@@ -1,0 +1,20 @@
+{
+  "name": "@onerlaw/verena",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "clean": "npm run clean --workspaces",
+    "clean:install": "npm run clean && npm install",
+    "test": "npm run test --workspaces",
+    "start": "npm run start --workspaces",
+    "build": "npm run build --workspaces",
+    "lint:format": "npm run lint:format --workspaces"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "workspaces": [
+    "packages/server",
+    "packages/app"
+  ]
+}
