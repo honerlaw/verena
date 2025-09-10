@@ -33,6 +33,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "@tamagui/metro-plugin",
+        {
+          "components": ["@tamagui/core", "@tamagui/stacks", "@tamagui/text", "@tamagui/button", "@tamagui/card", "@tamagui/separator", "@tamagui/avatar", "@tamagui/input", "@tamagui/switch", "@tamagui/slider"],
+          "config": "./tamagui.config.ts"
+        }
       ]
     ],
     "experiments": {
