@@ -15,8 +15,17 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.9.0",
     "prettier-eslint-cli": "^8.0.1",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@clerk/express": "^1.7.30",
+    "@onerlaw/framework": "^1.0.36",
+    "@trpc/server": "^11.5.1",
+    "express": "^5.1.0",
+    "prisma": "^6.15.0"
   }
 }
