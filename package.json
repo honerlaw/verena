@@ -19,5 +19,8 @@
   ],
   "devDependencies": {
     "nx": "21.5.2"
+  },
+  "overrides": {
+    "react-native": "0.81.4"
   }
 }
