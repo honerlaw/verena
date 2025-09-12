@@ -3,13 +3,12 @@ import { createContext, type Context } from '../../context.mjs';
 import { router } from './router.mjs';
 import * as trpcExpress from "@trpc/server/adapters/express";
 import type { User } from '../../util/database.mjs';
+import * as userRoutes from "./route/user/index.mjs";
  
 const appRouter = router({
-  // ...
+  user: router(userRoutes),
 });
  
-// Export type router type signature,
-// NOT the router itself.
 export type AppRouter = typeof appRouter;
 
 export const expressTRPCMiddleware = trpcExpress.createExpressMiddleware({

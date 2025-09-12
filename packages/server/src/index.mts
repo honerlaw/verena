@@ -3,6 +3,7 @@ import express from 'express';
 import { contextMiddleware } from './context.mjs';
 import { logger, register } from '@onerlaw/framework/backend/logger';
 import { expressTRPCMiddleware } from './network/rpc/index.mjs';
+import { config } from './network/http/index.mjs';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,8 @@ app.get("/api/health", express.json(), (req, res) =>
 );
 
 app.use("/api/trpc", express.json(), expressTRPCMiddleware);
+
+app.use("/api/app/config", express.json(), config);
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,27 +1,34 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
-import { TamaguiProvider } from '@tamagui/core';
-import tamaguiConfig from '../../tamagui.config';
 import 'react-native-reanimated';
+import { AppThemeProvider } from '@/src/providers/AppThemeProvider';
+import { TRPCProvider } from '@/src/providers/TRPCProvider';
+import { AuthProvider } from '@/src/providers/AuthProvider';
+import { ConfigProvider } from '@/src/providers/ConfigProvider';
+import { ToastProvider, ToastViewport } from "@tamagui/toast"
 
 export const unstable_settings = {
   anchor: 'index',
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <TamaguiProvider config={tamaguiConfig}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(unauth)/signin" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </TamaguiProvider>
+    <AppThemeProvider>
+      <ConfigProvider>
+        <AuthProvider>
+          <TRPCProvider>
+            <ToastProvider>
+              <Stack>
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              </Stack>
+              <StatusBar style="auto" />
+              <ToastViewport />
+            </ToastProvider>
+          </TRPCProvider>
+        </AuthProvider>
+      </ConfigProvider>
+    </AppThemeProvider>
   );
 }

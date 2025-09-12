@@ -1,10 +1,24 @@
 const { getDefaultConfig } = require('expo/metro-config');
 const { withTamagui } = require('@tamagui/metro-plugin');
 
-const config = getDefaultConfig(__dirname);
+module.exports = (() => {
+  const config = getDefaultConfig(__dirname);
 
-module.exports = withTamagui(config, {
-  components: ['tamagui'],
-  config: './tamagui.config.ts',
-  outputCSS: './dist/tamagui-web.css',
-});
+  const { transformer, resolver } = config;
+
+  config.transformer = {
+    ...transformer,
+    babelTransformerPath: require.resolve("react-native-svg-transformer/expo")
+  };
+  config.resolver = {
+    ...resolver,
+    assetExts: resolver.assetExts.filter((ext) => ext !== "svg"),
+    sourceExts: [...resolver.sourceExts, "svg"]
+  };
+
+  return withTamagui(config, {
+    components: ['tamagui'],
+    config: './tamagui.config.ts',
+    outputCSS: './tamagui-web.css',
+  });
+})();
