@@ -1,5 +1,8 @@
+import { Link } from "expo-router"
 
 
 export default function Dashboard() {
-  return null
+  return <Link href="/connector">
+  Connector
+  </Link>
 }

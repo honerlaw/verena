@@ -1,6 +1,6 @@
+wwwroot/*.js
 node_modules
-# Keep environment variables out of version control
+typings
+dist
 .env
-
-/src/generated/prisma
-dist/
+src/generated/

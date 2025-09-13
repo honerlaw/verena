@@ -5,6 +5,7 @@ export async function upsert(
   logger: Logger,
   client: DBClient,
   authId: string,
+  quilttUserId?: string,
 ): Promise<User | null> {
   try {
     return await client.user.upsert({
@@ -13,8 +14,11 @@ export async function upsert(
       },
       create: {
         authId: authId,
+        quilttUserId: quilttUserId ?? null,
       },
-      update: {},
+      update: {
+        quilttUserId: quilttUserId ?? null,
+      },
     });
   } catch (err) {
     logger.error(

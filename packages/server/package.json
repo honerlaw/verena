@@ -5,19 +5,34 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "start:local": "tsx watch src/index.mts",
-    "build": "tsc",
+    "start:local": "tsx --watch --no-cache --env-file=.env src/index.mts",
+    "build": "npm run generate && tsc",
     "start": "node dist/index.js",
-    "lint:format": "prettier-eslint-cli \"src/**/*.{js,ts,tsx}\" --write",
-    "clean": "rm -rf dist node_modules tsconfig.tsbuildinfo package-lock.json"
+    "format": "prettier --write \"src/**/*.{js,ts,mjs,mts}\"",
+    "lint": "eslint \"src/**/*.{js,ts,mjs,mts}\" --fix",
+    "lint:format": "npm run lint && npm run format",
+    "clean": "rm -rf dist node_modules tsconfig.tsbuildinfo package-lock.json src/generated",
+    "generate:quiltt": "rm -rf src/generated/quiltt && npx openapi-typescript ./openapi.json -o src/generated/quiltt.mts",
+    "generate:prisma": "npx prisma generate",
+    "generate": "npm run generate:quiltt && npm run generate:prisma && npm run codegen",
+    "codegen": "rm -rf src/generated/graphql && graphql-codegen --config codegen.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@graphql-codegen/cli": "6.0.0",
+    "@graphql-codegen/typescript": "5.0.0",
+    "@graphql-codegen/typescript-operations": "^5.0.0",
+    "@graphql-codegen/typescript-urql": "^4.0.1",
+    "@openapitools/openapi-generator-cli": "^2.23.1",
     "@types/express": "^5.0.0",
     "@types/node": "^22.9.0",
-    "prettier-eslint-cli": "^8.0.1",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "openapi-typescript": "^7.9.1",
+    "prettier": "^3.0.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
   },
@@ -25,8 +40,11 @@
     "@clerk/express": "^1.7.30",
     "@onerlaw/framework": "^1.0.36",
     "@trpc/server": "^11.5.1",
+    "@urql/core": "^6.0.1",
     "express": "^5.1.0",
     "prisma": "^6.15.0",
-    "superjson": "^2.2.2"
+    "superjson": "^2.2.2",
+    "urql": "^5.0.1",
+    "zod": "^4.1.8"
   }
 }

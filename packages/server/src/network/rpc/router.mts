@@ -1,13 +1,13 @@
-import { initTRPC } from '@trpc/server';
-import type { Context } from '../../context.mjs';
-import superjson from 'superjson';
+import { initTRPC } from "@trpc/server";
+import type { Context } from "../../context.mjs";
+import superjson from "superjson";
 
 /**
  * Initialization of tRPC backend
  * Should be done only once per backend!
  */
 const trpc = initTRPC.context<Context>().create({
-    transformer: superjson,
+  transformer: superjson,
 });
 
 /**

@@ -1,0 +1,28 @@
+query GetTransactions($after: String) {
+  transactions(after: $after) {
+    count
+    edges {
+      cursor
+      node {
+        id
+        date
+        description
+        amount
+        currencyCode
+        entryType
+        kind
+        status
+        account {
+          id
+          name
+        }
+      }
+    }
+    pageInfo {
+      startCursor
+      endCursor
+      hasNextPage
+      hasPreviousPage
+    }
+  }
+}

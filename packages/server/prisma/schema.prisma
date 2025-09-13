@@ -19,7 +19,49 @@ model User {
 
   // clerk id
   authId    String   @unique
-  
+
+  quilttUserId String? @unique
+
+  connections Connection[]
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ConnectionStatus {
+  INITIALIZING // after the connection is created
+  SYNCED_INITIAL // after the initial sync is complete
+  SYNCED_HISTORICAL // after the historical sync is complete
+  ENRICHED // profile.ready event that is called after enrichment
+  RECONNECT // need user to do reconnect flow
+  DISCONNECTED // connection was disconnected
+  INSTITUTION_ERROR // problem with the institution itself
+}
+
+model Connection {
+  id        String   @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  quilttConnectionId String @unique
+
+  status ConnectionStatus @default(INITIALIZING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  quilttTransactionId String @unique
+  transaction Json // the JSON payload from quiltt
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

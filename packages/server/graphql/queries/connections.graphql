@@ -1,0 +1,17 @@
+query GetConnections {
+  connections {
+    id
+    provider
+    status
+    institution {
+      name
+      logo {
+        url
+      }
+    }
+    accounts {
+      id
+      name
+    }
+  }
+}
