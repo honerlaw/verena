@@ -9,6 +9,7 @@ import * as clerkDS from "./datasource/clerk/index.mjs";
 import * as quilttDS from "./datasource/quiltt/index.mjs";
 import * as quilttGraphQLDS from "./datasource/quiltt/graphql/index.mjs";
 import * as service from "./service/index.mjs";
+import * as sessionTokenService from "./service/sessionToken/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -50,7 +51,10 @@ const options = {
         transaction: wrap(client, wrap(childLogger, transactionDB)),
       },
       additional: additional || {},
-      service,
+      service: {
+        root: service,
+        sessionToken: sessionTokenService,
+      },
     };
   },
 };

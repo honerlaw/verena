@@ -20,8 +20,6 @@ model User {
   // clerk id
   authId    String   @unique
 
-  quilttUserId String? @unique
-
   connections Connection[]
   transactions Transaction[]
 

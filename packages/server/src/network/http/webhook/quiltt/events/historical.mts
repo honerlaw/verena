@@ -13,18 +13,19 @@ export const historical = async (ctx: Context, event: ConnectionEvent) => {
     return;
   }
 
-  const sessionToken = await ctx.service.getSessionTokenByConnection(
-    ctx,
-    event.record.id,
-  );
+  const sessionToken =
+    await ctx.service.sessionToken.getSessionTokenByConnection(
+      ctx,
+      event.record.id,
+    );
 
   if (!sessionToken) {
     return;
   }
 
-  await ctx.service.updateAllTransactions(
+  await ctx.service.root.updateAllTransactions(
     ctx,
     connection.user.id,
-    sessionToken,
+    sessionToken.token,
   );
 };

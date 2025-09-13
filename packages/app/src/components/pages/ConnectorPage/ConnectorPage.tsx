@@ -18,7 +18,7 @@ export const ConnectorPage: React.FC = () => {
   return (
     <QuilttConnector
       connectorId="11n4uw5f0q"
-      oauthRedirectUrl="verena://"
+      oauthRedirectUrl="https://www.verena.app/connector"
       onExitSuccess={async (metadata: ConnectorSDKCallbackMetadata) => {
         try {
           if (metadata.connectionId) {

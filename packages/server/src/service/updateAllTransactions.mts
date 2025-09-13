@@ -1,14 +1,12 @@
 import type { Context } from "../context.mjs";
-import type { SessionToken } from "../datasource/quiltt/types.js";
 
 export async function updateAllTransactions(
   ctx: Context,
   userId: string,
-  sessionToken: SessionToken,
+  sessionToken: string,
 ) {
-  const client = ctx.datasource.quilttGraphQL.createQuilttGraphQLClient(
-    sessionToken.token,
-  );
+  const client =
+    ctx.datasource.quilttGraphQL.createQuilttGraphQLClient(sessionToken);
 
   const transactions =
     await ctx.datasource.quilttGraphQL.getAllTransactions(client);

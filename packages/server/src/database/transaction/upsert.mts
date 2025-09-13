@@ -42,7 +42,7 @@ export async function upsert(
         error: err,
         attributes: {
           transactionCount: transactions.length,
-          transactionIds: transactions.map((t) => t.id),
+          transactionIds: transactions.map((t) => t?.id),
         },
       },
       "Failed to upsert transactions",

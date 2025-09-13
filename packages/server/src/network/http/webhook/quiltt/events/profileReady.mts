@@ -22,17 +22,15 @@ export async function profileReady(ctx: Context, event: ProfileEvent) {
     return;
   }
 
-  const sessionToken = await ctx.service.getSessionTokenByConnection(
-    ctx,
-    conId,
-  );
+  const sessionToken =
+    await ctx.service.sessionToken.getSessionTokenByConnection(ctx, conId);
   if (!sessionToken) {
     return;
   }
 
-  await ctx.service.updateAllTransactions(
+  await ctx.service.root.updateAllTransactions(
     ctx,
     connection.user.id,
-    sessionToken,
+    sessionToken.token,
   );
 }

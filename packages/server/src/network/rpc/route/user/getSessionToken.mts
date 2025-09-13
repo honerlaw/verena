@@ -9,21 +9,12 @@ export const getSessionToken = procedure.query(async ({ ctx }) => {
     throw new UnauthorizedError();
   }
 
-  const userId = ctx.auth.user.quilttUserId;
-
-  const clerkUser = await ctx.datasource.clerk.getUserById(
-    ctx.auth.user.authId,
-  );
-  const email = clerkUser?.emailAddresses[0]?.emailAddress;
-
-  const token = await ctx.datasource.quiltt.createSessionToken(userId, email);
+  const token =
+    await ctx.service.sessionToken.getSessionTokenByAuthContext(ctx);
 
   if (!token) {
     throw new InternalServerError("Failed to create session token");
   }
-
-  // store the quiltt user id in our database
-  await ctx.database.user.upsert(ctx.auth.user.authId, token.userId);
 
   return {
     token: token.token,
