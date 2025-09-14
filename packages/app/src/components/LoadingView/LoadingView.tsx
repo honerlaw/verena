@@ -1,41 +1,22 @@
-import { useEffect, useRef } from "react"
-import { Animated, Easing } from "react-native"
 import { YStack } from "tamagui"
-import Icon from "@/assets/icon.svg"
+import LottieView from "lottie-react-native"
+import source from "@/assets/loading.json"
 
-export const LoadingView: React.FC = () => {
-  const bounceAnim = useRef(new Animated.Value(0)).current
+type LoadingViewProps = {
+  small?: boolean
+}
 
-  useEffect(() => {
-    const startBounceAnimation = () => {
-      Animated.sequence([
-        // Jump up - starts fast, slows at peak
-        Animated.timing(bounceAnim, {
-          toValue: -30,
-          duration: 400,
-          easing: Easing.out(Easing.quad),
-          useNativeDriver: true,
-        }),
-        // Fall down - starts slow, accelerates quickly
-        Animated.timing(bounceAnim, {
-          toValue: 0,
-          duration: 250,
-          easing: Easing.in(Easing.cubic),
-          useNativeDriver: true,
-        }),
-        // Delay between jumps - pause before next jump
-        Animated.delay(800),
-      ]).start(() => startBounceAnimation())
-    }
-
-    startBounceAnimation()
-  }, [bounceAnim])
-
+export const LoadingView: React.FC<LoadingViewProps> = ({ small }) => {
   return (
     <YStack flex={1} justifyContent="center" alignItems="center">
-      <Animated.View style={{ transform: [{ translateY: bounceAnim }] }}>
-        <Icon width={100} height={100} />
-      </Animated.View>
+      <YStack width={small ? "$13" : "$20"} height={small ? "$13" : "$20"} borderRadius="$4">
+        <LottieView
+          autoPlay
+          loop
+          source={source}
+          style={{ width: "100%", height: "100%" }}
+        />
+        </YStack>
     </YStack>
   )
 }

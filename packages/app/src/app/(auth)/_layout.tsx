@@ -41,6 +41,7 @@ export default function AuthLayout() {
                   size="$3"
                   circular
                   icon={User}
+                  scaleIcon={1.5}
                   onPress={() => router.push("/profile")}
                 />
               ),
@@ -49,6 +50,7 @@ export default function AuthLayout() {
                   size="$3"
                   circular
                   icon={Plus}
+                  scaleIcon={1.5}
                   onPress={() => router.push("/connector")}
                 />
               ),

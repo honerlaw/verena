@@ -31,8 +31,7 @@ export const DeleteAccountSection: React.FC = () => {
 
       {/* Description */}
       <Text fontSize="$3" color="$gray11">
-        This permanently deletes your videos, transcripts, insights, tags, and
-        reels. This cannot be undone.
+        This permanently deletes all of your data. This cannot be undone.
       </Text>
 
       {/* Delete Button */}

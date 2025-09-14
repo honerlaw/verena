@@ -17,8 +17,8 @@ export const ProfilePage: React.FC = () => {
         <UserInfo />
         <ConnectionList />
         <DeleteAccountSection />
-        <SignOutSection />
       </ScrollView>
+      <SignOutSection />
     </YStack>
   )
 }
