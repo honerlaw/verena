@@ -9,7 +9,7 @@ export async function deleteProfile(
   try {
     await client.request(`/v1/profiles/${userId}`, {
       method: "DELETE",
-      logger
+      logger,
     });
     return true;
   } catch (error) {

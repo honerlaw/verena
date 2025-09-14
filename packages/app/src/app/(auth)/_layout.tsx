@@ -1,7 +1,7 @@
 import { LoadingView } from "@/src/components/LoadingView"
 import { useAuth } from "@/src/hooks/useAuth"
 import { Button } from "tamagui"
-import { User } from "@tamagui/lucide-icons"
+import { User, Plus } from "@tamagui/lucide-icons"
 import { Redirect, Stack, useRouter } from "expo-router"
 import { WebLayout } from "@/src/components/WebLayout"
 import { ConnectorProvider } from "@/src/providers/ConnectorProvider"
@@ -42,6 +42,14 @@ export default function AuthLayout() {
                   circular
                   icon={User}
                   onPress={() => router.push("/profile")}
+                />
+              ),
+              headerRight: () => (
+                <Button
+                  size="$3"
+                  circular
+                  icon={Plus}
+                  onPress={() => router.push("/connector")}
                 />
               ),
             }}

@@ -6,9 +6,7 @@ export interface KeyboardAvoidingProps {
   children: React.ReactNode
 }
 
-export const KeyboardAvoiding: React.FC<KeyboardAvoidingProps> = ({
-  children,
-}) => {
+export const KeyboardAvoiding = React.forwardRef<ScrollView, KeyboardAvoidingProps>(({ children }, ref) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -16,6 +14,7 @@ export const KeyboardAvoiding: React.FC<KeyboardAvoidingProps> = ({
       keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 0}
     >
       <ScrollView
+        ref={ref}
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -31,4 +30,6 @@ export const KeyboardAvoiding: React.FC<KeyboardAvoidingProps> = ({
       </ScrollView>
     </KeyboardAvoidingView>
   )
-}
+})
+
+KeyboardAvoiding.displayName = "KeyboardAvoiding"

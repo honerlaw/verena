@@ -35,6 +35,6 @@ export const disconnect = procedure
     }
 
     return {
-      success: true
+      success: true,
     };
   });

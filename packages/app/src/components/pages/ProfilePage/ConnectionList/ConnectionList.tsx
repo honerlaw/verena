@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useTRPC } from "@/src/providers/TRPCProvider"
 import { LoadingView } from "@/src/components/LoadingView"
 import { ErrorView } from "@/src/components/ErrorView"
-import { EmptyView } from "@/src/components/EmptyView"
 import { ConnectionCard } from "./ConnectionCard"
 
 export interface ConnectionListProps {}

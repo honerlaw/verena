@@ -1,8 +1,5 @@
-import { Link } from "expo-router"
-
+import { DashboardPage } from "@/src/components/pages/DashboardPage"
 
 export default function Dashboard() {
-  return <Link href="/connector">
-  Connector
-  </Link>
+  return <DashboardPage />
 }

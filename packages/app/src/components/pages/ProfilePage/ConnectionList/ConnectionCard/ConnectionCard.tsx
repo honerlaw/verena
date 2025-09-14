@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { YStack, XStack, Text, Card, Separator } from "tamagui"
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs"
+import { ConnectionDisconnectButton } from "../ConnectionDisconnectButton"
 
 export type Connection = Awaited<ReturnType<AppRouter['connection']['getAll']>>['connections'][number]
 
@@ -29,19 +30,23 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) =>
               {connection.provider} • {connection.status}
             </Text>
           </YStack>
-          <XStack
-            width={48}
-            height={48}
-            backgroundColor="$gray3"
-            borderRadius="$2"
-            alignItems="center"
-            justifyContent="center"
-            overflow="hidden"
-          >
-            {/* Would need an Image component to display the logo */}
-            <Text fontSize="$2" color="$gray8">
-              🏦
-            </Text>
+          <XStack alignItems="center" gap="$2">
+            <XStack
+              width={48}
+              height={48}
+              backgroundColor="$gray3"
+              borderRadius="$2"
+              alignItems="center"
+              justifyContent="center"
+              overflow="hidden"
+            >
+              {/* Would need an Image component to display the logo */}
+              <Text fontSize="$2" color="$gray8">
+                🏦
+              </Text>
+            </XStack>
+            
+            <ConnectionDisconnectButton connection={connection} />
           </XStack>
         </XStack>
 

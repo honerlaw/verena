@@ -46,8 +46,8 @@ export async function disconnectConnection(
       );
       return false;
     }
-    
-    return true
+
+    return true;
   } catch (error) {
     logger.error(
       {
