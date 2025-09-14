@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { YStack, XStack, Text, Card, Separator } from "tamagui"
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs"
 
@@ -9,6 +9,8 @@ export interface ConnectionCardProps {
 }
 
 export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) => {
+  const [isAccountsExpanded, setIsAccountsExpanded] = useState(false)
+
   return (
     <Card
       padding="$4"
@@ -16,11 +18,6 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) =>
       borderRadius="$4"
       borderWidth={1}
       borderColor="$borderColor"
-      elevationAndroid={2}
-      shadowColor="$shadowColor"
-      shadowOffset={{ width: 0, height: 2 }}
-      shadowOpacity={0.1}
-      shadowRadius={4}
     >
       <YStack gap="$3">
         <XStack alignItems="center" justifyContent="space-between">
@@ -52,14 +49,30 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) =>
           <>
             <Separator />
             <YStack gap="$2">
-              <Text fontSize="$3" fontWeight="500" color="$gray11">
-                Accounts ({connection.accounts.length})
-              </Text>
-              {connection.accounts.map((account, index) => (
-                <Text key={account.id} fontSize="$3" color="$color" paddingLeft="$2">
-                  • {account.name}
+              <XStack
+                alignItems="center"
+                gap="$2"
+                onPress={() => setIsAccountsExpanded(!isAccountsExpanded)}
+                cursor="pointer"
+                hoverStyle={{ opacity: 0.7 }}
+                pressStyle={{ opacity: 0.5 }}
+              >
+                <Text fontSize="$2" color="$gray11">
+                  {isAccountsExpanded ? "▼" : "▶"}
                 </Text>
-              ))}
+                <Text fontSize="$3" fontWeight="500" color="$gray11">
+                  Accounts ({connection.accounts.length})
+                </Text>
+              </XStack>
+              {isAccountsExpanded && (
+                <YStack gap="$1" paddingLeft="$4">
+                  {connection.accounts.map((account) => (
+                    <Text key={account.id} fontSize="$3" color="$color">
+                      • {account.name}
+                    </Text>
+                  ))}
+                </YStack>
+              )}
             </YStack>
           </>
         )}

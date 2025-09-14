@@ -43,7 +43,7 @@ model Connection {
   id        String   @id @default(uuid())
 
   userId String
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   quilttConnectionId String @unique
 
@@ -57,7 +57,7 @@ model Transaction {
   id String @id @default(uuid())
 
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   quilttTransactionId String @unique
   transaction Json // the JSON payload from quiltt
@@ -70,7 +70,7 @@ model SessionToken {
   id String @id @default(uuid())
 
   userId String @unique
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   token String
   expiresAt DateTime
