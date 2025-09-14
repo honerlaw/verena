@@ -1,4 +1,5 @@
 import React from "react"
+import { ScrollView } from "react-native"
 import { YStack } from "tamagui"
 import { UserInfo } from "@/src/components/pages/ProfilePage/UserInfo"
 import { ConnectionList } from "@/src/components/pages/ProfilePage/ConnectionList"
@@ -7,12 +8,16 @@ import { SignOutSection } from "@/src/components/pages/ProfilePage/SignOutSectio
 
 export const ProfilePage: React.FC = () => {
   return (
-    <YStack flex={1} padding="$4" gap="$4" backgroundColor="$background">
-      <YStack flex={1} gap="$4">
+    <YStack flex={1} backgroundColor="$background">
+      <ScrollView 
+        style={{ flex: 1 }}
+        contentContainerStyle={{ padding: 16, gap: 16 }}
+        showsVerticalScrollIndicator={false}
+      >
         <UserInfo />
         <ConnectionList />
         <DeleteAccountSection />
-      </YStack>
+      </ScrollView>
       <SignOutSection />
     </YStack>
   )

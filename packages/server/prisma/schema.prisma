@@ -23,6 +23,8 @@ model User {
   connections Connection[]
   transactions Transaction[]
 
+  sessionToken SessionToken?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -59,6 +61,19 @@ model Transaction {
 
   quilttTransactionId String @unique
   transaction Json // the JSON payload from quiltt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SessionToken {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id])
+
+  token String
+  expiresAt DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
