@@ -2,6 +2,8 @@ import React, { useCallback, useState } from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Button, Input, XStack, YStack } from "tamagui"
 import { Mic, Plus, Send, ArrowUp } from "@tamagui/lucide-icons"
+import { useTRPC } from "@/src/providers/TRPCProvider"
+import { useMutation } from "@tanstack/react-query"
 
 export interface ChatBarProps {
   isSending: boolean
@@ -11,24 +13,64 @@ export interface ChatBarProps {
     content: string
     timestamp: Date
   }) => void
+  onResponseReceived: (message: {
+    id: string
+    role: "assistant"
+    content: string
+    timestamp: Date
+  }) => void
 }
 
-export const ChatBar: React.FC<ChatBarProps> = ({ isSending, onMessageSent }) => {
+export const ChatBar: React.FC<ChatBarProps> = ({ isSending, onMessageSent, onResponseReceived }) => {
   const insets = useSafeAreaInsets()
   const [inputText, setInputText] = useState("")
+  const trpc = useTRPC()
 
-  const handleSend = useCallback(() => {
+  const { mutateAsync: getAgentResponse } = useMutation(
+    trpc.agent.respond.mutationOptions()
+  )
+
+  const handleSend = useCallback(async () => {
     const trimmed = inputText.trim()
     if (!trimmed || isSending) return
+    
     const userMessage = {
       id: `${Date.now()}`,
       role: "user" as const,
       content: trimmed,
       timestamp: new Date(),
     }
+    
+    // Send the user message immediately
     onMessageSent(userMessage)
     setInputText("")
-  }, [inputText, isSending, onMessageSent])
+    
+    try {
+      // Get agent response
+      const result = await getAgentResponse({
+        message: trimmed
+      })
+      
+      const assistantMessage = {
+        id: `${Date.now()}-assistant`,
+        role: "assistant" as const,
+        content: result.response,
+        timestamp: new Date(),
+      }
+      
+      onResponseReceived(assistantMessage)
+    } catch (error) {
+      console.error('Failed to get agent response:', error)
+      // Could add error handling here, maybe show an error message
+      const errorMessage = {
+        id: `${Date.now()}-error`,
+        role: "assistant" as const,
+        content: "Sorry, I encountered an error processing your message. Please try again.",
+        timestamp: new Date(),
+      }
+      onResponseReceived(errorMessage)
+    }
+  }, [inputText, isSending, onMessageSent, onResponseReceived, getAgentResponse])
 
   const handleEnterKey = (e: any) => {
     if (e?.nativeEvent?.key === "Enter" && !e?.nativeEvent?.shiftKey) {

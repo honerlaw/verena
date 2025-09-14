@@ -1,5 +1,5 @@
-import { getTransactionDataTool } from "./tools/index.mjs";
-import { Agent, run } from "@openai/agents";
+import { Agent } from "@openai/agents";
+import * as tools from "./tools/index.mjs";
 
 const FINANCIAL_ASSISTANT_SYSTEM_PROMPT = `You are a helpful and knowledgeable financial assistant specializing in personal finance, budgeting, and financial insights. Your role is to:
 
@@ -19,14 +19,8 @@ Always be:
 
 Remember to tailor your responses to the user's specific financial situation and needs.`;
 
-const VerenaAgent = new Agent({
+export const VerenaAgent = new Agent({
   name: "Verena",
   instructions: FINANCIAL_ASSISTANT_SYSTEM_PROMPT,
-  tools: [getTransactionDataTool],
+  tools: Object.values(tools),
 });
-
-export async function respond(message: string): Promise<string | undefined> {
-  const result = await run(VerenaAgent, message);
-
-  return result.finalOutput;
-}

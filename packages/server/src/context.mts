@@ -12,6 +12,7 @@ import * as quilttGraphQLDS from "./datasource/quiltt/graphql/index.mjs";
 
 import * as service from "./service/index.mjs";
 import * as sessionTokenService from "./service/sessionToken/index.mjs";
+import * as openaiDS from "./service/openai/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -57,6 +58,7 @@ const options = {
       service: {
         root: service,
         sessionToken: sessionTokenService,
+        agent: openaiDS,
       },
     };
   },

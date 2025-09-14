@@ -17,7 +17,7 @@ async function fetchTransactionsRecursively(
   graphqlClient: QuilttGraphQLClient,
   cursor: string | undefined,
   accumulatedTransactions: GQLTransaction[],
-): Promise<GQLTransaction[]> {
+): Promise<GQLTransaction[] | null> {
   try {
     const variables: GetTransactionsQueryVariables = cursor
       ? {
@@ -41,7 +41,7 @@ async function fetchTransactionsRecursively(
         },
         "GraphQL error while fetching transactions",
       );
-      throw new Error(`GraphQL error: ${result.error.message}`);
+      return null;
     }
 
     if (!result.data?.transactions) {
@@ -54,7 +54,7 @@ async function fetchTransactionsRecursively(
         },
         "No transactions data in GraphQL response",
       );
-      throw new Error("No transactions data returned from GraphQL query");
+      return null;
     }
 
     const { transactions } = result.data;
@@ -111,13 +111,13 @@ async function fetchTransactionsRecursively(
       },
       "Error fetching all transactions",
     );
-    throw error;
+    return null;
   }
 }
 
 export async function getAllTransactions(
   logger: Logger,
   graphqlClient: QuilttGraphQLClient,
-): Promise<GQLTransaction[]> {
+): Promise<GQLTransaction[] | null> {
   return fetchTransactionsRecursively(logger, graphqlClient, undefined, []);
 }

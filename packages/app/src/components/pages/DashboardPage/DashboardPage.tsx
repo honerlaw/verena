@@ -31,19 +31,11 @@ export const DashboardPage: React.FC = () => {
     if (isSending) return
     setMessages((prev) => [...prev, userMessage])
     setIsSending(true)
+  }
 
-    // TODO: Replace this simulated response with actual LLM integration
-    const trimmed = userMessage.content.trim()
-    setTimeout(() => {
-      const assistantMessage: ChatMessage = {
-        id: `${Date.now()}-assistant`,
-        role: "assistant",
-        content: `I received: "${trimmed}" — this is a placeholder response.`,
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, assistantMessage])
-      setIsSending(false)
-    }, 1200)
+  const handleResponseReceived = (assistantMessage: ChatMessage) => {
+    setMessages((prev) => [...prev, assistantMessage])
+    setIsSending(false)
   }
 
   return (
@@ -75,7 +67,11 @@ export const DashboardPage: React.FC = () => {
           </YStack>
         </ScrollView>
 
-        <ChatBar isSending={isSending} onMessageSent={handleMessageSent} />
+        <ChatBar 
+          isSending={isSending} 
+          onMessageSent={handleMessageSent}
+          onResponseReceived={handleResponseReceived}
+        />
       </KeyboardAvoidingView>
     </YStack>
   )

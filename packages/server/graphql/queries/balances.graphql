@@ -1,0 +1,14 @@
+query GetBalances {
+  accounts {
+    id
+    type
+    name
+    balance {
+      id
+      at
+      available
+      current
+      limit
+    }
+  }
+}

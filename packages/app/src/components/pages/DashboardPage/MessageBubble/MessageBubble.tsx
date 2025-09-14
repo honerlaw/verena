@@ -1,5 +1,6 @@
 import React from "react"
 import { Card, Text, XStack, YStack } from "tamagui"
+import Markdown from "react-native-markdown-display"
 
 export type MessageBubbleProps = {
   message: {
@@ -23,7 +24,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, isLoading
       >
         <YStack gap="$1">
           <Text opacity={isLoading ? 0.7 : 1}>
-            {message.content}
+            <Markdown>{message.content}</Markdown>
           </Text>
         </YStack>
       </Card>

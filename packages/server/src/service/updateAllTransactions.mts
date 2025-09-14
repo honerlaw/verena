@@ -11,5 +11,9 @@ export async function updateAllTransactions(
   const transactions =
     await ctx.datasource.quilttGraphQL.getAllTransactions(client);
 
+  if (!transactions) {
+    return;
+  }
+
   await ctx.database.transaction.upsert(userId, transactions);
 }
