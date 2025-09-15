@@ -1,19 +1,41 @@
 import { run } from "@openai/agents";
 import type { Context } from "../../context.mjs";
 
-// so I might need to create an abstraction here around the `openai.conversations.create()`
-// essentially we would create a new conversation (if we don't have one in our database)
-// for the user and then use that conversation id to run the agent
-// this should hopefully allow us to restore conversations and toggle between them
-// if needed (see https://platform.openai.com/docs/api-reference/conversations/list-items)
 export async function respond(
   context: Context,
+  conversationId: string,
   message: string,
 ): Promise<string | null> {
   try {
-    const result = await run(context.service.agent.Agent, message, {
-      context,
-    });
+    // must have a conversation to respond to
+    const conversation =
+      await context.database.conversation.getByConversationId(conversationId);
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
+    // generate a title for the conversation if it doesn't have one
+    if (conversation.title === null) {
+      const result = await run(
+        context.service.agent.agents.SummaryAgent,
+        message,
+        {
+          context,
+        },
+      );
+      const title = result.finalOutput ?? "New Conversation";
+      await context.database.conversation.update(conversationId, title);
+    }
+
+    // respond to the message
+    const result = await run(
+      context.service.agent.agents.VerenaAgent,
+      message,
+      {
+        conversationId,
+        context,
+      },
+    );
 
     return result.finalOutput ?? null;
   } catch (error) {

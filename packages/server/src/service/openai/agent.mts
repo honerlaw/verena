@@ -24,3 +24,11 @@ export const VerenaAgent = new Agent({
   instructions: FINANCIAL_ASSISTANT_SYSTEM_PROMPT,
   tools: Object.values(tools),
 });
+
+export const SummaryAgent = new Agent({
+  model: "gpt-4o-mini",
+  name: "Conversation Title Generator",
+  instructions:
+    "You are a helpful assistant that summarizes a message between the user and the Verena agent. You goal is to create a short title for the conversation.",
+  tools: Object.values(tools),
+});

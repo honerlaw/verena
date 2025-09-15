@@ -6,6 +6,7 @@ import { procedure } from "../../router.mjs";
 import { z } from "zod";
 
 const RespondSchema = z.object({
+  conversationId: z.string().min(1, "Conversation ID is required"),
   message: z.string().min(1, "Message is required"),
 });
 
@@ -16,9 +17,13 @@ export const respond = procedure
       throw new UnauthorizedError();
     }
 
-    const { message } = input;
+    const { conversationId, message } = input;
 
-    const response = await ctx.service.agent.respond(ctx, message);
+    const response = await ctx.service.agent.respond(
+      ctx,
+      conversationId,
+      message,
+    );
 
     if (response === null) {
       throw new InternalServerError(
