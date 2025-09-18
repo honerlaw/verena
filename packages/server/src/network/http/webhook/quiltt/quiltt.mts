@@ -33,7 +33,19 @@ export const quiltt = async (req: Request, res: Response) => {
     webhook.events.map(async (event) => {
       switch (event.type) {
         case "connection.synced.successful.initial": {
+          const user =
+            await req.serverContext.database.user.getByConnectionIdForWebhooks(
+              event.record.id,
+            );
+          if (!user) {
+            req.serverContext.logger.error(
+              { attributes: { event } },
+              "User not found",
+            );
+            return;
+          }
           await req.serverContext.database.connection.updateStatus(
+            user.id,
             event.record.id,
             ConnectionStatus.SYNCED_INITIAL,
           );
@@ -48,21 +60,57 @@ export const quiltt = async (req: Request, res: Response) => {
           break;
         }
         case "connection.disconnected": {
+          const user =
+            await req.serverContext.database.user.getByConnectionIdForWebhooks(
+              event.record.id,
+            );
+          if (!user) {
+            req.serverContext.logger.error(
+              { attributes: { event } },
+              "User not found",
+            );
+            return;
+          }
           await req.serverContext.database.connection.updateStatus(
+            user.id,
             event.record.id,
             ConnectionStatus.DISCONNECTED,
           );
           break;
         }
         case "connection.synced.errored.repairable": {
+          const user =
+            await req.serverContext.database.user.getByConnectionIdForWebhooks(
+              event.record.id,
+            );
+          if (!user) {
+            req.serverContext.logger.error(
+              { attributes: { event } },
+              "User not found",
+            );
+            return;
+          }
           await req.serverContext.database.connection.updateStatus(
+            user.id,
             event.record.id,
             ConnectionStatus.RECONNECT,
           );
           break;
         }
         case "connection.synced.errored.institution": {
+          const user =
+            await req.serverContext.database.user.getByConnectionIdForWebhooks(
+              event.record.id,
+            );
+          if (!user) {
+            req.serverContext.logger.error(
+              { attributes: { event } },
+              "User not found",
+            );
+            return;
+          }
           await req.serverContext.database.connection.updateStatus(
+            user.id,
             event.record.id,
             ConnectionStatus.INSTITUTION_ERROR,
           );

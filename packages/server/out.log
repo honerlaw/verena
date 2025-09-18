@@ -1,0 +1,270 @@
+
+> @onerlaw/verena-server@1.0.0 start:local
+> tsx --watch --no-cache --env-file=.env src/index.mts
+
+2025-09-17T23:46:45.302Z openai-agents:core Shutting down old processors
+2025-09-17T23:46:45.303Z openai-agents:core Shutting down gracefully
+2025-09-17T23:46:45.303Z openai-agents:core Buffer empty. Exiting
+Server is running on http://localhost:3000
+{"level":30,"time":1758152813809,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":1,"method":"GET","url":"/api/app/config"},"res":{"statusCode":304},"responseTime":3,"msg":"request completed"}
+{"level":30,"time":1758152814766,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":2,"method":"GET","url":"/api/trpc/user.getSessionToken?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D"},"res":{"statusCode":200},"responseTime":14,"msg":"request completed"}
+{"level":30,"time":1758152814960,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":3,"method":"GET","url":"/api/trpc/conversation.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D"},"res":{"statusCode":200},"responseTime":14,"msg":"request completed"}
+{"level":30,"time":1758152815579,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":4,"method":"GET","url":"/api/app/config"},"res":{"statusCode":304},"responseTime":0,"msg":"request completed"}
+{"level":30,"time":1758152815928,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":5,"method":"GET","url":"/api/trpc/user.getSessionToken?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+{"level":30,"time":1758152816089,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":6,"method":"GET","url":"/api/trpc/conversation.list?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%7D"},"res":{"statusCode":200},"responseTime":7,"msg":"request completed"}
+{"level":30,"time":1758152823993,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":7,"method":"POST","url":"/api/trpc/conversation.create?batch=1"},"res":{"statusCode":200},"responseTime":286,"msg":"request completed"}
+{"level":30,"time":1758152824245,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":8,"method":"GET","url":"/api/trpc/conversation.list,conversation.items?batch=1&input=%7B%220%22%3A%7B%22json%22%3Anull%2C%22meta%22%3A%7B%22values%22%3A%5B%22undefined%22%5D%7D%7D%2C%221%22%3A%7B%22json%22%3A%7B%22conversationId%22%3A%22conv_68cb4877e9a88195a99da264a11c8fab09919f2b0f1ecc05%22%7D%7D%7D"},"res":{"statusCode":200},"responseTime":178,"msg":"request completed"}
+2025-09-17T23:47:06.031Z openai-agents:core Creating trace trace_b631578619f1486c8a8a78042d94b180 with name Agent workflow
+2025-09-17T23:47:06.033Z openai-agents:core No parent span, using current trace trace_b631578619f1486c8a8a78042d94b180
+2025-09-17T23:47:06.033Z openai-agents:core Creating span {"type":"agent","name":"Verena","handoffs":[],"output_type":"text"} with id trace_b631578619f1486c8a8a78042d94b180
+2025-09-17T23:47:06.033Z openai-agents:core Running agent Verena (turn 1)
+turnInput [ { type: 'message', role: 'user', content: 'What is my net worth?' } ] What is my net worth? undefined
+2025-09-17T23:47:06.034Z openai-agents:core Using parent span span_7730d7c3eb2b41c987cb077a
+2025-09-17T23:47:06.034Z openai-agents:core Creating span {"type":"response"} with id trace_b631578619f1486c8a8a78042d94b180
+2025-09-17T23:47:06.035Z openai-agents:openai Calling LLM. Request data: {
+  "instructions": "You are a helpful and knowledgeable financial assistant specializing in personal finance, budgeting, and financial insights. Your role is to:\n\n- Provide clear, actionable financial advice and insights\n- Help users understand their spending patterns and financial habits\n- Offer budgeting tips and money management strategies\n- Explain financial concepts in simple, accessible language\n- Suggest ways to improve financial health and achieve financial goals\n- Analyze financial data and provide meaningful insights\n\nAlways be:\n- Professional yet approachable\n- Educational and informative\n- Supportive and non-judgmental\n- Focused on practical, actionable advice\n- Clear about when professional financial planning advice may be needed\n\nRemember to tailor your responses to the user's specific financial situation and needs.",
+  "model": "gpt-4.1",
+  "input": [
+    {
+      "role": "user",
+      "content": "What is my net worth?"
+    }
+  ],
+  "include": [],
+  "tools": [
+    {
+      "type": "function",
+      "name": "get_account_balances",
+      "description": "Retrieve user's current account balances in a tabular format for analysis or viewing. Returns account balances with details like account name, available balance, current balance, and credit limits.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    },
+    {
+      "type": "function",
+      "name": "get_most_recent_transactions",
+      "description": "Retrieve user's most recent financial transaction data in a tabular format for analysis or viewing. Returns transactions with details like date, amount, category, and description.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    }
+  ],
+  "conversation": "conv_68cb4877e9a88195a99da264a11c8fab09919f2b0f1ecc05",
+  "stream": false
+}
+2025-09-17T23:47:08.139Z openai-agents:openai Response received: {
+  "id": "resp_68cb487aa1588195a25f17d99bf75f4409919f2b0f1ecc05",
+  "object": "response",
+  "created_at": 1758152826,
+  "status": "completed",
+  "background": false,
+  "billing": {
+    "payer": "developer"
+  },
+  "conversation": {
+    "id": "conv_68cb4877e9a88195a99da264a11c8fab09919f2b0f1ecc05"
+  },
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "You are a helpful and knowledgeable financial assistant specializing in personal finance, budgeting, and financial insights. Your role is to:\n\n- Provide clear, actionable financial advice and insights\n- Help users understand their spending patterns and financial habits\n- Offer budgeting tips and money management strategies\n- Explain financial concepts in simple, accessible language\n- Suggest ways to improve financial health and achieve financial goals\n- Analyze financial data and provide meaningful insights\n\nAlways be:\n- Professional yet approachable\n- Educational and informative\n- Supportive and non-judgmental\n- Focused on practical, actionable advice\n- Clear about when professional financial planning advice may be needed\n\nRemember to tailor your responses to the user's specific financial situation and needs.",
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-4.1-2025-04-14",
+  "output": [
+    {
+      "id": "fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05",
+      "type": "function_call",
+      "status": "completed",
+      "arguments": "{}",
+      "call_id": "call_9zFyKGtfdx72jEW1KoRDfk6T",
+      "name": "get_account_balances"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": null,
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1,
+  "text": {
+    "format": {
+      "type": "text"
+    },
+    "verbosity": "medium"
+  },
+  "tool_choice": "auto",
+  "tools": [
+    {
+      "type": "function",
+      "description": "Retrieve user's current account balances in a tabular format for analysis or viewing. Returns account balances with details like account name, available balance, current balance, and credit limits.",
+      "name": "get_account_balances",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    },
+    {
+      "type": "function",
+      "description": "Retrieve user's most recent financial transaction data in a tabular format for analysis or viewing. Returns transactions with details like date, amount, category, and description.",
+      "name": "get_most_recent_transactions",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    }
+  ],
+  "top_logprobs": 0,
+  "top_p": 1,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 256,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 13,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 269
+  },
+  "user": null,
+  "metadata": {},
+  "output_text": ""
+}
+2025-09-17T23:47:08.141Z openai-agents:core Using parent span span_7730d7c3eb2b41c987cb077a
+2025-09-17T23:47:08.141Z openai-agents:core Creating span {"type":"function","input":"","output":"","name":"get_account_balances"} with id trace_b631578619f1486c8a8a78042d94b180
+2025-09-17T23:47:08.141Z openai-agents:core Invoking tool get_account_balances with input {}
+2025-09-17T23:47:08.809Z openai-agents:core Tool get_account_balances returned: | Account Name | Account Type | Available Balance | Current Balance | Credit Limit | Balance As Of |
+|--------------|-------------------|-----------------|--------------|---------------|
+| Line of Credit | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |
+| Brokerage | OTHER | N/A | $917.30 | N/A | 9/17/2025 |
+| Auto Loan | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |
+| Savings | OTHER | N/A | $917.30 | N/A | 9/17/2025 |
+| Roth IRA | OTHER | N/A | $917.30 | N/A | 9/17/2025 |
+| Checking | OTHER | N/A | $917.30 | N/A | 9/17/2025 |
+| Home Mortgage | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |
+| Credit Card | OTHER | N/A | $917.30 | N/A | 9/17/2025 |
+2025-09-17T23:47:08.809Z openai-agents:core Running next loop
+2025-09-17T23:47:08.809Z openai-agents:core Running agent Verena (turn 2)
+turnInput [
+  { type: 'message', role: 'user', content: 'What is my net worth?' },
+  {
+    type: 'function_call',
+    id: 'fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05',
+    callId: 'call_9zFyKGtfdx72jEW1KoRDfk6T',
+    name: 'get_account_balances',
+    status: 'completed',
+    arguments: '{}',
+    providerData: {
+      id: 'fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05',
+      type: 'function_call'
+    }
+  },
+  {
+    type: 'function_call_result',
+    name: 'get_account_balances',
+    callId: 'call_9zFyKGtfdx72jEW1KoRDfk6T',
+    status: 'completed',
+    output: {
+      type: 'text',
+      text: '| Account Name | Account Type | Available Balance | Current Balance | Credit Limit | Balance As Of |\n' +
+        '|--------------|-------------------|-----------------|--------------|---------------|\n' +
+        '| Line of Credit | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n' +
+        '| Brokerage | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n' +
+        '| Auto Loan | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n' +
+        '| Savings | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n' +
+        '| Roth IRA | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n' +
+        '| Checking | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n' +
+        '| Home Mortgage | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n' +
+        '| Credit Card | OTHER | N/A | $917.30 | N/A | 9/17/2025 |'
+    }
+  }
+] What is my net worth? undefined
+2025-09-17T23:47:08.810Z openai-agents:core Using parent span span_7730d7c3eb2b41c987cb077a
+2025-09-17T23:47:08.810Z openai-agents:core Creating span {"type":"response"} with id trace_b631578619f1486c8a8a78042d94b180
+2025-09-17T23:47:08.810Z openai-agents:openai Calling LLM. Request data: {
+  "instructions": "You are a helpful and knowledgeable financial assistant specializing in personal finance, budgeting, and financial insights. Your role is to:\n\n- Provide clear, actionable financial advice and insights\n- Help users understand their spending patterns and financial habits\n- Offer budgeting tips and money management strategies\n- Explain financial concepts in simple, accessible language\n- Suggest ways to improve financial health and achieve financial goals\n- Analyze financial data and provide meaningful insights\n\nAlways be:\n- Professional yet approachable\n- Educational and informative\n- Supportive and non-judgmental\n- Focused on practical, actionable advice\n- Clear about when professional financial planning advice may be needed\n\nRemember to tailor your responses to the user's specific financial situation and needs.",
+  "model": "gpt-4.1",
+  "input": [
+    {
+      "role": "user",
+      "content": "What is my net worth?"
+    },
+    {
+      "id": "fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05",
+      "type": "function_call",
+      "name": "get_account_balances",
+      "call_id": "call_9zFyKGtfdx72jEW1KoRDfk6T",
+      "arguments": "{}",
+      "status": "completed"
+    },
+    {
+      "type": "function_call_output",
+      "call_id": "call_9zFyKGtfdx72jEW1KoRDfk6T",
+      "output": "| Account Name | Account Type | Available Balance | Current Balance | Credit Limit | Balance As Of |\n|--------------|-------------------|-----------------|--------------|---------------|\n| Line of Credit | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n| Brokerage | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n| Auto Loan | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n| Savings | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n| Roth IRA | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n| Checking | OTHER | N/A | $917.30 | N/A | 9/17/2025 |\n| Home Mortgage | OTHER | N/A | $-917.30 | N/A | 9/17/2025 |\n| Credit Card | OTHER | N/A | $917.30 | N/A | 9/17/2025 |",
+      "status": "completed"
+    }
+  ],
+  "include": [],
+  "tools": [
+    {
+      "type": "function",
+      "name": "get_account_balances",
+      "description": "Retrieve user's current account balances in a tabular format for analysis or viewing. Returns account balances with details like account name, available balance, current balance, and credit limits.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    },
+    {
+      "type": "function",
+      "name": "get_most_recent_transactions",
+      "description": "Retrieve user's most recent financial transaction data in a tabular format for analysis or viewing. Returns transactions with details like date, amount, category, and description.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": true
+      },
+      "strict": false
+    }
+  ],
+  "conversation": "conv_68cb4877e9a88195a99da264a11c8fab09919f2b0f1ecc05",
+  "stream": false
+}
+{"level":50,"time":1758152829607,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","userId":"user_32bGCfRsXv05EvpiaRz0relw4yM","error":{"type":"BadRequestError","message":"400 Duplicate item found with id fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05. Remove duplicate items from your input and try again.","stack":"Error: 400 Duplicate item found with id fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05. Remove duplicate items from your input and try again.\n    at Function.generate (/Users/derekhonerlaw/Development/verena/node_modules/openai/src/core/error.ts:72:14)\n    at OpenAI.makeStatusError (/Users/derekhonerlaw/Development/verena/node_modules/openai/src/client.ts:463:28)\n    at OpenAI.makeRequest (/Users/derekhonerlaw/Development/verena/node_modules/openai/src/client.ts:713:24)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async OpenAIResponsesModel.#fetchResponse (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-openai/src/openaiResponsesModel.ts:897:16)\n    at async <anonymous> (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-openai/src/openaiResponsesModel.ts:919:19)\n    at async <anonymous> (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-core/src/tracing/createSpans.ts:41:16)\n    at async OpenAIResponsesModel.getResponse (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-openai/src/openaiResponsesModel.ts:917:13)\n    at async <anonymous> (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-core/src/run.ts:391:35)\n    at async <anonymous> (/Users/derekhonerlaw/Development/verena/node_modules/@openai/agents-core/src/tracing/context.ts:60:20)","status":400,"headers":{},"requestID":"req_ee8fcf8f32364143da18336742cbfd5b","error":{"type":"Object","message":"Duplicate item found with id fc_68cb487b99a48195bfaa5cf62d550d8c09919f2b0f1ecc05. Remove duplicate items from your input and try again.","stack":"","param":"input","code":null},"code":null,"param":"input"},"msg":"Error responding to message"}
+{"level":30,"time":1758152829620,"pid":72620,"hostname":"Dereks-MacBook-Pro.local","req":{"id":9,"method":"POST","url":"/api/trpc/agent.respond?batch=1"},"res":{"statusCode":500},"err":{"type":"Error","message":"failed with status code 500","stack":"Error: failed with status code 500\n    at onResFinished (/Users/derekhonerlaw/Development/verena/node_modules/pino-http/logger.js:114:39)\n    at ServerResponse.onResponseComplete (/Users/derekhonerlaw/Development/verena/node_modules/pino-http/logger.js:177:14)\n    at ServerResponse.emit (node:events:530:35)\n    at onFinish (node:_http_outgoing:1082:10)\n    at callback (node:internal/streams/writable:766:21)\n    at afterWrite (node:internal/streams/writable:710:5)\n    at afterWriteTick (node:internal/streams/writable:696:10)\n    at process.processTicksAndRejections (node:internal/process/task_queues:89:21)"},"responseTime":5524,"msg":"request errored"}
+2025-09-17T23:47:10.309Z openai-agents:core Exporting batches. Force: false. Buffer size: 5
+2025-09-17T23:47:11.041Z openai-agents:openai Exported 5 items
+2025-09-17T23:47:17.470Z openai-agents:core Shutting down tracing provider
+2025-09-17T23:47:17.471Z openai-agents:core Shutting down gracefully
+2025-09-17T23:47:17.471Z openai-agents:core Buffer empty. Exiting
+npm error Lifecycle script `start:local` failed with error:
+npm error code 130
+npm error path /Users/derekhonerlaw/Development/verena/packages/server
+npm error workspace @onerlaw/verena-server@1.0.0
+npm error location /Users/derekhonerlaw/Development/verena/packages/server
+npm error command failed
+npm error command sh -c tsx --watch --no-cache --env-file=.env src/index.mts

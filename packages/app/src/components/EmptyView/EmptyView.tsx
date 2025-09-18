@@ -4,9 +4,10 @@ import source from "@/assets/empty.json"
 
 type EmptyViewProps = {
   inline?: boolean
+  message?: string
 }
 
-export const EmptyView: React.FC<EmptyViewProps> = ({ inline }) => {
+export const EmptyView: React.FC<EmptyViewProps> = ({ inline, message }) => {
   return (
     <YStack
       flex={inline ? undefined : 1}
@@ -22,7 +23,7 @@ export const EmptyView: React.FC<EmptyViewProps> = ({ inline }) => {
             style={{ width: "100%", height: "100%" }}
           />
         </YStack>
-        <H6 textAlign="center">Sorry, we couldn't find anything!</H6>
+        <H6 textAlign="center">{message || "Sorry, we couldn't find anything!"}</H6>
       </YStack>
     </YStack>
   )

@@ -15,22 +15,38 @@ export async function profileReady(ctx: Context, event: ProfileEvent) {
     return;
   }
 
-  await ctx.database.connection.updateStatus(conId, ConnectionStatus.ENRICHED);
+  const user = await ctx.database.user.getByConnectionIdForWebhooks(
+    event.record.id,
+  );
+  if (!user) {
+    ctx.logger.error({ attributes: { event } }, "User not found");
+    return;
+  }
 
-  const connection = await ctx.database.connection.getById(conId);
+  await ctx.database.connection.updateStatus(
+    user.id,
+    conId,
+    ConnectionStatus.ENRICHED,
+  );
+
+  const connection = await ctx.database.connection.getById(user.id, conId);
   if (!connection) {
     return;
   }
 
   const sessionToken =
-    await ctx.service.sessionToken.getSessionTokenByConnection(ctx, conId);
+    await ctx.service.sessionToken.getSessionTokenByConnection(
+      ctx,
+      user.id,
+      conId,
+    );
   if (!sessionToken) {
     return;
   }
 
   await ctx.service.root.updateAllTransactions(
     ctx,
-    connection.user.id,
+    user.id,
     sessionToken.token,
   );
 }

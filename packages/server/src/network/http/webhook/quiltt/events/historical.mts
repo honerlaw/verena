@@ -3,12 +3,24 @@ import { ConnectionStatus } from "../../../../../util/database.mjs";
 import type { ConnectionEvent } from "../types.mjs";
 
 export const historical = async (ctx: Context, event: ConnectionEvent) => {
+  const user = await ctx.database.user.getByConnectionIdForWebhooks(
+    event.record.id,
+  );
+  if (!user) {
+    ctx.logger.error({ attributes: { event } }, "User not found");
+    return;
+  }
+
   await ctx.database.connection.updateStatus(
+    user.id,
     event.record.id,
     ConnectionStatus.SYNCED_HISTORICAL,
   );
 
-  const connection = await ctx.database.connection.getById(event.record.id);
+  const connection = await ctx.database.connection.getById(
+    user.id,
+    event.record.id,
+  );
   if (!connection) {
     return;
   }
@@ -16,6 +28,7 @@ export const historical = async (ctx: Context, event: ConnectionEvent) => {
   const sessionToken =
     await ctx.service.sessionToken.getSessionTokenByConnection(
       ctx,
+      user.id,
       event.record.id,
     );
 
@@ -25,7 +38,7 @@ export const historical = async (ctx: Context, event: ConnectionEvent) => {
 
   await ctx.service.root.updateAllTransactions(
     ctx,
-    connection.user.id,
+    user.id,
     sessionToken.token,
   );
 };

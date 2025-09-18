@@ -2,6 +2,7 @@ import { createTamagui, createTokens } from "tamagui"
 import { tokens, themes } from "@tamagui/themes"
 import { shorthands } from "@tamagui/shorthands"
 import { createInterFont } from "@tamagui/font-inter"
+import { createAnimations } from "@tamagui/animations-react-native"
 import { COLOR_PRIMARY, COLOR_SECONDARY } from "./src/constant"
 
 const headingFont = createInterFont()
@@ -20,6 +21,28 @@ const customTokens = createTokens({
   }
 })
 
+const animations = createAnimations({
+  bouncy: {
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+  lazy: {
+    damping: 20,
+    stiffness: 60,
+  },
+  quick: {
+    damping: 20,
+    mass: 1.2,
+    stiffness: 250,
+  },
+  tooltip: {
+    damping: 10,
+    mass: 0.9,
+    stiffness: 100,
+  },
+})
+
 export const config = createTamagui({
   defaultTheme: "dark",
   defaultFont: "body",
@@ -31,6 +54,7 @@ export const config = createTamagui({
   themes,
   tokens: customTokens,
   shorthands,
+  animations,
   shouldAddPrefersColorThemes: true,
   themeClassNameOnRoot: false,
 })

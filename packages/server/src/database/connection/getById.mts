@@ -12,12 +12,14 @@ export type ConnectionWithUser = Connection & {
 export async function getById(
   logger: Logger,
   client: DBClient,
+  userId: string,
   connectionId: string,
 ): Promise<ConnectionWithUser | null> {
   try {
     return await client.connection.findUnique({
       where: {
         id: connectionId,
+        userId,
       },
       include: {
         user: true,

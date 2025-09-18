@@ -29,6 +29,5 @@ export const SummaryAgent = new Agent({
   model: "gpt-4o-mini",
   name: "Conversation Title Generator",
   instructions:
-    "You are a helpful assistant that summarizes a message between the user and the Verena agent. You goal is to create a short title for the conversation.",
-  tools: Object.values(tools),
+    "You are a helpful assistant that summarizes a message between the user and the Verena agent. You goal is to create a short title for the conversation. Return plain text only, no quotes or markdown.",
 });

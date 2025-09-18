@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "postinstall": "patch-package",
     "clean": "nx run-many -t clean && rm -rf node_modules package-lock.json",
     "clean:install": "npm run clean && npm install",
     "test": "nx run-many -t test",
@@ -18,7 +19,8 @@
     "packages/app"
   ],
   "devDependencies": {
-    "nx": "21.5.2"
+    "nx": "21.5.2",
+    "patch-package": "^8.0.0"
   },
   "overrides": {
     "react-native": "0.81.4",

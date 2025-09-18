@@ -4,12 +4,14 @@ import { type DBClient } from "../../util/database.mjs";
 export async function update(
   logger: Logger,
   client: DBClient,
+  userId: string,
   conversationId: string,
   title: string,
 ) {
   try {
     return await client.conversation.update({
       where: {
+        userId,
         openaiConversationId: conversationId,
       },
       data: {

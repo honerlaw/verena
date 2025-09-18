@@ -21,6 +21,7 @@ export const respond = procedure
 
     const response = await ctx.service.agent.respond(
       ctx,
+      ctx.auth.user.id,
       conversationId,
       message,
     );

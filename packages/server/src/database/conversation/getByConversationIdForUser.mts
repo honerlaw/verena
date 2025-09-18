@@ -1,24 +1,26 @@
 import { type Logger } from "@onerlaw/framework/backend/logger";
 import { type DBClient } from "../../util/database.mjs";
 
-export async function getByConversationId(
+export async function getByConversationIdForUser(
   logger: Logger,
   client: DBClient,
   conversationId: string,
+  userId: string,
 ) {
   try {
     return await client.conversation.findUnique({
       where: {
         openaiConversationId: conversationId,
+        userId,
       },
     });
   } catch (error) {
     logger.error(
       {
         error,
-        tags: ["database", "conversation", "getByConversationId"],
+        tags: ["database", "conversation", "getByConversationIdForUser"],
       },
-      "Error getting conversation by id",
+      "Error getting conversation by id for user",
     );
     return null;
   }

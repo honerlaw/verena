@@ -1,0 +1,35 @@
+diff --git a/node_modules/@openai/agents-core/dist/run.mjs b/node_modules/@openai/agents-core/dist/run.mjs
+index 27bcfe7..97468d8 100644
+--- a/node_modules/@openai/agents-core/dist/run.mjs
++++ b/node_modules/@openai/agents-core/dist/run.mjs
+@@ -30,10 +30,19 @@ export function getTracing(tracingDisabled, traceIncludeSensitiveData) {
+     }
+     return 'enabled_without_data';
+ }
+-export function getTurnInput(originalInput, generatedItems) {
++export function getTurnInput(originalInput, generatedItems, lastTurnResponse, conversationId) {
+     const rawItems = generatedItems
+         .filter((item) => item.type !== 'tool_approval_item') // don't include approval items to avoid double function calls
+-        .map((item) => item.rawItem);
++        .map((item) => item.rawItem)
++        .filter((item) => {
++
++            // if conversationId is provided, the conversation will already have the history
++            // so we don't need to send it again as the responses api will fetch it for us
++            if (!lastTurnResponse || !conversationId) {
++                return true;
++            }
++            return !lastTurnResponse.output.some((outputItem) => outputItem.type === item.type && outputItem.id === item.id);
++        })
+     if (typeof originalInput === 'string') {
+         originalInput = [{ type: 'message', role: 'user', content: originalInput }];
+     }
+@@ -142,7 +151,7 @@ export class Runner extends RunHooks {
+                         if (state._currentTurn === 1) {
+                             await this.#runInputGuardrails(state);
+                         }
+-                        const turnInput = getTurnInput(state._originalInput, state._generatedItems);
++                        const turnInput = getTurnInput(state._originalInput, state._generatedItems, state._lastTurnResponse, options.conversationId);
+                         if (state._noActiveAgentRun) {
+                             state._currentAgent.emit('agent_start', state._context, state._currentAgent);
+                             this.emit('agent_start', state._context, state._currentAgent);

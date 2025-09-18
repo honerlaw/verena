@@ -5,6 +5,7 @@ import { type Logger } from "@onerlaw/framework/backend/logger";
 export async function updateStatus(
   logger: Logger,
   client: DBClient,
+  userId: string,
   quilttConnectionId: string,
   status: ConnectionStatus,
 ): Promise<Connection | null> {
@@ -12,6 +13,7 @@ export async function updateStatus(
     return await client.connection.update({
       where: {
         quilttConnectionId: quilttConnectionId,
+        userId,
       },
       data: {
         status: status,

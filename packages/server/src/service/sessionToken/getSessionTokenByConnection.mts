@@ -2,9 +2,13 @@ import type { Context } from "../../context.mjs";
 
 export async function getSessionTokenByConnection(
   ctx: Context,
+  userId: string,
   connectionId: string,
 ): Promise<{ token: string } | null> {
-  const connection = await ctx.database.connection.getById(connectionId);
+  const connection = await ctx.database.connection.getById(
+    userId,
+    connectionId,
+  );
 
   if (!connection) {
     ctx.logger.error(

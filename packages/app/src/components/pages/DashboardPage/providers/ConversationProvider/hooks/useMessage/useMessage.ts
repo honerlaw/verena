@@ -1,0 +1,137 @@
+import { useCallback, useState } from "react"
+import { useMutation } from "@tanstack/react-query"
+import { TextInputKeyPressEvent } from "react-native"
+import { useTRPC } from "@/src/providers/TRPCProvider"
+import { useReportError } from "@/src/hooks/useReportError"
+
+export type ChatMessage = {
+  id: string
+  role: "user" | "assistant"
+  content: string
+}
+
+const DEFAULT_MESSAGE: ChatMessage = {
+  id: "welcome",
+  role: "assistant",
+  content: "Hello! I'm your AI assistant. How can I help you today?",
+}
+
+type UseMessageReturn = {
+  messages: ChatMessage[]
+  isSending: boolean
+  sendMessage: (message: string) => Promise<void>
+  addMessage: (message: ChatMessage) => void
+  clearMessages: () => void
+  error: unknown | null
+  inputText: string
+  setInputText: (text: string) => void
+  handleSend: () => Promise<void>
+  handleEnterKey: (e: TextInputKeyPressEvent) => void
+  isSendDisabled: boolean
+}
+
+export const useMessage = (create: () => Promise<string | null>): UseMessageReturn => {
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    DEFAULT_MESSAGE,
+  ])
+  const [isSending, setIsSending] = useState(false)
+  const [error, setError] = useState<unknown | null>(null)
+  const [inputText, setInputText] = useState("")
+  
+  const trpc = useTRPC()
+  const { report } = useReportError()
+
+  const { mutateAsync: getAgentResponse } = useMutation(
+    trpc.agent.respond.mutationOptions()
+  )
+
+  const addMessage = useCallback((message: ChatMessage) => {
+    setMessages((prev) => [...prev, message])
+  }, [])
+
+  const clearMessages = useCallback(() => {
+    setMessages([
+      DEFAULT_MESSAGE,
+    ])
+  }, [])
+
+  const sendMessage = useCallback(async (message: string) => {
+    const trimmed = message.trim()
+    if (!trimmed || isSending) return
+
+    const conversationId = await create()
+    if (!conversationId) {
+      return
+    }
+
+    setError(null)
+    setIsSending(true)
+    
+    const userMessage: ChatMessage = {
+      id: `${Date.now()}`,
+      role: "user",
+      content: trimmed,
+    }
+    
+    // Add user message immediately
+    addMessage(userMessage)
+    
+    try {
+      // Get agent response
+      const result = await getAgentResponse({
+        conversationId,
+        message: trimmed
+      })
+      
+      const assistantMessage: ChatMessage = {
+        id: `${Date.now()}-assistant`,
+        role: "assistant",
+        content: result.response,
+      }
+      
+      addMessage(assistantMessage)
+    } catch (err) {
+      console.error('Failed to get agent response:', err)
+      setError(err)
+      report(err, "Failed to send message")
+      
+      // Add error message
+      const errorMessage: ChatMessage = {
+        id: `${Date.now()}-error`,
+        role: "assistant",
+        content: "Sorry, I encountered an error processing your message. Please try again.",
+      }
+      addMessage(errorMessage)
+    } finally {
+      setIsSending(false)
+    }
+  }, [isSending, addMessage, getAgentResponse, report])
+
+  const handleSend = useCallback(async () => {
+    setInputText("")
+    await sendMessage(inputText)
+  }, [inputText, sendMessage])
+
+  const handleEnterKey = useCallback((e: TextInputKeyPressEvent) => {
+    if (e?.nativeEvent?.key === "Enter") {
+      e.preventDefault?.()
+      handleSend()
+    }
+  }, [handleSend])
+
+  const isSendDisabled = inputText.trim().length === 0 || isSending
+
+  return {
+    messages,
+    isSending,
+    sendMessage,
+    addMessage,
+    clearMessages,
+    error,
+    inputText,
+    setInputText,
+    handleSend,
+    handleEnterKey,
+    isSendDisabled
+  }
+}
