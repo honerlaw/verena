@@ -11,3 +11,4 @@ Verena is your trusted and personalized AI Financial Assistant.
 - Verify web app works
 - Create landing page / privacy policy / TOS / etc
 - Deploy to testflight
+- cleanup the prompt ids from the backend to return a smaller set
