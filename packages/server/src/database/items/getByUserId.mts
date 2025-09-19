@@ -1,0 +1,20 @@
+import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type DBClient, type Item } from "../../util/database.mjs";
+
+export const getByUserId = async function (
+  logger: Logger,
+  client: DBClient,
+  userId: string,
+): Promise<Item[]> {
+  try {
+    return await client.item.findMany({
+      where: { userId },
+    });
+  } catch (err) {
+    logger.error(
+      { error: err, tags: ["database", "user", "items", "getItems"] },
+      "Failed to get items",
+    );
+    return [];
+  }
+};

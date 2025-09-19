@@ -16,7 +16,7 @@ export async function getAllConnections(
     const result = await graphqlClient.query<
       GetConnectionsQuery,
       GetConnectionsQueryVariables
-    >(GetConnectionsDocument, null);
+    >(GetConnectionsDocument, {});
 
     if (result.error) {
       logger.error(

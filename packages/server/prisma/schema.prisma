@@ -20,16 +20,80 @@ model User {
   // clerk id
   authId    String   @unique
 
+  // quiltt related
   connections Connection[]
   transactions Transaction[]
+  sessionToken SessionToken?
+
+  // openai related
   conversations Conversation[]
 
-  sessionToken SessionToken?
+  // plaid related
+  items Item[]
+  itemTransactions ItemTransaction[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+// PLAID START //
+
+enum ItemStatus {
+  INITIALIZING // item hasn't had its first sync yet
+  SYNCED // first full sync has completed for transactions
+  RECONNECT // user needs to reconnect the item
+}
+
+model Item {
+  id String @id @default(uuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token String
+  itemId String @unique
+  nextCursor String?
+
+  status ItemStatus @default(INITIALIZING)
+
+  itemTransactions ItemTransaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ItemTransaction {
+  id String @id @default(uuid())
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemId String
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  transactionId String @unique
+  transaction Bytes // this is going to be encrypted and stored as Bytea in the database
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// OPENAI START //
+model Conversation {
+  id String @id @default(uuid())
+
+  openaiConversationId String @unique
+
+  title String?
+
+  userId String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// QUILTT START //
 enum ConnectionStatus {
   INITIALIZING // after the connection is created
   SYNCED_INITIAL // after the initial sync is complete
@@ -75,20 +139,6 @@ model SessionToken {
 
   token String
   expiresAt DateTime
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Conversation {
-  id String @id @default(uuid())
-
-  openaiConversationId String @unique
-
-  title String?
-
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

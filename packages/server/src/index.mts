@@ -31,6 +31,8 @@ app.use("/api/app/config", express.json(), config);
 
 app.use("/api/webhook/quiltt", express.json(), quiltt);
 
+app.use("/api/webhook/plaid", express.json(), quiltt);
+
 // Serve static files from public directory (including .well-known)
 app.use(express.static(path.join(__dirname, "../public")));
 

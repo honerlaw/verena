@@ -6,16 +6,24 @@ import * as connectionDB from "./database/connection/index.mjs";
 import * as transactionDB from "./database/transaction/index.mjs";
 import * as sessionTokenDB from "./database/sessionToken/index.mjs";
 import * as conversationDB from "./database/conversation/index.mjs";
+import * as itemsDB from "./database/items/index.mjs";
+import * as itemsTransactionsDB from "./database/items/transactions/index.mjs";
 
 import * as clerkDS from "./datasource/clerk/index.mjs";
 import * as quilttDS from "./datasource/quiltt/index.mjs";
 import * as quilttGraphQLDS from "./datasource/quiltt/graphql/index.mjs";
 import * as openaiDS from "./datasource/openai/index.mjs";
 import * as openaiConversationDS from "./datasource/openai/conversation/index.mjs";
+import * as plaidDS from "./datasource/plaid/index.mjs";
+import * as plaidTokenDS from "./datasource/plaid/token/index.mjs";
+import * as plaidAccountDS from "./datasource/plaid/account/index.mjs";
+import * as plaidWebhookDS from "./datasource/plaid/webhook/index.mjs";
+import * as plaidTransactionsDS from "./datasource/plaid/transactions/index.mjs";
 
 import * as service from "./service/index.mjs";
 import * as sessionTokenService from "./service/sessionToken/index.mjs";
 import * as openaiService from "./service/openai/index.mjs";
+import * as transactionsService from "./service/transactions/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -37,6 +45,7 @@ const options = {
     const { createQuilttGraphQLClient, ...quilttGraphQLDSRemaining } =
       quilttGraphQLDS;
     const { openaiClient, ...openaiDSRemaining } = openaiDS;
+    const { plaidClient } = plaidDS;
 
     return {
       logger: childLogger,
@@ -57,6 +66,15 @@ const options = {
             wrap(childLogger, openaiConversationDS),
           ),
         },
+        plaid: {
+          token: wrap(plaidClient, wrap(childLogger, plaidTokenDS)),
+          webhook: wrap(plaidClient, wrap(childLogger, plaidWebhookDS)),
+          account: wrap(plaidClient, wrap(childLogger, plaidAccountDS)),
+          transactions: wrap(
+            plaidClient,
+            wrap(childLogger, plaidTransactionsDS),
+          ),
+        },
       },
       database: {
         client,
@@ -65,12 +83,17 @@ const options = {
         transaction: wrap(client, wrap(childLogger, transactionDB)),
         sessionToken: wrap(client, wrap(childLogger, sessionTokenDB)),
         conversation: wrap(client, wrap(childLogger, conversationDB)),
+        items: {
+          ...wrap(client, wrap(childLogger, itemsDB)),
+          transactions: wrap(client, wrap(childLogger, itemsTransactionsDB)),
+        },
       },
       additional: additional || {},
       service: {
         root: service,
         sessionToken: sessionTokenService,
         agent: openaiService,
+        transactions: transactionsService,
       },
     };
   },

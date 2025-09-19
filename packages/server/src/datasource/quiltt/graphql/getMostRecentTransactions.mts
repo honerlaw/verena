@@ -17,11 +17,10 @@ export async function getMostRecentTransactions(
   graphqlClient: QuilttGraphQLClient,
 ): Promise<GQLTransaction[] | null> {
   try {
-
     const result = await graphqlClient.query<
       GetTransactionsQuery,
       GetTransactionsQueryVariables
-    >(GetTransactionsDocument, null);
+    >(GetTransactionsDocument, {});
 
     if (result.error) {
       logger.error(

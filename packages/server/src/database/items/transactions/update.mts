@@ -1,0 +1,24 @@
+import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { DBClient } from "../../../util/database.mjs";
+
+export async function update(
+  logger: Logger,
+  client: DBClient,
+  userId: string,
+  itemId: string,
+  itemTransactionId: string,
+  transaction: Buffer,
+) {
+  try {
+    return await client.itemTransaction.update({
+      where: { id: itemTransactionId, itemId: itemId, userId: userId },
+      data: { transaction },
+    });
+  } catch (error) {
+    logger.error(
+      { error, tags: ["database", "items", "transactions", "update"] },
+      "Failed to update item transaction",
+    );
+    return null;
+  }
+}
