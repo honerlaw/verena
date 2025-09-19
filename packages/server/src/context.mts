@@ -2,16 +2,11 @@ import { type Logger, logger } from "@onerlaw/framework/backend/logger";
 import { wrap } from "@onerlaw/framework/backend/utils";
 
 import * as userDB from "./database/user/index.mjs";
-import * as connectionDB from "./database/connection/index.mjs";
-import * as transactionDB from "./database/transaction/index.mjs";
-import * as sessionTokenDB from "./database/sessionToken/index.mjs";
 import * as conversationDB from "./database/conversation/index.mjs";
 import * as itemsDB from "./database/items/index.mjs";
 import * as itemsTransactionsDB from "./database/items/transactions/index.mjs";
 
 import * as clerkDS from "./datasource/clerk/index.mjs";
-import * as quilttDS from "./datasource/quiltt/index.mjs";
-import * as quilttGraphQLDS from "./datasource/quiltt/graphql/index.mjs";
 import * as openaiDS from "./datasource/openai/index.mjs";
 import * as openaiConversationDS from "./datasource/openai/conversation/index.mjs";
 import * as plaidDS from "./datasource/plaid/index.mjs";
@@ -19,9 +14,9 @@ import * as plaidTokenDS from "./datasource/plaid/token/index.mjs";
 import * as plaidAccountDS from "./datasource/plaid/account/index.mjs";
 import * as plaidWebhookDS from "./datasource/plaid/webhook/index.mjs";
 import * as plaidTransactionsDS from "./datasource/plaid/transactions/index.mjs";
+import * as plaidItemDS from "./datasource/plaid/item/index.mjs";
 
 import * as service from "./service/index.mjs";
-import * as sessionTokenService from "./service/sessionToken/index.mjs";
 import * as openaiService from "./service/openai/index.mjs";
 import * as transactionsService from "./service/transactions/index.mjs";
 
@@ -41,9 +36,6 @@ const options = {
     additional?: { [key: string]: unknown },
   ) => {
     const { clerkClient, ...clerkDSRemaining } = clerkDS;
-    const { quilttClient, ...quilttDSRemaining } = quilttDS;
-    const { createQuilttGraphQLClient, ...quilttGraphQLDSRemaining } =
-      quilttGraphQLDS;
     const { openaiClient, ...openaiDSRemaining } = openaiDS;
     const { plaidClient } = plaidDS;
 
@@ -53,11 +45,6 @@ const options = {
         user,
       },
       datasource: {
-        quiltt: wrap(quilttClient, wrap(childLogger, quilttDSRemaining)),
-        quilttGraphQL: {
-          createQuilttGraphQLClient,
-          ...wrap(childLogger, quilttGraphQLDSRemaining),
-        },
         clerk: wrap(clerkClient, wrap(childLogger, clerkDSRemaining)),
         openai: {
           ...wrap(openaiClient, wrap(childLogger, openaiDSRemaining)),
@@ -74,14 +61,12 @@ const options = {
             plaidClient,
             wrap(childLogger, plaidTransactionsDS),
           ),
+          item: wrap(plaidClient, wrap(childLogger, plaidItemDS)),
         },
       },
       database: {
         client,
         user: wrap(client, wrap(childLogger, userDB)),
-        connection: wrap(client, wrap(childLogger, connectionDB)),
-        transaction: wrap(client, wrap(childLogger, transactionDB)),
-        sessionToken: wrap(client, wrap(childLogger, sessionTokenDB)),
         conversation: wrap(client, wrap(childLogger, conversationDB)),
         items: {
           ...wrap(client, wrap(childLogger, itemsDB)),
@@ -91,7 +76,6 @@ const options = {
       additional: additional || {},
       service: {
         root: service,
-        sessionToken: sessionTokenService,
         agent: openaiService,
         transactions: transactionsService,
       },

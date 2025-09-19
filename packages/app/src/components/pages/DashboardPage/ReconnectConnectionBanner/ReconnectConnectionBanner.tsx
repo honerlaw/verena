@@ -6,27 +6,27 @@ import { ConnectionBannerSection } from "./ConnectionBannerSection/ConnectionBan
 export const ReconnectConnectionBanner: React.FC = () => {
   const trpc = useTRPC();
 
-  const { data: connectionsData, isLoading } = useQuery(
-    trpc.connection.getAll.queryOptions(),
+  const { data: itemsData, isLoading } = useQuery(
+    trpc.item.getAll.queryOptions(),
   );
 
   if (isLoading) {
     return null;
   }
 
-  const reconnectConnections =
-    connectionsData?.connections?.filter(
-      (connection) => connection.status.toString() === "RECONNECT",
+  const reconnectItems =
+    itemsData?.items?.filter(
+      (item) => item.status.toString() === "RECONNECT",
     ) || [];
 
-  if (reconnectConnections.length === 0) {
+  if (reconnectItems.length === 0) {
     return null;
   }
 
   return (
     <>
-      {reconnectConnections.map((connection) => (
-        <ConnectionBannerSection key={connection.id} connection={connection} />
+      {reconnectItems.map((item) => (
+        <ConnectionBannerSection key={item.itemId} item={item} />
       ))}
     </>
   );

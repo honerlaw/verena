@@ -2,18 +2,16 @@ import React from "react";
 import { YStack, XStack, Text, Button } from "tamagui";
 import { Plus } from "@tamagui/lucide-icons";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useLinkToPlaid } from "@/src/components/LinkToPlaid";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { LoadingView } from "@/src/components/LoadingView";
 import { ErrorView } from "@/src/components/ErrorView";
 import { ConnectionCard } from "./ConnectionCard";
 
 export const ConnectionList: React.FC = () => {
-  const router = useRouter();
+  const { openLink } = useLinkToPlaid();
   const trpc = useTRPC();
-  const { data, isLoading, error } = useQuery(
-    trpc.connection.getAll.queryOptions(),
-  );
+  const { data, isLoading, error } = useQuery(trpc.item.getAll.queryOptions());
 
   if (isLoading) {
     return <LoadingView />;
@@ -30,10 +28,10 @@ export const ConnectionList: React.FC = () => {
   }
 
   const handleAddConnection = () => {
-    router.push("/connector");
+    openLink();
   };
 
-  const connectionCount = data?.connections?.length || 0;
+  const connectionCount = data?.items?.length || 0;
   const hasConnections = connectionCount > 0;
 
   return (
@@ -57,10 +55,10 @@ export const ConnectionList: React.FC = () => {
         />
       </XStack>
 
-      {hasConnections && data?.connections && (
+      {hasConnections && data?.items && (
         <YStack gap="$3">
-          {data.connections.map((connection) => (
-            <ConnectionCard key={connection.id} connection={connection} />
+          {data.items.map((item) => (
+            <ConnectionCard key={item.itemId} item={item} />
           ))}
         </YStack>
       )}

@@ -1,3 +1,3 @@
-export { LinkToPlaid } from "./LinkToPlaid"
+export { LinkToPlaid } from "./LinkToPlaid";
 
-export { useLinkToPlaid } from "./useLinkToPlaid"
+export { useLinkToPlaid } from "./useLinkToPlaid";

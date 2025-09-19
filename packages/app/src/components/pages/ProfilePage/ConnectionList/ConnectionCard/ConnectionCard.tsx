@@ -3,17 +3,15 @@ import { YStack, XStack, Text, Card, Separator } from "tamagui";
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs";
 import { ConnectionDisconnectButton } from "../ConnectionDisconnectButton";
 
-export type Connection = Awaited<
-  ReturnType<AppRouter["connection"]["getAll"]>
->["connections"][number];
+export type Item = Awaited<
+  ReturnType<AppRouter["item"]["getAll"]>
+>["items"][number];
 
 export interface ConnectionCardProps {
-  connection: Connection;
+  item: Item;
 }
 
-export const ConnectionCard: React.FC<ConnectionCardProps> = ({
-  connection,
-}) => {
+export const ConnectionCard: React.FC<ConnectionCardProps> = ({ item }) => {
   const [isAccountsExpanded, setIsAccountsExpanded] = useState(false);
 
   return (
@@ -29,18 +27,18 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
           <Text color="$gray8">🏦</Text>
           <YStack gap="$1" flex={1}>
             <Text fontSize="$5" fontWeight="600" color="$color">
-              {connection.institution.name}
+              {item.institutionName ?? "An account"}
             </Text>
             <Text fontSize="$3" color="$gray11" textTransform="capitalize">
-              {connection.provider} • {connection.status}
+              {item.status.toLowerCase()}
             </Text>
           </YStack>
           <XStack alignItems="center" gap="$2">
-            <ConnectionDisconnectButton connection={connection} />
+            <ConnectionDisconnectButton item={item} />
           </XStack>
         </XStack>
 
-        {connection.accounts.length > 0 && (
+        {item.accounts && item.accounts.length > 0 && (
           <>
             <Separator />
             <YStack gap="$2">
@@ -56,12 +54,12 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
                   {isAccountsExpanded ? "▼" : "▶"}
                 </Text>
                 <Text fontSize="$3" fontWeight="500" color="$gray11">
-                  Accounts ({connection.accounts.length})
+                  Accounts ({item.accounts?.length ?? 0})
                 </Text>
               </XStack>
               {isAccountsExpanded && (
                 <YStack gap="$1" paddingLeft="$4">
-                  {connection.accounts.map((account) => (
+                  {item.accounts?.map((account) => (
                     <Text key={account.id} fontSize="$3" color="$color">
                       • {account.name}
                     </Text>

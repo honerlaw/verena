@@ -1,1 +1,1 @@
-export { UniversalLinkHandler } from './UniversalLinkHandler';
+export { UniversalLinkHandler } from "./UniversalLinkHandler";

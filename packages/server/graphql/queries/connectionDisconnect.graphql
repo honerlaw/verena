@@ -1,8 +1,0 @@
-mutation ConnectionDisconnect($id: ID!) {
-  connectionDisconnect(input: { id: $id }) {
-    success
-    record {
-      id
-    }
-  }
-}

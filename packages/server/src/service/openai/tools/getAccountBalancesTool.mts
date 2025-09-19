@@ -62,8 +62,8 @@ async function executeGetAccountBalances(context: Context): Promise<string> {
   );
 
   const tableRows = filteredAccounts
-    .map((account) => {
-      const availableBalance = account.balance?.available
+    .map(() => {
+      /*const availableBalance = account.balance?.available
         ? `$${account.balance.available.toFixed(2)}`
         : "N/A";
       const currentBalance = account.balance?.current
@@ -76,7 +76,8 @@ async function executeGetAccountBalances(context: Context): Promise<string> {
         ? new Date(account.balance.at).toLocaleDateString()
         : "N/A";
 
-      return `| ${account.name} | ${account.type} | ${availableBalance} | ${currentBalance} | ${creditLimit} | ${balanceAt} |`;
+      return `| ${account.name} | ${account.type} | ${availableBalance} | ${currentBalance} | ${creditLimit} | ${balanceAt} |`;*/
+      return ``;
     })
     .join("\n");
 

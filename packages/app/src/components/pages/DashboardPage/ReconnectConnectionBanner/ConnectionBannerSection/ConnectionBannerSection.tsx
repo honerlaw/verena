@@ -1,30 +1,31 @@
 import React from "react";
 import { YStack, XStack, Text, Button } from "tamagui";
 import { AlertTriangle, X } from "@tamagui/lucide-icons";
-import { useRouter } from "expo-router";
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs";
 import { useDismissed } from "@/src/hooks/useDismissed";
+import { useLinkToPlaid } from "@/src/components/LinkToPlaid";
 
-type Connection =
-  AppRouter["connection"]["getAll"]["_def"]["$types"]["output"]["connections"][number];
+type Item =
+  AppRouter["item"]["getAll"]["_def"]["$types"]["output"]["items"][number];
 
 const DISMISSED_CONNECTIONS_KEY = "reconnect_banner_dismissed_connections";
 
 type ConnectionBannerSectionProps = {
-  connection: Connection;
+  item: Item;
 };
 
 export const ConnectionBannerSection: React.FC<
   ConnectionBannerSectionProps
-> = ({ connection }) => {
-  const router = useRouter();
+> = ({ item }) => {
   const { isDismissed, dismiss } = useDismissed({
     storageKey: DISMISSED_CONNECTIONS_KEY,
-    id: connection.id,
+    id: item.itemId,
   });
 
+  const { openLink } = useLinkToPlaid();
+
   const handleReconnect = () => {
-    router.push("/connector");
+    openLink();
   };
 
   if (isDismissed) {
@@ -50,7 +51,7 @@ export const ConnectionBannerSection: React.FC<
         <AlertTriangle size={16} color="$red9" />
         <YStack flex={1} gap="$1">
           <Text fontSize="$3" fontWeight="600" color="$red11">
-            {connection.institution.name} needs reconnection
+            {item.institutionName ?? "Your account"} needs reconnection
           </Text>
           <Text fontSize="$2" color="$red10">
             Your connection has expired and needs to be reauthorized.
