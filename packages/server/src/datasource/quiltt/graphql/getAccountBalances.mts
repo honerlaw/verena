@@ -16,7 +16,7 @@ export async function getAccountBalances(
     const result = await graphqlClient.query<
       GetBalancesQuery,
       GetBalancesQueryVariables
-    >(GetBalancesDocument, {});
+    >(GetBalancesDocument, null);
 
     if (result.error) {
       logger.error(

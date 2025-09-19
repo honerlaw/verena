@@ -23,7 +23,7 @@ async function fetchTransactionsRecursively(
       ? {
           after: cursor,
         }
-      : {};
+      : null;
 
     const result = await graphqlClient.query<
       GetTransactionsQuery,

@@ -17,20 +17,16 @@ export async function getMostRecentTransactions(
   graphqlClient: QuilttGraphQLClient,
 ): Promise<GQLTransaction[] | null> {
   try {
-    const variables: GetTransactionsQueryVariables = {};
 
     const result = await graphqlClient.query<
       GetTransactionsQuery,
       GetTransactionsQueryVariables
-    >(GetTransactionsDocument, variables);
+    >(GetTransactionsDocument, null);
 
     if (result.error) {
       logger.error(
         {
           error: result.error,
-          attributes: {
-            variables,
-          },
         },
         "GraphQL error while fetching most recent transactions",
       );

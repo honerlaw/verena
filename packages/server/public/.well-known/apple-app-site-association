@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "*.com.onerlaw.verena"
+        ],
+        "components": [
+          {
+            "/": "/connect/*",
+            "comment": "Matches any URL with path /connect/*"
+          }
+        ]
+      }
+    ]
+  }
+}

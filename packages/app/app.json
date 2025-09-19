@@ -10,7 +10,11 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.onerlaw.verena"
+      "bundleIdentifier": "com.onerlaw.verena",
+      "associatedDomains": [
+        "applinks:verena.app",
+        "applinks:www.verena.app"
+      ]
     },
     "android": {
       "adaptiveIcon": {
@@ -20,7 +24,29 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "verena.app",
+              "pathPrefix": "/connect"
+            },
+            {
+              "scheme": "https", 
+              "host": "www.verena.app",
+              "pathPrefix": "/connect"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     },
     "web": {
       "output": "static",
@@ -44,7 +70,8 @@
     ],
     "experiments": {
       "typedRoutes": true,
-      "reactCompiler": true
+      "reactCompiler": true,
+      "staticRendering": false
     }
   }
 }
