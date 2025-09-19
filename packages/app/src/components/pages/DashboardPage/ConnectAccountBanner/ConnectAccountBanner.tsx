@@ -28,7 +28,7 @@ export const ConnectAccountBanner: React.FC = () => {
     isDismissed ||
     (connectionsData?.connections && connectionsData.connections.length > 0)
   ) {
-    // return null;
+    return null;
   }
 
   const handleConnectAccount = () => {
