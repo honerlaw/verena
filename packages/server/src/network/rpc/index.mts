@@ -4,17 +4,19 @@ import { router } from "./router.mjs";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import type { User } from "../../util/database.mjs";
 import * as userRoutes from "./route/user/index.mjs";
-import * as connectionRoutes from "./route/connection/index.mjs";
 import * as agentRoutes from "./route/agent/index.mjs";
 import * as conversationRoutes from "./route/conversation/index.mjs";
 import * as promptRoutes from "./route/prompt/index.mjs";
+import * as linkRoutes from "./route/link/index.mjs";
+import * as itemRoutes from "./route/item/index.mjs";
 
 const appRouter = router({
   user: router(userRoutes),
-  connection: router(connectionRoutes),
   agent: router(agentRoutes),
   conversation: router(conversationRoutes),
   prompt: router(promptRoutes),
+  link: router(linkRoutes),
+  item: router(itemRoutes),
 });
 
 export type AppRouter = typeof appRouter;

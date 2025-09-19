@@ -66,8 +66,9 @@ async function executeGetMostRecentTransactions(
 
   const tableRows = filteredTransactions
     .map(
-      (t) =>
-        `| ${t.date} | ${t.description} | ${t.kind} | $${t.amount.toFixed(2)} | ${t.entryType} | ${t.account.name} |`,
+      () =>
+        // `| ${t.date} | ${t.original_description} | ${t.category} | $${t.amount.toFixed(2)} | ${t.personal_finance_category?.primary} | ${t.account_id} |`,
+        ``,
     )
     .join("\n");
 

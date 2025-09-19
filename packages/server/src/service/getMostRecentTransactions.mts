@@ -1,16 +1,6 @@
 import type { Context } from "../context.mjs";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function getMostRecentTransactions(context: Context) {
-  const sessionToken =
-    await context.service.sessionToken.getSessionTokenByAuthContext(context);
-
-  if (!sessionToken) {
-    return null;
-  }
-
-  const client = context.datasource.quilttGraphQL.createQuilttGraphQLClient(
-    sessionToken.token,
-  );
-
-  return context.datasource.quilttGraphQL.getMostRecentTransactions(client);
+  return [];
 }

@@ -5,7 +5,7 @@ import { contextMiddleware } from "./context.mjs";
 import { logger, register } from "@onerlaw/framework/backend/logger";
 import { expressTRPCMiddleware } from "./network/rpc/index.mjs";
 import { config } from "./network/http/index.mjs";
-import { quiltt } from "./network/http/webhook/quiltt/index.mjs";
+import { plaidWebhook } from "./network/http/webhook/plaid/webhook.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,9 +29,7 @@ app.use("/api/trpc", express.json(), expressTRPCMiddleware);
 
 app.use("/api/app/config", express.json(), config);
 
-app.use("/api/webhook/quiltt", express.json(), quiltt);
-
-app.use("/api/webhook/plaid", express.json(), quiltt);
+app.use("/api/webhook/plaid", express.json(), plaidWebhook);
 
 // Serve static files from public directory (including .well-known)
 app.use(express.static(path.join(__dirname, "../public")));

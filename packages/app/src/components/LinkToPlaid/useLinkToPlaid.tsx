@@ -1,63 +1,53 @@
-import { useEffect, useMemo } from "react"
-import { create, open } from "react-native-plaid-link-sdk"
-import * as Sentry from "@sentry/react-native"
-import { useTRPC } from "@/src/providers/TRPCProvider"
+import { useEffect, useMemo } from "react";
+import { create, open } from "react-native-plaid-link-sdk";
+import { useTRPC } from "@/src/providers/TRPCProvider";
+import { useMutation } from "@tanstack/react-query";
+import { useReportError } from "@/src/hooks/useReportError";
 
-export function useLinkToPlaid(tokenId?: string) {
-  const t = useTRPC()
+export function useLinkToPlaid(itemId?: string) {
+  const trpc = useTRPC();
+  const { report } = useReportError();
 
   const {
-    data: createData,
-    error: createError,
+    data,
+    error,
     mutateAsync: createLinkToken,
-  } = trpc.createLinkToken.useMutation()
-  const {
-    data: updateData,
-    error: updateError,
-    mutateAsync: updateLinkToken,
-  } = trpc.updateLinkToken.useMutation()
+  } = useMutation(trpc.link.create.mutationOptions());
   const { mutateAsync: exchangePublicToken, error: exchangeError } =
-    trpc.exchangePublicToken.useMutation()
+    useMutation(trpc.link.exchange.mutationOptions());
 
   useEffect(() => {
-    if (tokenId) {
-      updateLinkToken({
-        tokenId,
-      })
-    } else {
-      createLinkToken()
-    }
-  }, [tokenId, createLinkToken, updateLinkToken])
-
-  const data = tokenId ? updateData : createData
-  const error = tokenId ? updateError : createError
+    createLinkToken({
+      itemId,
+    });
+  }, [itemId, createLinkToken]);
 
   useEffect(() => {
     if (!data?.token) {
-      return
+      return;
     }
     create({
-      token: data.token,
+      token: data.token.link_token,
       noLoadingState: true,
-    })
-  }, [tokenId, data?.token])
+    });
+  }, [itemId, data?.token]);
 
-  const token = data?.token || null
+  const token = data?.token?.link_token || null;
 
   // notify sentry of the error since we want to render nothing if it fails
   useMemo(() => {
     if (!error) {
-      return
+      return;
     }
-    Sentry.captureException(error)
-  }, [error])
+    report(error);
+  }, [error, report]);
 
   useMemo(() => {
     if (!exchangeError) {
-      return
+      return;
     }
-    Sentry.captureException(exchangeError)
-  }, [exchangeError])
+    report(exchangeError);
+  }, [exchangeError, report]);
 
   const openLink = () => {
     open({
@@ -70,19 +60,21 @@ export function useLinkToPlaid(tokenId?: string) {
             mask: account.mask,
             type: account.type,
           })),
-        }).finally(() => {
-          emit()
-        })
+        });
 
         // create a new token for the next time
-        createLinkToken()
+        createLinkToken({
+          itemId,
+        });
       },
       onExit: () => {
         // create a new token for the next time
-        createLinkToken()
+        createLinkToken({
+          itemId,
+        });
       },
-    })
-  }
+    });
+  };
 
   return {
     // this is to match the contract with web
@@ -90,5 +82,5 @@ export function useLinkToPlaid(tokenId?: string) {
     error,
     token,
     openLink,
-  }
+  };
 }
