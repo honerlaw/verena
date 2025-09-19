@@ -1,0 +1,25 @@
+[
+    {
+      "project": "verena",
+      "environment": {
+        "name": "prod",
+        "environment": "prod",
+        "database": {
+          "name": "verena_prod",
+          "user": "verena_prod_user"
+        },
+        "pubsub": null,
+        "apps": [
+          {
+            "name": "server",
+            "port": 3000,
+            "prebuild": "npm run build:web",
+            "dns": {
+              "domainName": "verena.app",
+              "subdomainNames": ["www"]
+            }
+          }
+        ]
+      }
+    }
+  ]

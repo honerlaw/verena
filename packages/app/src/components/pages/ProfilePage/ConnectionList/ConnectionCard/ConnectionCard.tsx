@@ -25,7 +25,8 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
       borderColor="$borderColor"
     >
       <YStack gap="$3">
-        <XStack alignItems="center" justifyContent="space-between">
+        <XStack alignItems="center" justifyContent="space-between" gap="$4">
+          <Text color="$gray8">🏦</Text>
           <YStack gap="$1" flex={1}>
             <Text fontSize="$5" fontWeight="600" color="$color">
               {connection.institution.name}
@@ -35,21 +36,6 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({
             </Text>
           </YStack>
           <XStack alignItems="center" gap="$2">
-            <XStack
-              width={48}
-              height={48}
-              backgroundColor="$gray3"
-              borderRadius="$2"
-              alignItems="center"
-              justifyContent="center"
-              overflow="hidden"
-            >
-              {/* Would need an Image component to display the logo */}
-              <Text fontSize="$2" color="$gray8">
-                🏦
-              </Text>
-            </XStack>
-
             <ConnectionDisconnectButton connection={connection} />
           </XStack>
         </XStack>

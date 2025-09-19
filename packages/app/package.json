@@ -5,12 +5,14 @@
   "scripts": {
     "build": "tsc --noEmit",
     "clean": "rm -rf node_modules .vscode package-lock.json ios android .expo-env.d.ts .tamagui .expo dist",
+    "clean:cache": "rm -rf .expo .tamagui ios android .expo-env.d.ts dist $TMPDIR/react-* && watchman watch-del-all",
     "start": "expo start",
     "start:clear": "expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "web:export": "npm run clean:cache && expo export -p web",
     "lint": "expo lint",
     "lint:format": "expo lint --fix"
   },
