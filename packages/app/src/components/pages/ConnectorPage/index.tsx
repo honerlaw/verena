@@ -1,1 +1,1 @@
-export { ConnectorPage } from "./ConnectorPage"
+export { ConnectorPage } from "./ConnectorPage";

@@ -1,16 +1,20 @@
-import React, { useState } from "react"
-import { YStack, XStack, Text, Card, Separator } from "tamagui"
-import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs"
-import { ConnectionDisconnectButton } from "../ConnectionDisconnectButton"
+import React, { useState } from "react";
+import { YStack, XStack, Text, Card, Separator } from "tamagui";
+import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs";
+import { ConnectionDisconnectButton } from "../ConnectionDisconnectButton";
 
-export type Connection = Awaited<ReturnType<AppRouter['connection']['getAll']>>['connections'][number]
+export type Connection = Awaited<
+  ReturnType<AppRouter["connection"]["getAll"]>
+>["connections"][number];
 
 export interface ConnectionCardProps {
-  connection: Connection
+  connection: Connection;
 }
 
-export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) => {
-  const [isAccountsExpanded, setIsAccountsExpanded] = useState(false)
+export const ConnectionCard: React.FC<ConnectionCardProps> = ({
+  connection,
+}) => {
+  const [isAccountsExpanded, setIsAccountsExpanded] = useState(false);
 
   return (
     <Card
@@ -45,7 +49,7 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) =>
                 🏦
               </Text>
             </XStack>
-            
+
             <ConnectionDisconnectButton connection={connection} />
           </XStack>
         </XStack>
@@ -83,5 +87,5 @@ export const ConnectionCard: React.FC<ConnectionCardProps> = ({ connection }) =>
         )}
       </YStack>
     </Card>
-  )
-}
+  );
+};

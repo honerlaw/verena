@@ -1,1 +1,1 @@
-export { DeleteAccountSection } from "./DeleteAccountSection"
+export { DeleteAccountSection } from "./DeleteAccountSection";

@@ -1,19 +1,19 @@
-import React from "react"
-import { YStack, Text, Button } from "tamagui"
-import { useMutation } from "@tanstack/react-query"
-import { useTRPC } from "@/src/providers/TRPCProvider"
-import { useReportError } from "@/src/hooks/useReportError"
-import { useAuth } from "@/src/hooks/useAuth"
-import { AlertModal } from "@/src/components/AlertModal"
+import React from "react";
+import { YStack, Text, Button } from "tamagui";
+import { useMutation } from "@tanstack/react-query";
+import { useTRPC } from "@/src/providers/TRPCProvider";
+import { useReportError } from "@/src/hooks/useReportError";
+import { useAuth } from "@/src/hooks/useAuth";
+import { AlertModal } from "@/src/components/AlertModal";
 
 export const DeleteAccountSection: React.FC = () => {
-  const trpc = useTRPC()
-  const { report } = useReportError()
-  const { logout } = useAuth()
+  const trpc = useTRPC();
+  const { report } = useReportError();
+  const { logout } = useAuth();
 
   const { mutateAsync: removeUser, isPending } = useMutation(
     trpc.user.remove.mutationOptions(),
-  )
+  );
 
   return (
     <YStack
@@ -48,11 +48,11 @@ export const DeleteAccountSection: React.FC = () => {
             style: "destructive",
             onPress: async () => {
               try {
-                await removeUser()
+                await removeUser();
                 // Sign out the user after successful deletion
-                await logout()
+                await logout();
               } catch (error) {
-                report(error, "Failed to delete account. Please try again.")
+                report(error, "Failed to delete account. Please try again.");
               }
             },
           },
@@ -76,5 +76,5 @@ export const DeleteAccountSection: React.FC = () => {
         </Button>
       </AlertModal>
     </YStack>
-  )
-}
+  );
+};

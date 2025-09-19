@@ -71,9 +71,5 @@ async function executeGetMostRecentTransactions(
     )
     .join("\n");
 
-  const table = `${tableHeader}\n${tableSeparator}\n${tableRows}`;
-
-  console.log(table);
-
-  return table;
+  return `${tableHeader}\n${tableSeparator}\n${tableRows}`;
 }

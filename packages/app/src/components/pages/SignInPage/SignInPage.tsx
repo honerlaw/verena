@@ -1,11 +1,11 @@
-import { useRouter } from "expo-router"
-import React from "react"
-import { Button, Form, H1, H3, Input, Stack, Text, YStack } from "tamagui"
-import { KeyboardAvoiding } from "@/src/components/KeyboardAvoiding"
-import { useSignInForm } from "./hooks/useSignInForm"
+import { useRouter } from "expo-router";
+import React from "react";
+import { Button, Form, H1, H3, Input, Stack, Text, YStack } from "tamagui";
+import { KeyboardAvoiding } from "@/src/components/KeyboardAvoiding";
+import { useSignInForm } from "./hooks/useSignInForm";
 
 export function SignInPage() {
-  const router = useRouter()
+  const router = useRouter();
   const {
     emailAddress,
     setEmailAddress,
@@ -14,7 +14,7 @@ export function SignInPage() {
     errors,
     onSignInPress,
     isSigningIn,
-  } = useSignInForm()
+  } = useSignInForm();
 
   return (
     <KeyboardAvoiding>
@@ -58,5 +58,5 @@ export function SignInPage() {
         </YStack>
       </Form>
     </KeyboardAvoiding>
-  )
+  );
 }

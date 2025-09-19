@@ -1,3 +1,1 @@
-export { ChatBar } from "./ChatBar"
-
-
+export { ChatBar } from "./ChatBar";

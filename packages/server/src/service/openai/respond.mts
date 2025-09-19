@@ -43,17 +43,6 @@ export async function respond(
       );
     }
 
-    console.log(
-      "THIS HERE",
-      JSON.stringify(
-        await context.datasource.openai.conversation.items(
-          "conv_68cb4877e9a88195a99da264a11c8fab09919f2b0f1ecc05",
-        ),
-        null,
-        2,
-      ),
-    );
-
     // respond to the message
     const result = await run(
       context.service.agent.agents.VerenaAgent,

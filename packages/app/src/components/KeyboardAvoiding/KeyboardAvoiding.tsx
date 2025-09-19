@@ -1,12 +1,15 @@
-import React from "react"
-import { KeyboardAvoidingView, Platform, ScrollView } from "react-native"
-import { Stack } from "tamagui"
+import React from "react";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Stack } from "tamagui";
 
 export interface KeyboardAvoidingProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export const KeyboardAvoiding = React.forwardRef<ScrollView, KeyboardAvoidingProps>(({ children }, ref) => {
+export const KeyboardAvoiding = React.forwardRef<
+  ScrollView,
+  KeyboardAvoidingProps
+>(({ children }, ref) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -29,7 +32,7 @@ export const KeyboardAvoiding = React.forwardRef<ScrollView, KeyboardAvoidingPro
         </Stack>
       </ScrollView>
     </KeyboardAvoidingView>
-  )
-})
+  );
+});
 
-KeyboardAvoiding.displayName = "KeyboardAvoiding"
+KeyboardAvoiding.displayName = "KeyboardAvoiding";

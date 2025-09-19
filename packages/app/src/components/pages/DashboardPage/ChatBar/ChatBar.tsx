@@ -1,27 +1,31 @@
-import React from "react"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Button, Input, XStack, YStack } from "tamagui"
-import { ArrowUp } from "@tamagui/lucide-icons"
-import { ActionButton } from "./ActionButton"
-import { useConversation } from "../providers/ConversationProvider"
+import React from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Button, Input, XStack, YStack } from "tamagui";
+import { ArrowUp, MoreVertical } from "@tamagui/lucide-icons";
+import { useConversation } from "../../../../providers/ConversationProvider";
+import { useActionSheet } from "@/src/components/ActionSheet";
 
 export const ChatBar: React.FC = () => {
-  const insets = useSafeAreaInsets()
-  const { message } = useConversation()
+  const insets = useSafeAreaInsets();
+  const { message } = useConversation();
+  const { setOpen } = useActionSheet();
 
   return (
-    <XStack
-      margin="$3"
-      alignItems="flex-end"
-      marginBottom={insets.bottom}
-    >
+    <XStack margin="$3" alignItems="flex-end" marginBottom={insets.bottom}>
       <YStack flex={1}>
-        <XStack
-          gap="$2"
-          alignItems="center"
-        >
-          <ActionButton />
-          <XStack backgroundColor="$gray4" flex={1} borderRadius={"$8"} alignItems="center">
+        <XStack gap="$2" alignItems="center">
+          <Button
+            size="$3"
+            circular
+            icon={MoreVertical}
+            onPress={() => setOpen(true)}
+          />
+          <XStack
+            backgroundColor="$gray4"
+            flex={1}
+            borderRadius={"$8"}
+            alignItems="center"
+          >
             <Input
               multiline
               flex={1}
@@ -51,7 +55,5 @@ export const ChatBar: React.FC = () => {
         </XStack>
       </YStack>
     </XStack>
-  )
-}
-
-
+  );
+};

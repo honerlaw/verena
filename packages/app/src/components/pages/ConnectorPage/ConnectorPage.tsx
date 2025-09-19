@@ -1,19 +1,19 @@
-import { QuilttConnector } from '@quiltt/react-native'
-import type { ConnectorSDKCallbackMetadata } from '@quiltt/core'
-import React from 'react'
-import { useRouter } from 'expo-router'
-import { useMutation } from '@tanstack/react-query'
-import { useTRPC } from '@/src/providers/TRPCProvider'
-import { useReportError } from '@/src/hooks/useReportError'
+import { QuilttConnector } from "@quiltt/react-native";
+import type { ConnectorSDKCallbackMetadata } from "@quiltt/core";
+import React from "react";
+import { useRouter } from "expo-router";
+import { useMutation } from "@tanstack/react-query";
+import { useTRPC } from "@/src/providers/TRPCProvider";
+import { useReportError } from "@/src/hooks/useReportError";
 
 export const ConnectorPage: React.FC = () => {
-  const router = useRouter()
-  const trpc = useTRPC()
-  const { report } = useReportError()
+  const router = useRouter();
+  const trpc = useTRPC();
+  const { report } = useReportError();
 
   const { mutateAsync: createConnection } = useMutation(
-    trpc.connection.create.mutationOptions()
-  )
+    trpc.connection.create.mutationOptions(),
+  );
 
   return (
     <QuilttConnector
@@ -23,17 +23,17 @@ export const ConnectorPage: React.FC = () => {
         try {
           if (metadata.connectionId) {
             await createConnection({
-              connectionId: metadata.connectionId
-            })
+              connectionId: metadata.connectionId,
+            });
           }
-          router.back()
+          router.back();
         } catch (error) {
-          report(error, 'Failed to save connection. Please try again.')
+          report(error, "Failed to save connection. Please try again.");
         }
       }}
       onExitAbort={() => {
-        router.back()
+        router.back();
       }}
     />
-  )
-}
+  );
+};

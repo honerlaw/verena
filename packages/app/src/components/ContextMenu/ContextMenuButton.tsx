@@ -1,14 +1,14 @@
-import React from "react"
-import { Button, Text, XStack, Separator } from "tamagui"
+import React from "react";
+import { Button, Text, XStack, Separator } from "tamagui";
 
 export type ContextMenuButtonProps = {
-  label: string
-  onPress: () => void
-  disabled?: boolean
-  type?: "destructive"
-  icon?: React.ComponentType<any>
-  showSeparator?: boolean
-}
+  label: string;
+  onPress: () => void;
+  disabled?: boolean;
+  type?: "destructive";
+  icon?: React.ComponentType<any>;
+  showSeparator?: boolean;
+};
 
 export const ContextMenuButton: React.FC<ContextMenuButtonProps> = ({
   label,
@@ -40,7 +40,7 @@ export const ContextMenuButton: React.FC<ContextMenuButtonProps> = ({
         <XStack alignItems="center" gap="$2">
           {icon &&
             (() => {
-              const IconComponent = icon
+              const IconComponent = icon;
               return (
                 <IconComponent
                   size={16}
@@ -52,7 +52,7 @@ export const ContextMenuButton: React.FC<ContextMenuButtonProps> = ({
                         : "$color"
                   }
                 />
-              )
+              );
             })()}
           <Text
             fontSize="$3"
@@ -67,5 +67,5 @@ export const ContextMenuButton: React.FC<ContextMenuButtonProps> = ({
       </Button>
       {showSeparator && <Separator marginVertical="$1" />}
     </>
-  )
-}
+  );
+};

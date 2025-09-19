@@ -1,25 +1,25 @@
-import { LoadingView } from "@/src/components/LoadingView"
-import { useAuth } from "@/src/hooks/useAuth"
-import { Button } from "tamagui"
-import { User, Plus } from "@tamagui/lucide-icons"
-import { Redirect, Stack, useRouter } from "expo-router"
-import { WebLayout } from "@/src/components/WebLayout"
-import { ConnectorProvider } from "@/src/providers/ConnectorProvider"
+import { LoadingView } from "@/src/components/LoadingView";
+import { useAuth } from "@/src/hooks/useAuth";
+import { Button } from "tamagui";
+import { User } from "@tamagui/lucide-icons";
+import { Redirect, Stack, useRouter } from "expo-router";
+import { WebLayout } from "@/src/components/WebLayout";
+import { ConnectorProvider } from "@/src/providers/ConnectorProvider";
 
 export const unstable_settings = {
   initialRouteName: "dashboard",
-}
+};
 
 export default function AuthLayout() {
-  const { isLoaded, isSignedIn } = useAuth()
-  const router = useRouter()
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
 
   if (!isLoaded) {
-    return <LoadingView />
+    return <LoadingView />;
   }
 
   if (!isSignedIn) {
-    return <Redirect href="/" />
+    return <Redirect href="/" />;
   }
 
   return (
@@ -45,15 +45,6 @@ export default function AuthLayout() {
                   onPress={() => router.push("/profile")}
                 />
               ),
-              headerRight: () => (
-                <Button
-                  size="$3"
-                  circular
-                  icon={Plus}
-                  scaleIcon={1.5}
-                  onPress={() => router.push("/connector")}
-                />
-              ),
             }}
           />
           <Stack.Screen
@@ -76,5 +67,5 @@ export default function AuthLayout() {
         </Stack>
       </WebLayout>
     </ConnectorProvider>
-  )
+  );
 }

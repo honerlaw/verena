@@ -40,7 +40,32 @@ export const items = procedure
       };
     }
 
+    const messages = items.data
+      .filter((item) => item.type === "message")
+      .map((item) => {
+        return {
+          id: item.id,
+          role: item.role,
+          content: item.content,
+        };
+      });
+
+    // Dedupe messages by id
+    const filteredItems = messages.filter(
+      (message, index, array) =>
+        array.findIndex((m) => m.id === message.id) === index,
+    );
+
+    // Further filter out messages with identical content
+    const uniqueContentItems = filteredItems.filter(
+      (message, index, array) =>
+        array.findIndex(
+          (m) => JSON.stringify(m.content) === JSON.stringify(message.content),
+        ) === index,
+    );
+
     return {
-      items: items.data,
+      conversationId,
+      items: uniqueContentItems.reverse(),
     };
   });

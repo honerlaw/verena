@@ -1,9 +1,9 @@
-import React from "react"
-import { Platform } from "react-native"
-import { View, YStack } from "tamagui"
+import React from "react";
+import { Platform } from "react-native";
+import { View, YStack } from "tamagui";
 
 interface WebLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export const WebLayout: React.FC<WebLayoutProps> = ({ children }) => {
@@ -20,9 +20,9 @@ export const WebLayout: React.FC<WebLayoutProps> = ({ children }) => {
           {children}
         </YStack>
       </View>
-    )
+    );
   }
 
   // On mobile, render normally without constraints
-  return <>{children}</>
-}
+  return <>{children}</>;
+};

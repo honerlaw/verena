@@ -7,6 +7,9 @@ export async function list(logger: Logger, client: DBClient, userId: string) {
       where: {
         userId,
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
   } catch (error) {
     logger.error(

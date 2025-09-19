@@ -1,11 +1,11 @@
-import { YStack, Text, H6 } from "tamagui"
-import LottieView from "lottie-react-native"
-import source from "@/assets/empty.json"
+import { YStack, H6 } from "tamagui";
+import LottieView from "lottie-react-native";
+import source from "@/assets/empty.json";
 
 type EmptyViewProps = {
-  inline?: boolean
-  message?: string
-}
+  inline?: boolean;
+  message?: string;
+};
 
 export const EmptyView: React.FC<EmptyViewProps> = ({ inline, message }) => {
   return (
@@ -23,8 +23,10 @@ export const EmptyView: React.FC<EmptyViewProps> = ({ inline, message }) => {
             style={{ width: "100%", height: "100%" }}
           />
         </YStack>
-        <H6 textAlign="center">{message || "Sorry, we couldn't find anything!"}</H6>
+        <H6 textAlign="center">
+          {message || "Sorry, we couldn't find anything!"}
+        </H6>
       </YStack>
     </YStack>
-  )
-}
+  );
+};

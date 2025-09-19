@@ -1,17 +1,39 @@
-import React, { useEffect, useRef } from "react"
-import { ScrollView } from "react-native"
-import { YStack } from "tamagui"
-import { MessageBubble } from "../MessageBubble"
-import { useConversation } from "../providers/ConversationProvider"
+import React, { useEffect, useRef } from "react";
+import { ScrollView } from "react-native";
+import { YStack } from "tamagui";
+import { MessageBubble } from "./MessageBubble";
+import { useConversation } from "../../../../providers/ConversationProvider";
+import { LoadingView } from "@/src/components/LoadingView";
+import { PromptButtonList } from "@/src/components/ActionSheet/PromptButtonList";
+import Icon from "@/assets/icon.svg";
 
 export const MessageList: React.FC = () => {
-  const { message: { messages, isSending } } = useConversation()
+  const {
+    message: { messages, isSending },
+    items,
+  } = useConversation();
 
-  const scrollViewRef = useRef<ScrollView>(null)
+  const scrollViewRef = useRef<ScrollView>(null);
 
   useEffect(() => {
-    scrollViewRef.current?.scrollToEnd({ animated: true })
-  }, [messages])
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
+
+  // loading a conversation, but have no messages yet
+  if (items.isLoading) {
+    return <LoadingView />;
+  }
+
+  if (messages.length === 0 && !isSending) {
+    return (
+      <YStack flex={1} padding={"$4"} justifyContent="flex-end">
+        <YStack flex={1} justifyContent="center" alignItems="center">
+          <Icon width={100} height={100} />
+        </YStack>
+        <PromptButtonList title={null} />
+      </YStack>
+    );
+  }
 
   return (
     <ScrollView
@@ -27,13 +49,14 @@ export const MessageList: React.FC = () => {
         {isSending && (
           <MessageBubble
             message={{
+              id: "thinking",
               role: "assistant",
-              content: "Thinking…"
+              content: "Thinking…",
             }}
             isLoading
           />
         )}
       </YStack>
     </ScrollView>
-  )
-}
+  );
+};

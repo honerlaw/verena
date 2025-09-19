@@ -1,31 +1,31 @@
-import React from "react"
-import { YStack, XStack, Text, Stack, Separator } from "tamagui"
-import { useAuth } from "@/src/hooks/useAuth"
-import { Avatar } from "./Avatar"
-import { LoadingView } from "../../../LoadingView"
-import { EmptyView } from "../../../EmptyView"
+import React from "react";
+import { YStack, XStack, Text, Separator } from "tamagui";
+import { useAuth } from "@/src/hooks/useAuth";
+import { Avatar } from "./Avatar";
+import { LoadingView } from "../../../LoadingView";
+import { EmptyView } from "../../../EmptyView";
 
 export const UserInfo: React.FC = () => {
-  const { user, isLoaded } = useAuth()
+  const { user, isLoaded } = useAuth();
 
   if (!isLoaded) {
-    return <LoadingView />
+    return <LoadingView />;
   }
 
   if (!user) {
-    return <EmptyView />
+    return <EmptyView />;
   }
 
   const email =
     user.primaryEmailAddress?.emailAddress ||
-    user.emailAddresses?.[0]?.emailAddress
+    user.emailAddresses?.[0]?.emailAddress;
   const displayName =
     user.fullName ||
     `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
-    email?.split("@")[0]
+    email?.split("@")[0];
 
   if (!email) {
-    return <EmptyView />
+    return <EmptyView />;
   }
 
   return (
@@ -56,5 +56,5 @@ export const UserInfo: React.FC = () => {
         </Text>
       )}
     </YStack>
-  )
-}
+  );
+};

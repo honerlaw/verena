@@ -19,6 +19,8 @@ export const list = procedure.query(async ({ ctx }) => {
       id: conversation.id,
       conversationId: conversation.openaiConversationId,
       title: conversation.title || "New Conversation",
+      createdAt: conversation.createdAt,
+      updatedAt: conversation.updatedAt,
     })),
   };
 });

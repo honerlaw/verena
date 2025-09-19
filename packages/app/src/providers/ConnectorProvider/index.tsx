@@ -1,1 +1,1 @@
-export { ConnectorProvider } from "./ConnectorProvider"
+export { ConnectorProvider } from "./ConnectorProvider";

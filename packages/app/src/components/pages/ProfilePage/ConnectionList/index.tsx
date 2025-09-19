@@ -1,1 +1,1 @@
-export { ConnectionList } from "./ConnectionList"
+export { ConnectionList } from "./ConnectionList";

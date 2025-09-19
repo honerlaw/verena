@@ -1,36 +1,34 @@
-import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo"
-import { useRouter } from "expo-router"
-import React from "react"
-import { useReportError } from "@/src/hooks/useReportError/useReportError"
+import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
+import React from "react";
+import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
 interface UseSignInFormReturn {
-  emailAddress: string
-  setEmailAddress: (value: string) => void
-  password: string
-  setPassword: (value: string) => void
-  errors: string[] | null
-  onSignInPress: () => Promise<void>
-  isSigningIn: boolean
+  emailAddress: string;
+  setEmailAddress: (value: string) => void;
+  password: string;
+  setPassword: (value: string) => void;
+  errors: string[] | null;
+  onSignInPress: () => Promise<void>;
+  isSigningIn: boolean;
 }
 
 export function useSignInForm(): UseSignInFormReturn {
-  const { signIn, setActive, isLoaded } = useSignIn()
-  const [errors, setErrors] = React.useState<string[] | null>(null)
-  const [isSigningIn, setIsSigningIn] = React.useState(false)
-  const router = useRouter()
-  const { report } = useReportError()
+  const { signIn, setActive, isLoaded } = useSignIn();
+  const [errors, setErrors] = React.useState<string[] | null>(null);
+  const [isSigningIn, setIsSigningIn] = React.useState(false);
+  const { report } = useReportError();
 
-  const [emailAddress, setEmailAddress] = React.useState("")
-  const [password, setPassword] = React.useState("")
+  const [emailAddress, setEmailAddress] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
-    setErrors(null)
-    setIsSigningIn(true)
+    setErrors(null);
+    setIsSigningIn(true);
 
     if (!isLoaded) {
-      setIsSigningIn(false)
-      return
+      setIsSigningIn(false);
+      return;
     }
 
     // Start the sign-in process using the email and password provided
@@ -38,26 +36,26 @@ export function useSignInForm(): UseSignInFormReturn {
       const signInAttempt = await signIn.create({
         identifier: emailAddress,
         password,
-      })
+      });
 
       // If sign-in process is complete, set the created session as active
       // and redirect the user
       if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId })
+        await setActive({ session: signInAttempt.createdSessionId });
         // router.replace('/')
       } else {
-        report(new Error(JSON.stringify(signInAttempt, null, 2)))
+        report(new Error(JSON.stringify(signInAttempt, null, 2)));
       }
     } catch (err) {
       if (isClerkAPIResponseError(err)) {
-        setErrors(["Invalid email or password."])
+        setErrors(["Invalid email or password."]);
       } else {
-        report(err, "Failed to sign in.")
+        report(err, "Failed to sign in.");
       }
     } finally {
-      setIsSigningIn(false)
+      setIsSigningIn(false);
     }
-  }
+  };
 
   return {
     emailAddress,
@@ -67,5 +65,5 @@ export function useSignInForm(): UseSignInFormReturn {
     errors,
     onSignInPress,
     isSigningIn,
-  }
+  };
 }
