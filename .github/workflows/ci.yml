@@ -43,9 +43,3 @@ jobs:
       with:
         args: --all-projects --severity-threshold=high
         command: test
-
-    - name: Upload Snyk results to GitHub Code Scanning
-      uses: github/codeql-action/upload-sarif@v3
-      if: always()
-      with:
-        sarif_file: snyk.sarif
