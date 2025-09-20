@@ -49,7 +49,7 @@ export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     <>
       {Platform.OS === "web" && (
         <Head>
-          <title>Jurnara</title>
+          <title>Verena</title>
         </Head>
       )}
       <AppThemeProvider>
