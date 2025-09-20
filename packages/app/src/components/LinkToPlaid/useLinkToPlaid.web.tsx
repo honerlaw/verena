@@ -1,11 +1,12 @@
 import { useEffect, useMemo } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useReportError } from "@/src/hooks/useReportError";
 import { usePlaidLink } from "react-plaid-link";
 
 export function useLinkToPlaid(itemId?: string) {
   const trpc = useTRPC();
+  const client = useQueryClient();
   const { report } = useReportError();
   const {
     data,
@@ -29,7 +30,7 @@ export function useLinkToPlaid(itemId?: string) {
     // @todo the second argument is a metadata object so we could
     // display data right away technically
     onSuccess: async (publicToken, metadata) => {
-      exchangePublicToken({
+      await exchangePublicToken({
         publicToken,
         accounts: metadata.accounts.map((account) => ({
           id: account.id,
@@ -38,6 +39,9 @@ export function useLinkToPlaid(itemId?: string) {
           type: account.type,
         })),
       });
+
+      // trigger everything to refetch
+      client.invalidateQueries();
     },
   });
 

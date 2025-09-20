@@ -4,10 +4,12 @@ import { LogOut } from "@tamagui/lucide-icons";
 import { useAuth } from "@clerk/clerk-expo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { AlertModal, type AlertButton } from "../../../AlertModal";
+import { usePublishEvent } from "@onerlaw/framework/frontend/utils/hooks";
 
 export const SignOutSection: React.FC = () => {
   const { signOut } = useAuth();
   const { bottom } = useSafeAreaInsets();
+  const emit = usePublishEvent("signout");
 
   const alertButtons: AlertButton[] = [
     {
@@ -19,6 +21,7 @@ export const SignOutSection: React.FC = () => {
       style: "destructive",
       onPress: async () => {
         await signOut();
+        emit();
       },
     },
   ];

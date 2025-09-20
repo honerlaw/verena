@@ -1,12 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { create, open } from "react-native-plaid-link-sdk";
 import { useTRPC } from "@/src/providers/TRPCProvider";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useReportError } from "@/src/hooks/useReportError";
 
 export function useLinkToPlaid(itemId?: string) {
   const trpc = useTRPC();
   const { report } = useReportError();
+  const client = useQueryClient();
 
   const {
     data,
@@ -52,7 +53,7 @@ export function useLinkToPlaid(itemId?: string) {
   const openLink = () => {
     open({
       onSuccess: async (success) => {
-        exchangePublicToken({
+        await exchangePublicToken({
           publicToken: success.publicToken,
           accounts: success.metadata.accounts.map((account) => ({
             id: account.id,
@@ -63,13 +64,16 @@ export function useLinkToPlaid(itemId?: string) {
         });
 
         // create a new token for the next time
-        createLinkToken({
+        await createLinkToken({
           itemId,
         });
+
+        // trigger everything to refetch
+        client.invalidateQueries();
       },
-      onExit: () => {
+      onExit: async () => {
         // create a new token for the next time
-        createLinkToken({
+        await createLinkToken({
           itemId,
         });
       },

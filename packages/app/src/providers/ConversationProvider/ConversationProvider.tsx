@@ -58,7 +58,7 @@ export const ConversationProvider: React.FC<React.PropsWithChildren> = ({
   const message = useMessage(create.create);
 
   // Refetch items whenever currentConversationId changes
-  const refetch = items.refetch
+  const refetch = items.refetch;
   useEffect(() => {
     if (currentConversationId) {
       refetch();
