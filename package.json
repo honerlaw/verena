@@ -1,7 +1,6 @@
 {
   "name": "@onerlaw/verena",
   "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "postinstall": "patch-package",
     "clean": "nx run-many -t clean && rm -rf node_modules package-lock.json",

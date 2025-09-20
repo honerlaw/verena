@@ -1,7 +1,6 @@
 {
   "name": "@onerlaw/verena-server",
   "version": "1.0.0",
-  "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "node --import tsx --test **/*.test.mts",
@@ -9,7 +8,7 @@
     "ngrok": "ngrok http --url=intimate-certainly-opossum.ngrok-free.app 3000",
     "build": "npm run codegen && tsc",
     "build:web": "rm -rf static && cd ../app && npm run web:export && cd ../server && cp -r ../app/dist static",
-    "start": "node dist/index.js",
+    "start": "node dist/index.mjs",
     "format": "prettier --write \"src/**/*.{js,ts,mjs,mts}\"",
     "lint": "eslint \"src/**/*.{js,ts,mjs,mts}\" --fix",
     "lint:format": "npm run lint && npm run format",
