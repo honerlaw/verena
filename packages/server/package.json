@@ -6,7 +6,7 @@
     "test": "OPENAI_API_KEY=test node --import tsx --test **/*.test.mts",
     "start:local": "tsx --watch --no-cache --env-file=.env src/index.mts",
     "ngrok": "ngrok http --url=intimate-certainly-opossum.ngrok-free.app 3000",
-    "build": "npm run codegen && tsc && cp -r ./src/generated ./dist/generated",
+    "build": "rm -rf dist && npm run codegen && tsc && cp -r ./src/generated ./dist/generated",
     "build:web": "rm -rf static && cd ../app && npm run web:export && cd ../server && cp -r ../app/dist static",
     "start": "node dist/index.mjs",
     "format": "prettier --write \"src/**/*.{js,ts,mjs,mts}\"",
