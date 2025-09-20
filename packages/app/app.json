@@ -48,10 +48,9 @@
       "typedRoutes": true
     },
     "extra": {
-      "apiUrl": "http://localhost:3000",
       "router": {},
       "eas": {
-        "projectId": "e9cd82c0-9da2-42d3-adb5-458a283fe970"
+        "projectId": "42d07c38-1caf-4f2e-866c-2a73403b20e2"
       }
     }
   }
