@@ -4,6 +4,8 @@ import { Button } from "tamagui";
 import { User } from "@tamagui/lucide-icons";
 import { Redirect, Stack, useRouter } from "expo-router";
 import { WebLayout } from "@/src/components/WebLayout";
+import { ActionSheetProvider, ActionSheet } from "@/src/components/ActionSheet";
+import { ConversationProvider } from "@/src/providers/ConversationProvider";
 
 export const unstable_settings = {
   initialRouteName: "dashboard",
@@ -22,39 +24,44 @@ export default function AuthLayout() {
   }
 
   return (
-    <WebLayout>
-      <Stack
-        initialRouteName="dashboard"
-        screenOptions={{
-          headerBackButtonDisplayMode: "minimal",
-          headerShadowVisible: false,
-        }}
-      >
-        <Stack.Screen
-          name="dashboard"
-          options={{
-            headerTitle: "Verena",
-            headerLeft: () => (
-              <Button
-                size="$3"
-                circular
-                icon={User}
-                scaleIcon={1.5}
-                onPress={() => router.push("/profile")}
-              />
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="profile"
-          options={{
-            headerTitle: "Profile",
-            headerTransparent: false,
-            presentation: "modal",
-            animationTypeForReplace: "push",
-          }}
-        />
-      </Stack>
-    </WebLayout>
+    <ActionSheetProvider>
+      <ConversationProvider>
+        <WebLayout>
+          <Stack
+            initialRouteName="dashboard"
+            screenOptions={{
+              headerBackButtonDisplayMode: "minimal",
+              headerShadowVisible: false,
+            }}
+          >
+            <Stack.Screen
+              name="dashboard"
+              options={{
+                headerTitle: "Verena",
+                headerLeft: () => (
+                  <Button
+                    size="$3"
+                    circular
+                    icon={User}
+                    scaleIcon={1.5}
+                    onPress={() => router.push("/profile")}
+                  />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="profile"
+              options={{
+                headerTitle: "Profile",
+                headerTransparent: false,
+                presentation: "modal",
+                animationTypeForReplace: "push",
+              }}
+            />
+          </Stack>
+          <ActionSheet />
+        </WebLayout>
+      </ConversationProvider>
+    </ActionSheetProvider>
   );
 }
