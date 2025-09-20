@@ -58,11 +58,12 @@ export const ConversationProvider: React.FC<React.PropsWithChildren> = ({
   const message = useMessage(create.create);
 
   // Refetch items whenever currentConversationId changes
+  const refetch = items.refetch
   useEffect(() => {
     if (currentConversationId) {
-      items.refetch();
+      refetch();
     }
-  }, [currentConversationId, items]);
+  }, [currentConversationId, refetch]);
 
   // items changed, and we have no messages, so add the previous historical messages
   useEffect(() => {

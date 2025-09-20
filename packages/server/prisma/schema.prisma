@@ -54,7 +54,7 @@ model Item {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   token String
-  itemId String @unique
+  itemId String @unique // plaid's item id
   nextCursor String?
 
   status ItemStatus @default(INITIALIZING)

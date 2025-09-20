@@ -100,6 +100,10 @@ export const exchange = procedure
     if (!added) {
       throw new InternalServerError("Failed to add plaid access token.");
     }
+
+    // run a quick sync
+    await ctx.service.transactions.sync(ctx, itemToken.itemId);
+
     return {
       itemId: itemToken.itemId,
     };

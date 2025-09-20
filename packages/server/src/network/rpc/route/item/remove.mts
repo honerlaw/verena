@@ -29,6 +29,15 @@ export const remove = procedure
       throw new InternalServerError("Failed to remove item");
     }
 
+    // delete it from the database as well
+    const dbRemoved = await ctx.database.items.remove(
+      ctx.auth.user.id,
+      item.itemId,
+    );
+    if (!dbRemoved) {
+      throw new InternalServerError("Failed to remove item from database");
+    }
+
     return {
       success: true,
     };

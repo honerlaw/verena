@@ -22,7 +22,7 @@ export async function create(
       },
       access_token: accessToken,
       client_name: "Verena",
-      products: [Products.Transactions, Products.Auth],
+      products: [Products.Transactions],
       country_codes: [CountryCode.Us],
       language: "en",
       webhook: `${process.env.WEBHOOK_BASE_URL}/api/webhook/plaid`,

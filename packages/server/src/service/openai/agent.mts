@@ -20,6 +20,7 @@ Always be:
 Remember to tailor your responses to the user's specific financial situation and needs.`;
 
 export const VerenaAgent = new Agent({
+  model: "gpt-5",
   name: "Verena",
   instructions: FINANCIAL_ASSISTANT_SYSTEM_PROMPT,
   tools: Object.values(tools),
