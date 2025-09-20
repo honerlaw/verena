@@ -14,7 +14,8 @@
     "web": "expo start --web",
     "web:export": "npm run clean:cache && expo export -p web",
     "lint": "expo lint",
-    "lint:format": "expo lint --fix"
+    "lint:format": "expo lint --fix",
+    "submit:ios": "eas workflow:run submit-ios.yml"
   },
   "dependencies": {
     "@clerk/clerk-expo": "^2.14.30",

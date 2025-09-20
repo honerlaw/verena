@@ -32,14 +32,14 @@ app.use("/api/app/config", express.json(), config);
 app.use("/api/webhook/plaid", express.json(), plaidWebhook);
 
 // Serve static files from public directory (including .well-known)
-app.use(express.static(path.join(process.cwd(), "../public")));
+app.use(express.static(path.join(process.cwd(), "public")));
 
 // serve static files from static directory (the app itself)
-app.use(express.static(path.join(process.cwd(), "../static")));
+app.use(express.static(path.join(process.cwd(), "static")));
 
 // for unhandled paths, serve the index.html of the app
 app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(process.cwd(), "../static/index.html"));
+  res.sendFile(path.join(process.cwd(), "static/index.html"));
 });
 
 // Start the server
