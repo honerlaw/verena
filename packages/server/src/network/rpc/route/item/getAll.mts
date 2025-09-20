@@ -9,7 +9,7 @@ export const getAll = procedure.query(async ({ ctx }) => {
   const items = await ctx.database.items.getByUserId(ctx.auth.user.id);
 
   const plaidItems = await Promise.all(
-    items.map(async (item) => {
+    items?.map(async (item) => {
       const plaidItem = await ctx.datasource.plaid.item.get(item.token);
 
       if (plaidItem === null) {
@@ -28,7 +28,7 @@ export const getAll = procedure.query(async ({ ctx }) => {
         item,
         accounts,
       };
-    })
+    }) ?? [],
   );
 
   return {
@@ -41,8 +41,8 @@ export const getAll = procedure.query(async ({ ctx }) => {
           return {
             id: account.account_id,
             name: account.name,
-          }
-        })
+          };
+        }),
       };
     }),
   };

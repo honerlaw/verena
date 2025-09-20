@@ -44,7 +44,18 @@ export function useSignInForm(): UseSignInFormReturn {
         await setActive({ session: signInAttempt.createdSessionId });
         // router.replace('/')
       } else {
-        report(new Error(JSON.stringify(signInAttempt, null, 2)));
+        console.log(signInAttempt);
+        report(
+          new Error(
+            JSON.stringify(
+              {
+                status: signInAttempt.status,
+              },
+              null,
+              2,
+            ),
+          ),
+        );
       }
     } catch (err) {
       if (isClerkAPIResponseError(err)) {

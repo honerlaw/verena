@@ -45,10 +45,10 @@ export const getAccountBalancesTool = tool({
 });
 
 async function executeGetAccountBalances(context: Context): Promise<string> {
-  const accounts = await context.service.root.getAccountBalances(context);
+  const accounts = await context.service.account.getAll(context);
 
   if (!accounts || accounts.length === 0) {
-    return "No account balances found.";
+    return "No accounts found.";
   }
 
   // Format as tabular data for LLM consumption
@@ -62,22 +62,21 @@ async function executeGetAccountBalances(context: Context): Promise<string> {
   );
 
   const tableRows = filteredAccounts
-    .map(() => {
-      /*const availableBalance = account.balance?.available
-        ? `$${account.balance.available.toFixed(2)}`
+    .map((account) => {
+      const availableBalance = account.balances.available
+        ? `$${account.balances.available.toFixed(2)}`
         : "N/A";
-      const currentBalance = account.balance?.current
-        ? `$${account.balance.current.toFixed(2)}`
+      const currentBalance = account.balances.current
+        ? `$${account.balances.current.toFixed(2)}`
         : "N/A";
-      const creditLimit = account.balance?.limit
-        ? `$${account.balance.limit.toFixed(2)}`
+      const creditLimit = account.balances.limit
+        ? `$${account.balances.limit.toFixed(2)}`
         : "N/A";
-      const balanceAt = account.balance?.at
-        ? new Date(account.balance.at).toLocaleDateString()
+      const balanceAt = account.balances.last_updated_datetime
+        ? new Date(account.balances.last_updated_datetime).toLocaleDateString()
         : "N/A";
 
-      return `| ${account.name} | ${account.type} | ${availableBalance} | ${currentBalance} | ${creditLimit} | ${balanceAt} |`;*/
-      return ``;
+      return `| ${account.name} | ${account.type} | ${availableBalance} | ${currentBalance} | ${creditLimit} | ${balanceAt} |`;
     })
     .join("\n");
 

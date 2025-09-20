@@ -1,5 +1,5 @@
 import { type PendingExpirationWebhook } from "plaid";
-import type { WebhookHandler } from "../type.mjs";
+import type { WebhookHandler } from "../../type.mjs";
 
 export const itemLoginRepairedHandler: WebhookHandler<
   PendingExpirationWebhook

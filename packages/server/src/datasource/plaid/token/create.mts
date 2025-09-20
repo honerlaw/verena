@@ -25,8 +25,7 @@ export async function create(
       products: [Products.Transactions, Products.Auth],
       country_codes: [CountryCode.Us],
       language: "en",
-      redirect_uri: "https://www.verena.app/connect",
-      webhook: "https://www.verena.app/api/webhook/plaid",
+      webhook: `${process.env.WEBHOOK_BASE_URL}/api/webhook/plaid`,
       transactions: {
         days_requested: 730, // 2 years, max data retention
       },

@@ -14,9 +14,9 @@ export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <AuthProvider>
           <TRPCProvider>
             <ToastProvider>
-                  {children}
-                  <StatusBar style="auto" />
-                  <ToastViewport />
+              {children}
+              <StatusBar style="auto" />
+              <ToastViewport />
             </ToastProvider>
           </TRPCProvider>
         </AuthProvider>

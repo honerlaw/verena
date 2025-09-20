@@ -1,5 +1,5 @@
 import { type SyncUpdatesAvailableWebhook } from "plaid";
-import { type WebhookHandler } from "../type.mjs";
+import { type WebhookHandler } from "../../type.mjs";
 
 export const syncUpdatesAvailableHandler: WebhookHandler<
   SyncUpdatesAvailableWebhook

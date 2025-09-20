@@ -12,7 +12,7 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
   }
 
   const items = await ctx.database.items.getByUserId(ctx.auth.user.id);
-  const item = items.find((item) => item.id === itemId);
+  const item = items?.find((item) => item.id === itemId);
 
   if (!item) {
     ctx.logger.error(
@@ -114,5 +114,12 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
     return false;
   }
 
-  return true;
+  // finally update the item status to SYNCED
+  const updated = await ctx.database.items.update(
+    ctx.auth.user!.id,
+    item.id,
+    "SYNCED",
+  );
+
+  return updated !== null;
 }

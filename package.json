@@ -9,7 +9,8 @@
     "test": "nx run-many -t test",
     "start": "nx run-many -t start",
     "build": "nx run-many -t build",
-    "lint:format": "nx run-many -t lint:format"
+    "lint:format": "nx run-many -t lint:format",
+    "snyk": "snyk test --all-projects"
   },
   "author": "",
   "license": "ISC",
@@ -20,13 +21,12 @@
   ],
   "devDependencies": {
     "nx": "21.5.2",
-    "patch-package": "^8.0.0"
+    "patch-package": "^8.0.0",
+    "snyk": "^1.1299.0"
   },
   "overrides": {
     "react-native": "0.81.4",
-    "zod": "^4.1.8"
-  },
-  "dependencies": {
-    "snyk": "^1.1299.0"
+    "zod": "^4.1.8",
+    "markdown-it": "^13.0.2"
   }
 }

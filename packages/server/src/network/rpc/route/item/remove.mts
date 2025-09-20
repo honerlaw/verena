@@ -18,7 +18,7 @@ export const remove = procedure
     }
 
     const items = await ctx.database.items.getByUserId(ctx.auth.user.id);
-    const item = items.find((item) => item.itemId === input.itemId);
+    const item = items?.find((item) => item.itemId === input.itemId);
 
     if (!item) {
       throw new NotFoundError("Item not found");

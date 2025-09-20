@@ -16,9 +16,9 @@ import * as plaidWebhookDS from "./datasource/plaid/webhook/index.mjs";
 import * as plaidTransactionsDS from "./datasource/plaid/transactions/index.mjs";
 import * as plaidItemDS from "./datasource/plaid/item/index.mjs";
 
-import * as service from "./service/index.mjs";
 import * as openaiService from "./service/openai/index.mjs";
 import * as transactionsService from "./service/transactions/index.mjs";
+import * as accountService from "./service/account/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -75,9 +75,9 @@ const options = {
       },
       additional: additional || {},
       service: {
-        root: service,
         agent: openaiService,
         transactions: transactionsService,
+        account: accountService,
       },
     };
   },

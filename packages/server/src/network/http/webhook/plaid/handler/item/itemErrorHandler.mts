@@ -1,5 +1,5 @@
 import { type ItemErrorWebhook } from "plaid";
-import type { WebhookHandler } from "../type.mjs";
+import type { WebhookHandler } from "../../type.mjs";
 
 export const itemErrorHandler: WebhookHandler<ItemErrorWebhook> = async (
   hook,
