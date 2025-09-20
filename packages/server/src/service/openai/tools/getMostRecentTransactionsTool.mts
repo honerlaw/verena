@@ -1,15 +1,6 @@
 import { RunContext, tool } from "@openai/agents";
 import type { Context } from "../../../context.mjs";
-
-export interface Transaction {
-  id: string;
-  date: string;
-  description: string;
-  category: string;
-  amount: number;
-  type: "income" | "expense";
-  account: string;
-}
+import type { Transaction } from "plaid";
 
 const TransactionDataParams = {
   type: "object" as const,
@@ -48,27 +39,58 @@ export const getMostRecentTransactionsTool = tool({
 async function executeGetMostRecentTransactions(
   context: Context,
 ): Promise<string> {
-  const transactions =
-    await context.service.root.getMostRecentTransactions(context);
+  const itemTransactions = await context.service.transactions.getAll(context);
 
-  if (!transactions) {
+  if (!itemTransactions || itemTransactions.length === 0) {
     return "No transactions found.";
   }
 
-  // Format as tabular data for LLM consumption
-  const tableHeader = "| Date | Description | Kind | Amount | Type | Account |";
+  // Format as tabular data for LLM consumption with Plaid transaction structure
+  const tableHeader =
+    "| Date | Transaction ID | Name | Amount | Category | Personal Finance Category | Account ID | Transaction Type |";
   const tableSeparator =
-    "|------|-------------|----------|---------|------|---------|";
+    "|------|----------------|------|--------|----------|---------------------------|------------|------------------|";
 
-  const filteredTransactions = transactions.filter(
+  const filteredTransactions = itemTransactions.filter(
     (t) => t !== null && t !== undefined,
   );
 
   const tableRows = filteredTransactions
-    .map(
-      (t) =>
-        `| ${t.date} | ${t.description} | ${t.kind} | $${t.amount.toFixed(2)} | ${t.entryType} | ${t.account.name} |`,
-    )
+    .map((itemTransaction) => {
+      try {
+        // Parse the stored transaction bytes back to Plaid Transaction object
+        const plaidTransaction: Transaction = itemTransaction.transaction;
+
+        const date = plaidTransaction.date;
+        const transactionId = plaidTransaction.transaction_id;
+        const name =
+          plaidTransaction.name ||
+          plaidTransaction.original_description ||
+          "N/A";
+        const amount = `$${Math.abs(plaidTransaction.amount).toFixed(2)}`;
+        const category = plaidTransaction.category
+          ? plaidTransaction.category.join(", ")
+          : "N/A";
+        const personalFinanceCategory =
+          plaidTransaction.personal_finance_category?.primary || "N/A";
+        const accountId = plaidTransaction.account_id;
+        const transactionType = plaidTransaction.transaction_type || "N/A";
+
+        return `| ${date} | ${transactionId} | ${name} | ${amount} | ${category} | ${personalFinanceCategory} | ${accountId} | ${transactionType} |`;
+      } catch (error) {
+        context.logger.error(
+          {
+            error,
+            attributes: {
+              transactionId: itemTransaction.transactionId,
+            },
+            tags: ["service", "openai", "tools", "getMostRecentTransactions"],
+          },
+          "Failed to parse transaction data",
+        );
+        return `| - | ${itemTransaction.transactionId} | Parse Error | - | - | - | - | - |`;
+      }
+    })
     .join("\n");
 
   return `${tableHeader}\n${tableSeparator}\n${tableRows}`;

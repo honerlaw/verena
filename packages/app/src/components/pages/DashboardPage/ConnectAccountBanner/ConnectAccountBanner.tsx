@@ -1,16 +1,15 @@
 import React from "react";
 import { YStack, XStack, Text, Button } from "tamagui";
 import { TrendingUp, X } from "@tamagui/lucide-icons";
-import { useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useDismissed } from "@/src/hooks/useDismissed";
+import { useLinkToPlaid } from "@/src/components/LinkToPlaid";
 
 const BANNER_DISMISSED_KEY = "connect_account_banner_dismissed";
 const DISMISS_DURATION_HOURS = 12;
 
 export const ConnectAccountBanner: React.FC = () => {
-  const router = useRouter();
   const trpc = useTRPC();
   const { isReady, isDismissed, dismiss } = useDismissed({
     storageKey: BANNER_DISMISSED_KEY,
@@ -18,21 +17,23 @@ export const ConnectAccountBanner: React.FC = () => {
     durationMs: DISMISS_DURATION_HOURS * 60 * 60 * 1000,
   });
 
-  const { data: connectionsData, isLoading } = useQuery(
-    trpc.connection.getAll.queryOptions(),
+  const { openLink } = useLinkToPlaid();
+
+  const { data: itemsData, isLoading } = useQuery(
+    trpc.item.getAll.queryOptions(),
   );
 
   if (
     isLoading ||
     !isReady ||
     isDismissed ||
-    (connectionsData?.connections && connectionsData.connections.length > 0)
+    (itemsData?.items && itemsData.items.length > 0)
   ) {
     return null;
   }
 
   const handleConnectAccount = () => {
-    router.push("/connector");
+    openLink();
   };
 
   const handleDismiss = () => {

@@ -7,7 +7,7 @@ export async function update(
   userId: string,
   itemId: string,
   itemTransactionId: string,
-  transaction: Buffer,
+  transaction: string,
 ) {
   try {
     return await client.itemTransaction.update({

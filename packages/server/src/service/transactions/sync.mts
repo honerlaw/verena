@@ -12,7 +12,7 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
   }
 
   const items = await ctx.database.items.getByUserId(ctx.auth.user.id);
-  const item = items.find((item) => item.id === itemId);
+  const item = items?.find((item) => item.itemId === itemId);
 
   if (!item) {
     ctx.logger.error(
@@ -23,12 +23,6 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
     );
     return false;
   }
-
-  // okay so what information do we get?
-  // we need to know the access token and the next cursor
-  // so we need to know the item id
-  // then from there we sync with that information
-  // and then we can update the transactions in our database
 
   const response = await ctx.datasource.plaid.transactions.sync(
     item.token,
@@ -49,12 +43,18 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
 
   const failures: string[] = [];
 
+  // get the DEK to encrypt the transaction payloads going into the database
+  const dek = await ctx.service.encryption.getDEK(
+    ctx,
+    ctx.service.encryption.DEKIdentifier.TRANSACTIONS,
+  );
+
   for (const transaction of added) {
     const result = await ctx.database.items.transactions.add(
       ctx.auth.user.id,
       item.id,
       transaction.transaction_id,
-      Buffer.from(JSON.stringify(transaction)),
+      dek.encrypt(JSON.stringify(transaction)),
     );
     if (!result) {
       failures.push(transaction.transaction_id);
@@ -66,7 +66,7 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
       ctx.auth.user.id,
       item.id,
       transaction.transaction_id,
-      Buffer.from(JSON.stringify(transaction)),
+      dek.encrypt(JSON.stringify(transaction)),
     );
     if (!result) {
       failures.push(transaction.transaction_id);
@@ -100,7 +100,7 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
   // if everything succeeded, then we can update the next cursor
   const success = await ctx.database.items.update(
     ctx.auth.user.id,
-    item.id,
+    itemId,
     item.status,
     nextCursor ?? null,
   );
@@ -114,5 +114,12 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
     return false;
   }
 
-  return true;
+  // finally update the item status to SYNCED
+  const updated = await ctx.database.items.update(
+    ctx.auth.user!.id,
+    itemId,
+    "SYNCED",
+  );
+
+  return updated !== null;
 }

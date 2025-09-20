@@ -32,9 +32,6 @@ export const remove = procedure.mutation(async ({ ctx }) => {
     throw new InternalServerError("User not found or failed to remove.");
   }
 
-  // delete all of the user's data from quiltt as well
-  await ctx.datasource.quiltt.deleteProfile(ctx.auth.user.id);
-
   return {
     success: true,
     user: {

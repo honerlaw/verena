@@ -1,40 +1,27 @@
-import { useEffect, useMemo } from "react"
-import { usePublishEvent } from "@onerlaw/framework/frontend/utils"
-import { trpc } from "../../common/contexts/TRPCContext"
-import * as Sentry from "@sentry/react-native"
-import { usePlaidLink } from "react-plaid-link"
-import { EmitterEvent } from "../../common/utils/events"
+import { useEffect, useMemo } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useTRPC } from "@/src/providers/TRPCProvider";
+import { useReportError } from "@/src/hooks/useReportError";
+import { usePlaidLink } from "react-plaid-link";
 
-export function useLinkToPlaid(tokenId?: string) {
-  const emit = usePublishEvent<EmitterEvent>("plaid_link_success")
-
+export function useLinkToPlaid(itemId?: string) {
+  const trpc = useTRPC();
+  const { report } = useReportError();
   const {
-    data: createData,
-    error: createError,
+    data,
+    error,
     mutateAsync: createLinkToken,
-  } = trpc.createLinkToken.useMutation()
-  const {
-    data: updateData,
-    error: updateError,
-    mutateAsync: updateLinkToken,
-  } = trpc.updateLinkToken.useMutation()
+  } = useMutation(trpc.link.create.mutationOptions());
   const { mutateAsync: exchangePublicToken, error: exchangeError } =
-    trpc.exchangePublicToken.useMutation()
+    useMutation(trpc.link.exchange.mutationOptions());
 
   useEffect(() => {
-    if (tokenId) {
-      updateLinkToken({
-        tokenId,
-      })
-    } else {
-      createLinkToken()
-    }
-  }, [tokenId, createLinkToken, updateLinkToken])
+    createLinkToken({
+      itemId,
+    });
+  }, [itemId, createLinkToken]);
 
-  const data = tokenId ? updateData : createData
-  const error = tokenId ? updateError : createError
-
-  const token = data?.token || null
+  const token = data?.token?.link_token || null;
 
   // this is also web only, so we shouldn't call it unless we are on the web platform
   const { open, ready } = usePlaidLink({
@@ -50,30 +37,29 @@ export function useLinkToPlaid(tokenId?: string) {
           mask: account.mask,
           type: account.type,
         })),
-      })
-      emit()
+      });
     },
-  })
+  });
 
   // notify sentry of the error since we want to render nothing if it fails
   useMemo(() => {
     if (!error) {
-      return
+      return;
     }
-    Sentry.captureException(error)
-  }, [error])
+    report(error);
+  }, [error, report]);
 
   useMemo(() => {
     if (!exchangeError) {
-      return
+      return;
     }
-    Sentry.captureException(exchangeError)
-  }, [exchangeError])
+    report(exchangeError);
+  }, [exchangeError, report]);
 
   return {
     ready,
     error,
     token,
     openLink: open,
-  }
+  };
 }

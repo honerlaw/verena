@@ -28,7 +28,7 @@ const GENERIC_PROMPTS = [
   },
 ];
 
-const PROMPTS = [
+/*const PROMPTS = [
   {
     title: "Spend Overview (This Month)",
     prompt:
@@ -148,11 +148,11 @@ const PROMPTS = [
     prompt:
       "Explain like I’m 5: why is my savings rate only [X]% and what’s the simplest way to raise it next month?",
   },
-];
+];*/
 
 export const list = procedure.query(async () => {
   return {
-    prompts: [...GENERIC_PROMPTS, ...PROMPTS].map((prompt, index) => {
+    prompts: [...GENERIC_PROMPTS].map((prompt, index) => {
       return {
         id: index.toString(),
         title: prompt.title,

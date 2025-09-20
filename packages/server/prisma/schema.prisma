@@ -14,16 +14,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserType {
+  PRODUCTION
+  SANDBOX
+}
+
 model User {
   id        String   @id @default(uuid())
 
   // clerk id
   authId    String   @unique
 
-  // quiltt related
-  connections Connection[]
-  transactions Transaction[]
-  sessionToken SessionToken?
+  // allows us to have sandbox users in production for app store testing
+  accountType UserType @default(PRODUCTION)
 
   // openai related
   conversations Conversation[]
@@ -31,6 +34,22 @@ model User {
   // plaid related
   items Item[]
   itemTransactions ItemTransaction[]
+
+  userKey UserKey?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// used for data encryption
+// if it doesn't exist, we will generate a new one
+model UserKey {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,7 +70,7 @@ model Item {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   token String
-  itemId String @unique
+  itemId String @unique // plaid's item id
   nextCursor String?
 
   status ItemStatus @default(INITIALIZING)
@@ -72,7 +91,7 @@ model ItemTransaction {
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   transactionId String @unique
-  transaction Bytes // this is going to be encrypted and stored as Bytea in the database
+  transaction String // encrypted string
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -88,57 +107,6 @@ model Conversation {
 
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// QUILTT START //
-enum ConnectionStatus {
-  INITIALIZING // after the connection is created
-  SYNCED_INITIAL // after the initial sync is complete
-  SYNCED_HISTORICAL // after the historical sync is complete
-  ENRICHED // profile.ready event that is called after enrichment
-  RECONNECT // need user to do reconnect flow
-  DISCONNECTED // connection was disconnected
-  INSTITUTION_ERROR // problem with the institution itself
-}
-
-model Connection {
-  id        String   @id @default(uuid())
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  quilttConnectionId String @unique
-
-  status ConnectionStatus @default(INITIALIZING)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Transaction {
-  id String @id @default(uuid())
-
-  userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  quilttTransactionId String @unique
-  transaction Json // the JSON payload from quiltt
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model SessionToken {
-  id String @id @default(uuid())
-
-  userId String @unique
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  token String
-  expiresAt DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,19 +1,13 @@
-import { useEffect } from 'react';
-import { useRouter } from 'expo-router';
-import * as Linking from 'expo-linking';
+import { useEffect } from "react";
+import { useRouter } from "expo-router";
+import * as Linking from "expo-linking";
 
 export const UniversalLinkHandler: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
     const handleDeepLink = (url: string) => {
-      const { path } = Linking.parse(url);
-      
-      // Handle /connect path by navigating to the connector flow
-      if (path === '/connect') {
-        // Navigate to the connector page for account connection
-        router.push('/connector');
-      }
+      console.log("handleDeepLink", url);
     };
 
     // Handle initial URL if app was opened via universal link
@@ -25,7 +19,7 @@ export const UniversalLinkHandler: React.FC = () => {
     };
 
     // Handle URL changes while app is running
-    const subscription = Linking.addEventListener('url', (event) => {
+    const subscription = Linking.addEventListener("url", (event) => {
       handleDeepLink(event.url);
     });
 

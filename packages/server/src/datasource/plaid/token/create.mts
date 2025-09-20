@@ -22,11 +22,10 @@ export async function create(
       },
       access_token: accessToken,
       client_name: "Verena",
-      products: [Products.Transactions, Products.Auth],
+      products: [Products.Transactions],
       country_codes: [CountryCode.Us],
       language: "en",
-      redirect_uri: "https://www.verena.app/connect",
-      webhook: "https://www.verena.app/api/webhook/plaid",
+      webhook: `${process.env.WEBHOOK_BASE_URL}/api/webhook/plaid`,
       transactions: {
         days_requested: 730, // 2 years, max data retention
       },

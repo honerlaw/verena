@@ -5,7 +5,7 @@ export const getByUserId = async function (
   logger: Logger,
   client: DBClient,
   userId: string,
-): Promise<Item[]> {
+): Promise<Item[] | null> {
   try {
     return await client.item.findMany({
       where: { userId },
@@ -15,6 +15,6 @@ export const getByUserId = async function (
       { error: err, tags: ["database", "user", "items", "getItems"] },
       "Failed to get items",
     );
-    return [];
+    return null;
   }
 };

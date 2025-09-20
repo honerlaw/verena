@@ -7,28 +7,28 @@ import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useReportError } from "@/src/hooks/useReportError";
 import { AlertModal } from "@/src/components/AlertModal";
 
-export type Connection = Awaited<
-  ReturnType<AppRouter["connection"]["getAll"]>
->["connections"][number];
+export type Item = Awaited<
+  ReturnType<AppRouter["item"]["getAll"]>
+>["items"][number];
 
 export interface ConnectionDisconnectButtonProps {
-  connection: Connection;
+  item: Item;
 }
 
 export const ConnectionDisconnectButton: React.FC<
   ConnectionDisconnectButtonProps
-> = ({ connection }) => {
+> = ({ item }) => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { report } = useReportError();
 
   const { mutateAsync: disconnectConnection, isPending: isDisconnecting } =
-    useMutation(trpc.connection.disconnect.mutationOptions());
+    useMutation(trpc.item.remove.mutationOptions());
 
   return (
     <AlertModal
       title="Disconnect Account"
-      message={`Are you sure you want to disconnect ${connection.institution.name}? This will remove access to all associated accounts and transactions.`}
+      message={`Are you sure you want to disconnect ${item.institutionName ?? "An account"}? This will remove access to all associated accounts and transactions.`}
       buttons={[
         {
           text: "Cancel",
@@ -40,11 +40,11 @@ export const ConnectionDisconnectButton: React.FC<
           onPress: async () => {
             try {
               await disconnectConnection({
-                connectionId: connection.id,
+                itemId: item.itemId,
               });
               // Invalidate and refetch connection queries to refresh the list
               await queryClient.invalidateQueries({
-                queryKey: trpc.connection.getAll.queryKey(),
+                queryKey: trpc.item.getAll.queryKey(),
               });
             } catch (error) {
               report(error, "Failed to disconnect account. Please try again.");

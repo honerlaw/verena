@@ -4,10 +4,7 @@ import { AppThemeProvider } from "@/src/providers/AppThemeProvider";
 import { TRPCProvider } from "@/src/providers/TRPCProvider";
 import { AuthProvider } from "@/src/providers/AuthProvider";
 import { ConfigProvider } from "@/src/providers/ConfigProvider";
-import { ConversationProvider } from "@/src/providers/ConversationProvider";
-import { ActionSheetProvider, ActionSheet } from "@/src/components/ActionSheet";
 import { ToastProvider, ToastViewport } from "@tamagui/toast";
-import { UniversalLinkHandler } from "@/src/components/UniversalLinkHandler";
 import React from "react";
 
 export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -17,15 +14,9 @@ export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <AuthProvider>
           <TRPCProvider>
             <ToastProvider>
-              <ActionSheetProvider>
-                <ConversationProvider>
-                  {children}
-                  <UniversalLinkHandler />
-                  <ActionSheet />
-                  <StatusBar style="auto" />
-                  <ToastViewport />
-                </ConversationProvider>
-              </ActionSheetProvider>
+              {children}
+              <StatusBar style="auto" />
+              <ToastViewport />
             </ToastProvider>
           </TRPCProvider>
         </AuthProvider>

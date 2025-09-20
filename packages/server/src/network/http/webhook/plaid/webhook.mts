@@ -1,8 +1,8 @@
 import type express from "express";
-import { syncUpdatesAvailableHandler } from "./handler/syncUpdatesAvailable.mjs";
-import { itemErrorHandler } from "./handler/itemErrorHandler.mjs";
-import { itemPendingExpirationHandler } from "./handler/itemPendingExpirationHandler.mjs";
-import { itemLoginRepairedHandler } from "./handler/itemLoginRepairedHandler.mjs";
+import { syncUpdatesAvailableHandler } from "./handler/transaction/syncUpdatesAvailable.mjs";
+import { itemErrorHandler } from "./handler/item/itemErrorHandler.mjs";
+import { itemPendingExpirationHandler } from "./handler/item/itemPendingExpirationHandler.mjs";
+import { itemLoginRepairedHandler } from "./handler/item/itemLoginRepairedHandler.mjs";
 
 /**
  * These are codes that are used for /transactions/get, but this application uses
@@ -15,8 +15,6 @@ const LEGACY_WEBHOOK_CODES = [
   "INITIAL_UPDATE",
   "HISTORICAL_UPDATE",
 ].map((s) => s.toLowerCase());
-
-// RECURRING_TRANSACTIONS_UPDATE
 
 const HANDLER_MAP: Record<
   string,

@@ -5,7 +5,7 @@ import { contextMiddleware } from "./context.mjs";
 import { logger, register } from "@onerlaw/framework/backend/logger";
 import { expressTRPCMiddleware } from "./network/rpc/index.mjs";
 import { config } from "./network/http/index.mjs";
-import { quiltt } from "./network/http/webhook/quiltt/index.mjs";
+import { plaidWebhook } from "./network/http/webhook/plaid/webhook.mjs";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,19 +29,17 @@ app.use("/api/trpc", express.json(), expressTRPCMiddleware);
 
 app.use("/api/app/config", express.json(), config);
 
-app.use("/api/webhook/quiltt", express.json(), quiltt);
-
-app.use("/api/webhook/plaid", express.json(), quiltt);
+app.use("/api/webhook/plaid", express.json(), plaidWebhook);
 
 // Serve static files from public directory (including .well-known)
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(process.cwd(), "../public")));
 
 // serve static files from static directory (the app itself)
-app.use(express.static(path.join(__dirname, "../static")));
+app.use(express.static(path.join(process.cwd(), "../static")));
 
 // for unhandled paths, serve the index.html of the app
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../static/index.html"));
+app.get("/{*splat}", (req, res) => {
+  res.sendFile(path.join(process.cwd(), "../static/index.html"));
 });
 
 // Start the server

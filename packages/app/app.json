@@ -10,11 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.onerlaw.verena",
-      "associatedDomains": [
-        "applinks:verena.app",
-        "applinks:www.verena.app"
-      ]
+      "bundleIdentifier": "com.derek.honerlaw.verena"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,30 +19,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "intentFilters": [
-        {
-          "action": "VIEW",
-          "autoVerify": true,
-          "data": [
-            {
-              "scheme": "https",
-              "host": "verena.app",
-              "pathPrefix": "/connect"
-            },
-            {
-              "scheme": "https", 
-              "host": "www.verena.app",
-              "pathPrefix": "/connect"
-            }
-          ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
-        }
-      ]
+      "edgeToEdgeEnabled": true
     },
     "web": {
       "output": "static",
@@ -69,9 +42,7 @@
       "expo-web-browser"
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true,
-      "staticRendering": false
+      "typedRoutes": true
     }
   }
 }

@@ -7,7 +7,7 @@ export async function add(
   userId: string,
   itemId: string,
   transactionId: string,
-  transaction: Buffer,
+  transaction: string,
 ) {
   try {
     return await client.itemTransaction.create({
