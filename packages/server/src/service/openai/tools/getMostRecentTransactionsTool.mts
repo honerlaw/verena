@@ -59,9 +59,7 @@ async function executeGetMostRecentTransactions(
     .map((itemTransaction) => {
       try {
         // Parse the stored transaction bytes back to Plaid Transaction object
-        const plaidTransaction: Transaction = JSON.parse(
-          Buffer.from(itemTransaction.transaction).toString(),
-        );
+        const plaidTransaction: Transaction = itemTransaction.transaction;
 
         const date = plaidTransaction.date;
         const transactionId = plaidTransaction.transaction_id;

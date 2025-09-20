@@ -43,12 +43,18 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
 
   const failures: string[] = [];
 
+  // get the DEK to encrypt the transaction payloads going into the database
+  const dek = await ctx.service.encryption.getDEK(
+    ctx,
+    ctx.service.encryption.DEKIdentifier.TRANSACTIONS,
+  );
+
   for (const transaction of added) {
     const result = await ctx.database.items.transactions.add(
       ctx.auth.user.id,
       item.id,
       transaction.transaction_id,
-      Buffer.from(JSON.stringify(transaction)),
+      dek.encrypt(JSON.stringify(transaction)),
     );
     if (!result) {
       failures.push(transaction.transaction_id);
@@ -60,7 +66,7 @@ export async function sync(ctx: Context, itemId: string): Promise<boolean> {
       ctx.auth.user.id,
       item.id,
       transaction.transaction_id,
-      Buffer.from(JSON.stringify(transaction)),
+      dek.encrypt(JSON.stringify(transaction)),
     );
     if (!result) {
       failures.push(transaction.transaction_id);

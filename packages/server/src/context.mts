@@ -2,6 +2,7 @@ import { type Logger, logger } from "@onerlaw/framework/backend/logger";
 import { wrap } from "@onerlaw/framework/backend/utils";
 
 import * as userDB from "./database/user/index.mjs";
+import * as userKeyDB from "./database/user/key/index.mjs";
 import * as conversationDB from "./database/conversation/index.mjs";
 import * as itemsDB from "./database/items/index.mjs";
 import * as itemsTransactionsDB from "./database/items/transactions/index.mjs";
@@ -19,6 +20,7 @@ import * as plaidItemDS from "./datasource/plaid/item/index.mjs";
 import * as openaiService from "./service/openai/index.mjs";
 import * as transactionsService from "./service/transactions/index.mjs";
 import * as accountService from "./service/account/index.mjs";
+import * as encryptionService from "./service/encryption/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -66,7 +68,10 @@ const options = {
       },
       database: {
         client,
-        user: wrap(client, wrap(childLogger, userDB)),
+        user: {
+          ...wrap(client, wrap(childLogger, userDB)),
+          key: wrap(client, wrap(childLogger, userKeyDB)),
+        },
         conversation: wrap(client, wrap(childLogger, conversationDB)),
         items: {
           ...wrap(client, wrap(childLogger, itemsDB)),
@@ -78,6 +83,7 @@ const options = {
         agent: openaiService,
         transactions: transactionsService,
         account: accountService,
+        encryption: encryptionService,
       },
     };
   },

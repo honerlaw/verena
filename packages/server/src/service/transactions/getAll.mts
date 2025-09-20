@@ -1,8 +1,9 @@
+import type { Transaction } from "plaid";
 import type { Context } from "../../context.mjs";
 
-export async function getAll(context: Context) {
-  if (!context.auth.user) {
-    context.logger.error(
+export async function getAll(ctx: Context) {
+  if (!ctx.auth.user) {
+    ctx.logger.error(
       {
         tags: ["service", "transactions", "getAll"],
       },
@@ -11,7 +12,21 @@ export async function getAll(context: Context) {
     return null;
   }
 
-  return await context.database.items.transactions.getAllByUserID(
-    context.auth.user.id,
+  const dek = await ctx.service.encryption.getDEK(
+    ctx,
+    ctx.service.encryption.DEKIdentifier.TRANSACTIONS,
   );
+
+  const transactions = await ctx.database.items.transactions.getAllByUserID(
+    ctx.auth.user.id,
+  );
+
+  return transactions?.map((transaction) => {
+    return {
+      ...transaction,
+      transaction: JSON.parse(
+        dek.decrypt(transaction.transaction),
+      ) as Transaction,
+    };
+  });
 }

@@ -35,6 +35,22 @@ model User {
   items Item[]
   itemTransactions ItemTransaction[]
 
+  userKey UserKey?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// used for data encryption
+// if it doesn't exist, we will generate a new one
+model UserKey {
+  id String @id @default(uuid())
+
+  userId String @unique
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  key String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -75,7 +91,7 @@ model ItemTransaction {
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   transactionId String @unique
-  transaction Bytes // this is going to be encrypted and stored as Bytea in the database
+  transaction String // encrypted string
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

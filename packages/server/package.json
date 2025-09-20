@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --test",
+    "test": "node --import tsx --test **/*.test.mts",
     "start:local": "tsx --watch --no-cache --env-file=.env src/index.mts",
     "ngrok": "ngrok http --url=intimate-certainly-opossum.ngrok-free.app 3000",
     "build": "npm run generate && tsc",
@@ -21,6 +21,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cryptr": "^4.0.3",
     "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.9.0",
@@ -37,6 +38,7 @@
     "@onerlaw/framework": "^1.0.36",
     "@openai/agents": "^0.1.2",
     "@trpc/server": "^11.5.1",
+    "cryptr": "^6.4.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "plaid": "^38.1.0",
