@@ -7,7 +7,7 @@
     "start:local": "tsx --watch --no-cache --env-file=.env src/index.mts",
     "ngrok": "ngrok http --url=intimate-certainly-opossum.ngrok-free.app 3000",
     "build": "rm -rf dist && npm run codegen && tsc && cp -r ./src/generated ./dist/generated",
-    "build:web": "rm -rf static && cd ../app && npm run web:export && cd ../server && cp -r ../app/dist static",
+    "build:web": "rm -rf static && cd ../app && NODE_ENV=production npm run web:export && cd ../server && mv ../app/dist static",
     "start": "node dist/index.mjs",
     "format": "prettier --write \"src/**/*.{js,ts,mjs,mts}\"",
     "lint": "eslint \"src/**/*.{js,ts,mjs,mts}\" --fix",

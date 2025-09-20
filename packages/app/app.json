@@ -48,6 +48,7 @@
       "typedRoutes": true
     },
     "extra": {
+      "randomUrlOfSomeSort": "https://www.verena.app",
       "router": {},
       "eas": {
         "projectId": "42d07c38-1caf-4f2e-866c-2a73403b20e2"
