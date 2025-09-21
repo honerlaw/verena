@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import { Button, Form, H1, H3, Input, Stack, Text, YStack } from "tamagui";
+import { Button, Form, H1, H3, Input, Stack, Text, XStack, YStack } from "tamagui";
 import { KeyboardAvoiding } from "@/src/components/KeyboardAvoiding";
 import { useSignInForm } from "./hooks/useSignInForm";
+import Icon from "@/assets/icon.svg";
 
 export function SignInPage() {
   const router = useRouter();
@@ -18,9 +19,12 @@ export function SignInPage() {
 
   return (
     <KeyboardAvoiding>
+      <XStack alignItems="center" justifyContent="center" marginBottom="$12">
+        <Icon width={80} height={80} />
+      </XStack>
       <Form onSubmit={onSignInPress} gap="$5" width={"75%"} maxWidth={"400px"}>
         <YStack borderRadius="$4" gap="$5">
-          <H1>Verena</H1>
+          <H1 marginLeft={-8}>Verena</H1>
           <H3>Sign in</H3>
           {errors &&
             errors.map((e) => (
