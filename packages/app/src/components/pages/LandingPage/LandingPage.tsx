@@ -1,4 +1,5 @@
 import { YStack } from "tamagui";
+import { ScrollView } from "react-native";
 import { Navigation } from "./Navigation";
 import { Hero } from "./Hero";
 import { WhyVerena } from "./WhyVerena";
@@ -8,15 +9,15 @@ import { Footer } from "./Footer";
 
 export const LandingPage: React.FC = () => {
   return (
-    <YStack flex={1}>
+    <ScrollView style={{ flex: 1 }}>
       <Navigation />
       <Hero />
-      <YStack flex={1}>
+      <YStack>
         <WhyVerena />
         <HowItWorks />
         <Security />
       </YStack>
       <Footer />
-    </YStack>
+    </ScrollView>
   );
 };

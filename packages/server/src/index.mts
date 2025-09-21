@@ -1,4 +1,5 @@
 import { clerkMiddleware } from "@clerk/express";
+import cors from "cors";
 import express from "express";
 import path from "path";
 import { contextMiddleware } from "./context.mjs";
@@ -16,6 +17,14 @@ app.use(
     enableHandshake: true,
   }),
 );
+
+// CORS configuration to allow requests from localhost:8081
+app.use(cors({
+  origin: 'http://localhost:8081',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 
 app.use(contextMiddleware());
 
