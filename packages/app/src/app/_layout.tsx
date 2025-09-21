@@ -14,6 +14,14 @@ function RootLayout() {
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(unauth)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="privacy"
+          options={{
+            headerTitle: "",
+            headerBackButtonDisplayMode: "minimal",
+            headerShadowVisible: false,
+          }}
+        />
       </Stack>
     </AppLayout>
   );

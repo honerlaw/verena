@@ -1,33 +1,44 @@
 import React from "react";
-import { XStack, YStack, Text, Button } from "tamagui";
+import { XStack, Text, Button, ScrollView } from "tamagui";
 import { useRouter } from "expo-router";
-import { Platform } from "react-native";
+import Icon from "@/assets/icon.svg";
+import { useScreenSize } from "@/src/hooks/useScreenSize";
 
-export const Navigation: React.FC = () => {
+type NavigationProps = {
+  scrollViewRef: React.RefObject<ScrollView | null>;
+};
+
+export const Navigation: React.FC<NavigationProps> = ({ scrollViewRef }) => {
   const router = useRouter();
+  const { isDesktop } = useScreenSize();
 
   const handleSignIn = () => {
     router.push("/signin");
   };
 
-  const handleGetStarted = () => {
-    router.push("/signup");
-  };
-
   // For web only - navigation links
   const navigationItems = [
-    { label: "Features", href: "#features" },
+    { label: "Why Verena", href: "#why-verena" },
     { label: "Security", href: "#security" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "FAQ", href: "#faq" },
+    { label: "How it works", href: "#how-it-works" },
   ];
 
   const handleScrollToSection = (href: string) => {
-    if (Platform.OS === "web") {
-      const element = document.querySelector(href);
-      element?.scrollIntoView({ behavior: "smooth" });
+    const id = href.toLowerCase().replaceAll(" ", "-").replace("#", "");
+    const element = document.getElementById(id);
+    if (element) {
+      const elementTop = element.offsetTop + element.offsetHeight;
+      scrollViewRef.current?.scrollTo?.({
+        y: elementTop,
+        animated: true,
+      });
     }
   };
+
+  // mobile render nothing
+  if (!isDesktop) {
+    return null;
+  }
 
   return (
     <XStack
@@ -40,48 +51,34 @@ export const Navigation: React.FC = () => {
       borderBottomColor="$borderColor"
     >
       {/* Logo/Brand */}
-      <XStack alignItems="center" gap="$2">
-        <YStack
-          width={32}
-          height={32}
-          backgroundColor="$primary"
-          borderRadius="$2"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Text color="white" fontSize="$6" fontWeight="bold">
-            V
-          </Text>
-        </YStack>
+      <XStack alignItems="center" gap="$2" flex={1}>
+        <Icon width={32} height={32} />
         <Text fontSize="$6" fontWeight="bold" color="$color">
           Verena
         </Text>
       </XStack>
 
-      {/* Navigation Links - Web only */}
-      {Platform.OS === "web" && (
-        <XStack gap="$6" alignItems="center">
-          {navigationItems.map((item) => (
-            <Button
-              key={item.label}
-              variant="outlined"
-              size="$3"
-              backgroundColor="transparent"
-              borderWidth={0}
-              color="$color"
-              onPress={() => handleScrollToSection(item.href)}
-              hoverStyle={{
-                backgroundColor: "$background075",
-              }}
-            >
-              {item.label}
-            </Button>
-          ))}
-        </XStack>
-      )}
+      <XStack gap="$6" alignItems="center" justifyContent="center" flex={2}>
+        {navigationItems.map((item) => (
+          <Button
+            key={item.label}
+            variant="outlined"
+            size="$3"
+            backgroundColor="transparent"
+            borderWidth={0}
+            color="$color"
+            onPress={() => handleScrollToSection(item.href)}
+            hoverStyle={{
+              backgroundColor: "$background075",
+            }}
+          >
+            {item.label}
+          </Button>
+        ))}
+      </XStack>
 
       {/* Action Buttons */}
-      <XStack gap="$3" alignItems="center">
+      <XStack gap="$3" alignItems="center" justifyContent="flex-end" flex={1}>
         <Button
           variant="outlined"
           size="$3"
@@ -94,17 +91,6 @@ export const Navigation: React.FC = () => {
           }}
         >
           Sign in
-        </Button>
-        <Button
-          size="$3"
-          backgroundColor="$primary"
-          color="white"
-          onPress={handleGetStarted}
-          hoverStyle={{
-            backgroundColor: "$primary2",
-          }}
-        >
-          Get started
         </Button>
       </XStack>
     </XStack>
