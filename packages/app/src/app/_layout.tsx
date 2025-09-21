@@ -22,6 +22,14 @@ function RootLayout() {
             headerShadowVisible: false,
           }}
         />
+        <Stack.Screen
+          name="terms"
+          options={{
+            headerTitle: "",
+            headerBackButtonDisplayMode: "minimal",
+            headerShadowVisible: false,
+          }}
+        />
       </Stack>
     </AppLayout>
   );

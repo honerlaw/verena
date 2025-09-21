@@ -1,0 +1,1 @@
+export { FooterContent } from "./FooterContent";
