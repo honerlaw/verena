@@ -21,8 +21,8 @@ export const SignOutSection: React.FC = () => {
       style: "destructive",
       onPress: async () => {
         await signOut();
-        client.invalidateQueries()
-        client.resetQueries()
+        client.invalidateQueries();
+        client.resetQueries();
       },
     },
   ];

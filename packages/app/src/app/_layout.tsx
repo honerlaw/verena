@@ -1,12 +1,13 @@
 import { Stack } from "expo-router";
 import "react-native-reanimated";
 import { AppLayout } from "@/src/components/AppLayout";
+import * as Sentry from "@sentry/react-native";
 
 export const unstable_settings = {
   anchor: "index",
 };
 
-export default function RootLayout() {
+function RootLayout() {
   return (
     <AppLayout>
       <Stack>
@@ -17,3 +18,5 @@ export default function RootLayout() {
     </AppLayout>
   );
 }
+
+export default Sentry.wrap(RootLayout);

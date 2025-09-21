@@ -26,6 +26,8 @@
   "overrides": {
     "react-native": "0.81.4",
     "zod": "^4.1.8",
-    "markdown-it": "^13.0.2"
+    "markdown-it": "^13.0.2",
+    "@react-native-async-storage/async-storage": "2.2.0",
+    "react-native-web": "0.21.1"
   }
 }
