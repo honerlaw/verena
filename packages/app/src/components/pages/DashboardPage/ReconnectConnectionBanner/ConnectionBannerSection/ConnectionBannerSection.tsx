@@ -22,7 +22,7 @@ export const ConnectionBannerSection: React.FC<
     id: item.itemId,
   });
 
-  const { openLink } = useLinkToPlaid();
+  const { openLink } = useLinkToPlaid(item.itemId);
 
   const handleReconnect = () => {
     openLink();

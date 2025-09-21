@@ -32,7 +32,7 @@ export const ChatBar: React.FC = () => {
               maxHeight={140}
               value={message.inputText}
               onChangeText={message.setInputText}
-              onKeyPress={message.handleEnterKey}
+              onSubmitEditing={message.handleSend}
               placeholder="Ask about my finances..."
               disabled={message.isSending}
               borderWidth={0}
@@ -40,6 +40,7 @@ export const ChatBar: React.FC = () => {
               fontWeight={400}
               style={{ fontSize: 15, lineHeight: 20 }}
               verticalAlign={"center"}
+              returnKeyType="send"
             />
             <Button
               size="$3"

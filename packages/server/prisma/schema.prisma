@@ -27,7 +27,7 @@ model User {
   authId    String   @unique
 
   // allows us to have sandbox users in production for app store testing
-  accountType UserType @default(PRODUCTION)
+  userType UserType?
 
   // openai related
   conversations Conversation[]

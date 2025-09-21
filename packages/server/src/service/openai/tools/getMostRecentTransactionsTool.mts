@@ -31,7 +31,7 @@ export const getMostRecentTransactionsTool = tool({
         },
         "Error executing get transaction data tool",
       );
-      throw error;
+      return "Error executing, no transactions found.";
     }
   },
 });

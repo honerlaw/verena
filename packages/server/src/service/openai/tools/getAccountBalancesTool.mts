@@ -39,7 +39,7 @@ export const getAccountBalancesTool = tool({
         },
         "Error executing get account balances tool",
       );
-      throw error;
+      return "Error executing, no accounts found.";
     }
   },
 });

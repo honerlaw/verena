@@ -1,14 +1,34 @@
 import { LoadingView } from "@/src/components/LoadingView";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Button } from "tamagui";
-import { User } from "@tamagui/lucide-icons";
+import { Plus, User } from "@tamagui/lucide-icons";
 import { Redirect, Stack, useRouter } from "expo-router";
 import { WebLayout } from "@/src/components/WebLayout";
 import { ActionSheetProvider, ActionSheet } from "@/src/components/ActionSheet";
-import { ConversationProvider } from "@/src/providers/ConversationProvider";
+import {
+  ConversationProvider,
+  useConversation,
+} from "@/src/providers/ConversationProvider";
+import React from "react";
 
 export const unstable_settings = {
   initialRouteName: "dashboard",
+};
+
+const HeaderRight: React.FC = () => {
+  const { create, message, setCurrentConversationId } = useConversation();
+  return (
+    <Button
+      size="$3"
+      circular
+      icon={Plus}
+      onPress={async () => {
+        message.clearMessages();
+        setCurrentConversationId(null);
+        await create.create(true);
+      }}
+    />
+  );
 };
 
 export default function AuthLayout() {
@@ -47,6 +67,7 @@ export default function AuthLayout() {
                     onPress={() => router.push("/profile")}
                   />
                 ),
+                headerRight: () => <HeaderRight />,
               }}
             />
             <Stack.Screen

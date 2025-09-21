@@ -44,7 +44,6 @@ export function useSignInForm(): UseSignInFormReturn {
         await setActive({ session: signInAttempt.createdSessionId });
         // router.replace('/')
       } else {
-        console.log(signInAttempt);
         report(
           new Error(
             JSON.stringify(

@@ -10,7 +10,6 @@ import * as itemsTransactionsDB from "./database/items/transactions/index.mjs";
 import * as clerkDS from "./datasource/clerk/index.mjs";
 import * as openaiDS from "./datasource/openai/index.mjs";
 import * as openaiConversationDS from "./datasource/openai/conversation/index.mjs";
-import * as plaidDS from "./datasource/plaid/index.mjs";
 import * as plaidTokenDS from "./datasource/plaid/token/index.mjs";
 import * as plaidAccountDS from "./datasource/plaid/account/index.mjs";
 import * as plaidWebhookDS from "./datasource/plaid/webhook/index.mjs";
@@ -21,6 +20,7 @@ import * as openaiService from "./service/openai/index.mjs";
 import * as transactionsService from "./service/transactions/index.mjs";
 import * as accountService from "./service/account/index.mjs";
 import * as encryptionService from "./service/encryption/index.mjs";
+import * as plaidService from "./service/plaid/index.mjs";
 
 import { type ContextRequest } from "@onerlaw/framework/backend/context";
 import { client, type User } from "./util/database.mjs";
@@ -39,7 +39,29 @@ const options = {
   ) => {
     const { clerkClient, ...clerkDSRemaining } = clerkDS;
     const { openaiClient, ...openaiDSRemaining } = openaiDS;
-    const { plaidClient } = plaidDS;
+
+    const clerkDatasource = wrap(
+      clerkClient,
+      wrap(childLogger, clerkDSRemaining),
+    );
+    const userDatabase = {
+      ...wrap(client, wrap(childLogger, userDB)),
+      key: wrap(client, wrap(childLogger, userKeyDB)),
+    };
+
+    // create a temporary context for the plaid service
+    // as we need to the client to build the actual context
+    const plaidClient = await plaidService.getClient({
+      auth: {
+        user,
+      },
+      datasource: {
+        clerk: clerkDatasource,
+      },
+      database: {
+        user: userDatabase,
+      },
+    } as Context);
 
     return {
       logger: childLogger,
@@ -47,7 +69,7 @@ const options = {
         user,
       },
       datasource: {
-        clerk: wrap(clerkClient, wrap(childLogger, clerkDSRemaining)),
+        clerk: clerkDatasource,
         openai: {
           ...wrap(openaiClient, wrap(childLogger, openaiDSRemaining)),
           conversation: wrap(
@@ -68,10 +90,7 @@ const options = {
       },
       database: {
         client,
-        user: {
-          ...wrap(client, wrap(childLogger, userDB)),
-          key: wrap(client, wrap(childLogger, userKeyDB)),
-        },
+        user: userDatabase,
         conversation: wrap(client, wrap(childLogger, conversationDB)),
         items: {
           ...wrap(client, wrap(childLogger, itemsDB)),

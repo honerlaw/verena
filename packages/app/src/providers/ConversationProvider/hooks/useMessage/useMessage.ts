@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { TextInputKeyPressEvent } from "react-native";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useReportError } from "@/src/hooks/useReportError";
 
@@ -28,7 +27,6 @@ type UseMessageReturn = {
   inputText: string;
   setInputText: (text: string) => void;
   handleSend: () => Promise<void>;
-  handleEnterKey: (e: TextInputKeyPressEvent) => void;
   isSendDisabled: boolean;
 };
 
@@ -63,11 +61,6 @@ export const useMessage = (
       const trimmed = message.trim();
       if (!trimmed || isSending) return;
 
-      const conversationId = await create();
-      if (!conversationId) {
-        return;
-      }
-
       setError(null);
       setIsSending(true);
 
@@ -79,6 +72,12 @@ export const useMessage = (
 
       // Add user message immediately
       addMessage(userMessage);
+
+      // create the conversation or get the current conversation
+      const conversationId = await create();
+      if (!conversationId) {
+        return;
+      }
 
       try {
         // Get agent response
@@ -119,16 +118,6 @@ export const useMessage = (
     await sendMessage(inputText);
   }, [inputText, sendMessage]);
 
-  const handleEnterKey = useCallback(
-    (e: TextInputKeyPressEvent) => {
-      if (e?.nativeEvent?.key === "Enter") {
-        e.preventDefault?.();
-        handleSend();
-      }
-    },
-    [handleSend],
-  );
-
   const isSendDisabled = inputText.trim().length === 0 || isSending;
 
   return {
@@ -141,7 +130,6 @@ export const useMessage = (
     inputText,
     setInputText,
     handleSend,
-    handleEnterKey,
     isSendDisabled,
   };
 };

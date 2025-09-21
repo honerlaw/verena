@@ -20,7 +20,7 @@ export const MessageList: React.FC = () => {
   }, [messages]);
 
   // loading a conversation, but have no messages yet
-  if (items.isLoading) {
+  if (items.isLoading && messages.length === 0) {
     return <LoadingView />;
   }
 
