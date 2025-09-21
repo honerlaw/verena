@@ -16,6 +16,10 @@ export const Navigation: React.FC<NavigationProps> = ({ scrollViewRef }) => {
     router.push("/signin");
   };
 
+  const handleCreateAccount = () => {
+    router.push("/signup");
+  };
+
   // For web only - navigation links
   const navigationItems = [
     { label: "Why Verena", href: "#why-verena" },
@@ -42,23 +46,22 @@ export const Navigation: React.FC<NavigationProps> = ({ scrollViewRef }) => {
 
   return (
     <XStack
-      backgroundColor="$background"
-      paddingHorizontal="$4"
-      paddingVertical="$3"
+      width="100%"
+      paddingHorizontal="$6"
+      paddingVertical="$4"
       alignItems="center"
       justifyContent="space-between"
-      borderBottomWidth={1}
-      borderBottomColor="$borderColor"
     >
       {/* Logo/Brand */}
-      <XStack alignItems="center" gap="$2" flex={1}>
+      <XStack alignItems="center" gap="$2" width={200}>
         <Icon width={32} height={32} />
         <Text fontSize="$6" fontWeight="bold" color="$color">
           Verena
         </Text>
       </XStack>
 
-      <XStack gap="$6" alignItems="center" justifyContent="center" flex={2}>
+      {/* Navigation Items - Centered */}
+      <XStack gap="$6" alignItems="center" justifyContent="center" flex={1}>
         {navigationItems.map((item) => (
           <Button
             key={item.label}
@@ -78,19 +81,33 @@ export const Navigation: React.FC<NavigationProps> = ({ scrollViewRef }) => {
       </XStack>
 
       {/* Action Buttons */}
-      <XStack gap="$3" alignItems="center" justifyContent="flex-end" flex={1}>
+      <XStack
+        gap="$3"
+        alignItems="center"
+        justifyContent="flex-end"
+        width={200}
+      >
         <Button
           variant="outlined"
           size="$3"
           onPress={handleSignIn}
           borderColor="$borderColor"
           color="$color"
-          backgroundColor="transparent"
           hoverStyle={{
             backgroundColor: "$background075",
           }}
         >
           Sign in
+        </Button>
+        <Button
+          size="$3"
+          onPress={handleCreateAccount}
+          backgroundColor="$primary"
+          hoverStyle={{
+            backgroundColor: "$primary2",
+          }}
+        >
+          <Text color="white">Create account</Text>
         </Button>
       </XStack>
     </XStack>

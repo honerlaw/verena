@@ -59,6 +59,25 @@ export function SignUpPage() {
             secureTextEntry={true}
             onChangeText={(password) => setPassword(password)}
           />
+
+          <Stack
+            justifyContent="center"
+            alignItems="center"
+            paddingHorizontal="$2"
+          >
+            <Text fontSize="$2" textAlign="center" color="$gray10">
+              By creating an account, you agree to our{" "}
+              <Text
+                fontSize="$2"
+                color="$primary"
+                textDecorationLine="underline"
+                onPress={() => router.push("/terms")}
+              >
+                terms of service
+              </Text>
+            </Text>
+          </Stack>
+
           <Form.Trigger asChild>
             <Button disabled={isSigningUp}>
               {isSigningUp ? "Creating..." : "Create account"}
