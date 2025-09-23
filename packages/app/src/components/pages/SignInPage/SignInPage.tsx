@@ -14,7 +14,9 @@ export function SignInPage() {
     setPassword,
     errors,
     onSignInPress,
+    onAppleSignInPress,
     isSigningIn,
+    isAppleSignInAvailable,
   } = useSignInForm();
 
   return (
@@ -50,6 +52,30 @@ export function SignInPage() {
               {isSigningIn ? "Signing in..." : "Sign in"}
             </Button>
           </Form.Trigger>
+
+          {isAppleSignInAvailable && (
+            <>
+              <XStack alignItems="center" gap="$4" marginVertical="$4">
+                <Stack flex={1} height={1} backgroundColor="$borderColor" />
+                <Text color="$color11" fontSize="$3">or</Text>
+                <Stack flex={1} height={1} backgroundColor="$borderColor" />
+              </XStack>
+              
+              <Button
+                onPress={onAppleSignInPress}
+                disabled={isSigningIn}
+                backgroundColor="$black12"
+                borderColor="$borderColor"
+                pressStyle={{ backgroundColor: "$gray11" }}
+              >
+                <XStack alignItems="center" gap="$3">
+                  <Text color="white" fontWeight="600">
+                    {isSigningIn ? "Signing in..." : "Continue with Apple"}
+                  </Text>
+                </XStack>
+              </Button>
+            </>
+          )}
 
           <Stack justifyContent="center" alignItems="center" gap="$4">
             <Text onPress={() => router.push("/signup")}>
