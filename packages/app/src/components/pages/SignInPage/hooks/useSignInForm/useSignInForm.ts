@@ -1,6 +1,5 @@
-import { isClerkAPIResponseError, useSignIn, useOAuth } from "@clerk/clerk-expo";
+import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
 import React from "react";
-import * as AppleAuthentication from 'expo-apple-authentication';
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
 interface UseSignInFormReturn {
@@ -10,30 +9,17 @@ interface UseSignInFormReturn {
   setPassword: (value: string) => void;
   errors: string[] | null;
   onSignInPress: () => Promise<void>;
-  onAppleSignInPress: () => Promise<void>;
   isSigningIn: boolean;
-  isAppleSignInAvailable: boolean;
 }
 
 export function useSignInForm(): UseSignInFormReturn {
   const { signIn, setActive, isLoaded } = useSignIn();
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_apple" });
   const [errors, setErrors] = React.useState<string[] | null>(null);
   const [isSigningIn, setIsSigningIn] = React.useState(false);
-  const [isAppleSignInAvailable, setIsAppleSignInAvailable] = React.useState(false);
   const { report } = useReportError();
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
-
-  // Check if Apple Sign In is available on this device
-  React.useEffect(() => {
-    const checkAppleSignInAvailability = async () => {
-      const isAvailable = await AppleAuthentication.isAvailableAsync();
-      setIsAppleSignInAvailable(isAvailable);
-    };
-    checkAppleSignInAvailability();
-  }, []);
 
   // Handle the submission of the sign-in form
   const onSignInPress = async () => {
@@ -81,36 +67,6 @@ export function useSignInForm(): UseSignInFormReturn {
     }
   };
 
-  // Handle Apple Sign In
-  const onAppleSignInPress = async () => {
-    setErrors(null);
-    setIsSigningIn(true);
-
-    if (!isLoaded) {
-      setIsSigningIn(false);
-      return;
-    }
-
-    try {
-      const { createdSessionId, setActive: oauthSetActive } = await startOAuthFlow();
-
-      if (createdSessionId) {
-        await setActive({ session: createdSessionId });
-      } else {
-        setErrors(["Failed to complete Apple sign in."]);
-      }
-    } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        setErrors([err.errors?.[0]?.message || "Apple sign in failed."]);
-      } else {
-        report(err, "Failed to sign in with Apple.");
-        setErrors(["Apple sign in failed. Please try again."]);
-      }
-    } finally {
-      setIsSigningIn(false);
-    }
-  };
-
   return {
     emailAddress,
     setEmailAddress,
@@ -118,8 +74,6 @@ export function useSignInForm(): UseSignInFormReturn {
     setPassword,
     errors,
     onSignInPress,
-    onAppleSignInPress,
     isSigningIn,
-    isAppleSignInAvailable,
   };
 }
