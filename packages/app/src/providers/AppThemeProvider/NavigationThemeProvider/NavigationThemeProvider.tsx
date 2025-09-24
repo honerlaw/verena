@@ -42,10 +42,7 @@ export const NavigationThemeProvider: React.FC<
     colors: {
       primary: COLOR_PRIMARY || tamaguiTheme.color?.val || fallbacks.primary,
       background: tamaguiTheme.background?.val || fallbacks.background,
-      card:
-        tamaguiTheme.backgroundHover?.val ||
-        tamaguiTheme.background?.val ||
-        fallbacks.card,
+      card: tamaguiTheme.background?.val || fallbacks.card,
       text: tamaguiTheme.color?.val || fallbacks.text,
       border:
         tamaguiTheme.borderColor?.val ||
