@@ -22,10 +22,7 @@ export const AppleButton: React.FC = () => {
     >
       <XStack alignItems="center" justifyContent="center" gap="$3">
         <AppleIcon />
-        <Text
-          fontSize="$4"
-          fontWeight="500"
-        >
+        <Text fontSize="$4" fontWeight="500">
           {isSigningIn ? "Signing in..." : "Sign in with Apple"}
         </Text>
       </XStack>

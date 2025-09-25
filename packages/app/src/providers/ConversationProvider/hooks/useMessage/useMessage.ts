@@ -94,7 +94,6 @@ export const useMessage = (
 
         addMessage(assistantMessage);
       } catch (err) {
-        console.error("Failed to get agent response:", err);
         setError(err);
         report(err, "Failed to send message");
 

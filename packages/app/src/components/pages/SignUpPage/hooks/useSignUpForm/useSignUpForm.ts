@@ -54,6 +54,7 @@ export function useSignUpForm(): UseSignUpFormReturn {
       setPendingVerification(true);
     } catch (err) {
       if (isClerkAPIResponseError(err)) {
+        report(err);
         setErrors(err.errors.map((e) => e.longMessage || e.message));
       } else {
         report(err, "Failed to create account.");

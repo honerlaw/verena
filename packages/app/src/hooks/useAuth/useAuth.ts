@@ -84,10 +84,14 @@ export function useAuth() {
     try {
       await signOut();
       return { success: true };
-    } catch (err: any) {
+    } catch (err) {
+      report(err);
       return {
         success: false,
-        error: err.message || "An error occurred during sign out",
+        error:
+          err instanceof Error
+            ? err.message
+            : "An error occurred during sign out",
       };
     }
   };

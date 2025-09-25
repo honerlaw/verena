@@ -15,10 +15,7 @@ export const GoogleButton: React.FC = () => {
     >
       <XStack alignItems="center" justifyContent="center" gap="$3">
         <GoogleIcon width={20} height={20} />
-        <Text
-          fontSize="$4"
-          fontWeight="500"
-        >
+        <Text fontSize="$4" fontWeight="500">
           {isLoading ? "Signing in..." : "Sign in with Google"}
         </Text>
       </XStack>

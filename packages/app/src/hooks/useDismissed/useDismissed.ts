@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useReportError } from "../useReportError";
 
 export type UseDismissedOptions = {
   storageKey: string;
@@ -25,6 +26,7 @@ export type UseDismissed = {
 export const useDismissed = (options: UseDismissedOptions): UseDismissed => {
   const { storageKey, id, durationMs } = options;
   const compositeKey = useMemo(() => `${storageKey}:${id}`, [storageKey, id]);
+  const { report } = useReportError();
 
   const [expiresAt, setExpiresAt] = useState<number | null | undefined>(
     undefined,
@@ -58,11 +60,7 @@ export const useDismissed = (options: UseDismissedOptions): UseDismissed => {
         }
         setIsReady(true);
       } catch (error) {
-        console.error(
-          "useDismissed: error loading storage for",
-          compositeKey,
-          error,
-        );
+        report(error);
         if (mounted) setIsReady(true);
       }
     };
@@ -70,7 +68,7 @@ export const useDismissed = (options: UseDismissedOptions): UseDismissed => {
     return () => {
       mounted = false;
     };
-  }, [compositeKey]);
+  }, [compositeKey, report]);
 
   const isDismissed = useMemo(() => {
     if (expiresAt === undefined) return false;
@@ -84,18 +82,13 @@ export const useDismissed = (options: UseDismissedOptions): UseDismissed => {
       const nextExpiresAt =
         effectiveDuration != null ? Date.now() + effectiveDuration : null;
       setExpiresAt(nextExpiresAt);
-      // Fire and forget persist
       AsyncStorage.setItem(compositeKey, JSON.stringify(nextExpiresAt)).catch(
         (error) => {
-          console.error(
-            "useDismissed: error saving storage for",
-            compositeKey,
-            error,
-          );
+          report(error);
         },
       );
     },
-    [compositeKey, durationMs],
+    [compositeKey, durationMs, report],
   );
 
   return {

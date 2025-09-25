@@ -7,6 +7,7 @@ import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs";
 import { useConfig } from "@/src/providers/ConfigProvider";
+import { useReportError } from "@/src/hooks/useReportError";
 
 const context = createTRPCContext<AppRouter>();
 
@@ -20,6 +21,7 @@ export const TRPCProvider: React.FC<React.PropsWithChildren> = ({
   const config = useConfig();
   const { getToken } = useAuth();
   const [queryClient] = useState(() => new QueryClient());
+  const { report } = useReportError();
 
   const getHeaders = useCallback(async () => {
     try {
@@ -30,11 +32,11 @@ export const TRPCProvider: React.FC<React.PropsWithChildren> = ({
       return {
         Authorization: `Bearer ${token}`,
       };
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
+      report(err);
       return {};
     }
-  }, [getToken]);
+  }, [getToken, report]);
 
   const options = useMemo(
     () => ({

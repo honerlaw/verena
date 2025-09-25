@@ -1,4 +1,4 @@
-import { isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
+import { useSignIn } from "@clerk/clerk-expo";
 import React from "react";
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
@@ -57,11 +57,7 @@ export function useSignInForm(): UseSignInFormReturn {
         );
       }
     } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        setErrors(["Invalid email or password."]);
-      } else {
-        report(err, "Failed to sign in.");
-      }
+      report(err, "Invalid email or password.");
     } finally {
       setIsSigningIn(false);
     }

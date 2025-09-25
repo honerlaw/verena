@@ -1,4 +1,4 @@
-import { isClerkAPIResponseError, useSignIn, useSSO } from "@clerk/clerk-expo";
+import { useSignIn, useSSO } from "@clerk/clerk-expo";
 import React from "react";
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
@@ -29,8 +29,11 @@ export function useAppleSignIn(): UseAppleSignInReturn {
 
       if (createdSessionId) {
         await setActive({ session: createdSessionId });
-      } else {  
-        report(new Error("Failed to complete Apple sign in."), "Failed to complete Apple sign in.");
+      } else {
+        report(
+          new Error("Failed to complete Apple sign in."),
+          "Failed to complete Apple sign in.",
+        );
       }
     } catch (err) {
       report(err, "Failed to sign in with Apple.");
@@ -41,6 +44,6 @@ export function useAppleSignIn(): UseAppleSignInReturn {
 
   return {
     isSigningIn,
-    onAppleSignInPress
+    onAppleSignInPress,
   };
 }
