@@ -158,8 +158,8 @@ export const ForgotPasswordProvider: React.FC<ForgotPasswordProviderProps> = ({
       });
       // Password reset successful
       toast.show("Password reset successful!", {
-        message: "Success",
-        native: true,
+        type: "success",
+        native: false,
       });
       return true;
     } catch (error) {

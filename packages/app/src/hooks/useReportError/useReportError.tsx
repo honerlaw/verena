@@ -15,8 +15,8 @@ export function useReportError(error?: unknown) {
 
       if (displayMessage) {
         toast.show(displayMessage, {
-          message: "Error",
-          native: true,
+          type: "error",
+          native: false,
         });
       }
     },

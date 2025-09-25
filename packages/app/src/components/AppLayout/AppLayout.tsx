@@ -11,6 +11,7 @@ import * as Sentry from "@sentry/react-native";
 import { isRunningInExpoGo } from "expo";
 import { Platform } from "react-native";
 import Head from "expo-router/head";
+import { CustomToast } from "../CustomToast";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -60,6 +61,7 @@ export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
                 {children}
                 <StatusBar style="auto" />
                 <ToastViewport />
+                <CustomToast />
               </ToastProvider>
             </TRPCProvider>
           </AuthProvider>
