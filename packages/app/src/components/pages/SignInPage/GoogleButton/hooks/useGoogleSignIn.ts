@@ -1,5 +1,5 @@
 import React from "react";
-import { useSSO, isClerkAPIResponseError, useSignIn } from "@clerk/clerk-expo";
+import { useSSO, useSignIn } from "@clerk/clerk-expo";
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
 export const useGoogleSignIn = () => {
@@ -20,12 +20,7 @@ export const useGoogleSignIn = () => {
         await setActive({ session: createdSessionId });
       }
     } catch (err) {
-      if (isClerkAPIResponseError(err)) {
-        console.error("Google sign in error:", err);
-        report(err, "Failed to sign in with Google");
-      } else {
-        report(err, "Failed to sign in with Google");
-      }
+      report(err, "Failed to sign in with Google");
     } finally {
       setIsLoading(false);
     }
