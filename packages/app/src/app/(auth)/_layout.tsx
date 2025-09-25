@@ -10,18 +10,21 @@ import {
   useConversation,
 } from "@/src/providers/ConversationProvider";
 import React from "react";
+import { useLiquidGlass } from "@/src/hooks/useLiquidGlass";
 
 export const unstable_settings = {
   initialRouteName: "dashboard",
 };
 
 const HeaderRight: React.FC = () => {
+  const { isLiquidGlassEnabled } = useLiquidGlass();
   const { create, message, setCurrentConversationId } = useConversation();
   return (
     <Button
       size="$3"
       circular
       icon={Plus}
+      backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
       onPress={async () => {
         message.clearMessages();
         setCurrentConversationId(null);
@@ -32,6 +35,7 @@ const HeaderRight: React.FC = () => {
 };
 
 export default function AuthLayout() {
+  const { isLiquidGlassEnabled } = useLiquidGlass();
   const { isLoaded, isSignedIn } = useAuth();
   const router = useRouter();
 
@@ -63,6 +67,9 @@ export default function AuthLayout() {
                     size="$3"
                     circular
                     icon={User}
+                    backgroundColor={
+                      isLiquidGlassEnabled ? "transparent" : undefined
+                    }
                     scaleIcon={1.5}
                     onPress={() => router.push("/profile")}
                   />
