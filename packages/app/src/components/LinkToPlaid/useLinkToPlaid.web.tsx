@@ -49,7 +49,7 @@ export function useLinkToPlaid(itemId?: string) {
     if (!plaidError) {
       return;
     }
-    report(plaidError);
+    report(plaidError, "Failed to start linking process.");
   }, [plaidError, report]);
 
   // notify sentry of the error since we want to render nothing if it fails
@@ -57,14 +57,14 @@ export function useLinkToPlaid(itemId?: string) {
     if (!error) {
       return;
     }
-    report(error);
+    report(error, "Failed to start linking process.");
   }, [error, report]);
 
   useMemo(() => {
     if (!exchangeError) {
       return;
     }
-    report(exchangeError);
+    report(exchangeError, "Failed to connect accounts.");
   }, [exchangeError, report]);
 
   return {

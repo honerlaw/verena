@@ -40,14 +40,14 @@ export function useLinkToPlaid(itemId?: string) {
     if (!error) {
       return;
     }
-    report(error);
+    report(error, "Failed to start linking process.");
   }, [error, report]);
 
   useMemo(() => {
     if (!exchangeError) {
       return;
     }
-    report(exchangeError);
+    report(exchangeError, "Failed to connect accounts.");
   }, [exchangeError, report]);
 
   const openLink = () => {
@@ -73,7 +73,7 @@ export function useLinkToPlaid(itemId?: string) {
       },
       onExit: async ({ error }) => {
         if (error) {
-          return report(error);
+          return report(error, "Failed to link accounts.");
         }
 
         // create a new token for the next time
