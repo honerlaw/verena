@@ -93,7 +93,7 @@ export function SignInPage() {
       </KeyboardAvoiding>
       <YStack alignItems="center" justifyContent="center" gap="$4">
         <Separator width={"100%"} borderColor="$borderColor" />
-        <YStack marginBottom={insets.bottom * 2} width={"75%"} maxWidth={"400px"}>
+        <YStack marginBottom={insets.bottom * 1.3} width={"75%"} maxWidth={"400px"}>
           <Button size="$3" onPress={() => router.push("/signup")}>
             <Text fontWeight="600">Create an account</Text>
           </Button>

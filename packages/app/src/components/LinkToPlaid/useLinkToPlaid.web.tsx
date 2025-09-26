@@ -25,7 +25,7 @@ export function useLinkToPlaid(itemId?: string) {
   const token = data?.token?.link_token || null;
 
   // this is also web only, so we shouldn't call it unless we are on the web platform
-  const { open, ready } = usePlaidLink({
+  const { open, ready, error: plaidError } = usePlaidLink({
     token,
     // @todo the second argument is a metadata object so we could
     // display data right away technically
@@ -44,6 +44,13 @@ export function useLinkToPlaid(itemId?: string) {
       client.invalidateQueries();
     },
   });
+
+  useMemo(() => {
+    if (!plaidError) {
+      return;
+    }
+    report(plaidError);
+  }, [plaidError, report]);
 
   // notify sentry of the error since we want to render nothing if it fails
   useMemo(() => {

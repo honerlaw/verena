@@ -28,7 +28,7 @@ export const SignOutSection: React.FC = () => {
   ];
 
   return (
-    <YStack paddingBottom={bottom * 2} paddingHorizontal={"$4"}>
+    <YStack paddingBottom={bottom * 1.3} paddingHorizontal={"$4"}>
       <Separator marginBottom="$4" />
       <AlertModal
         title="Sign Out"

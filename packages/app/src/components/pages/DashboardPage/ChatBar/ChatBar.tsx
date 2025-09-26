@@ -11,7 +11,7 @@ export const ChatBar: React.FC = () => {
   const { setOpen } = useActionSheet();
 
   return (
-    <XStack margin="$3" alignItems="flex-end" marginBottom={insets.bottom * 2}>
+    <XStack margin="$3" alignItems="flex-end" marginBottom={insets.bottom * 1.3}>
       <YStack flex={1}>
         <XStack gap="$2" alignItems="center">
           <Button
