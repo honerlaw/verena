@@ -1,17 +1,6 @@
 import { afterEach, describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-
-// Mock the config module before importing other modules
-mock.module("../../../util/config.mjs", {
-  namedExports: {
-    getConfig: mock.fn(async (key: string) => {
-      if (key === "KEY_ENCRYPTION_KEY") {
-        return "test";
-      }
-      throw new Error(`Unexpected config key: ${key}`);
-    }),
-  },
-});
+import { getConfig } from "../../../util/config.mjs";
 
 import { encrypt } from "../encrypt.mjs";
 import { decrypt } from "../decrypt.mjs";
@@ -49,8 +38,16 @@ describe("Encryption Service", () => {
       },
     } as unknown as Context;
 
+    const mocked = mock.fn(getConfig, mock.fn(async (key: string) => {
+      if (key === "KEY_ENCRYPTION_KEY") {
+        return "test";
+      }
+      throw new Error(`Unexpected config key: ${key}`);
+    }));
+
     return {
       ctx,
+      mocked,
     };
   }
 
