@@ -1,0 +1,108 @@
+# Build and Publish to Google Container Registry
+#
+# This workflow builds a Docker image for the server application and publishes it to Google Container Registry (GCR).
+# It includes Google Cloud SDK setup, Terraform configuration, and automated deployment capabilities.
+#
+# Required Secrets:
+# - GCP_SA_KEY: Service Account Key JSON (base64 encoded or raw JSON)
+# - NPM_ACCESS_TOKEN: NPM token for accessing private packages
+#
+# Note: PROJECT_ID is automatically extracted from packages/server/onerlaw.config.json
+#
+# Usage:
+# To trigger a build and deployment, create and push the 'deploy-server' tag:
+#   git tag deploy-server
+#   git push origin deploy-server
+# The tag will be automatically deleted after the workflow completes.
+#
+# Required Repository Setup:
+# 1. Create a Google Cloud service account with the following roles:
+#    - Storage Admin (for GCR access)
+#    - Cloud Run Admin (if deploying to Cloud Run)
+#    - Service Account User
+# 2. Download the service account key JSON and add it as GCP_SA_KEY secret
+# 3. Enable the following APIs in your GCP project:
+#    - Container Registry API
+#    - Cloud Build API
+#    - Cloud Run API (if using)
+# 4. Create an infrastructure/ directory in your repo root with Terraform files (optional)
+#
+# Triggers:
+# - Push of 'deploy-server' tag (tag will be automatically deleted after build)
+#
+name: Build and Publish to GCR
+
+on:
+  push:
+    tags:
+      - 'deploy-server'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    # Google Cloud Setup
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v3
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    # Terraform Setup
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.7
+        terraform_wrapper: false
+
+    # Build Dependencies
+    - name: Authenticate with private NPM package
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Apply patches
+      run: npm run postinstall
+
+    # Build and Publish
+    - name: Change to server directory and build image
+      run: |
+        cd packages/server
+        npm run build:image
+
+    # Delete the deploy tag if it was used to trigger this workflow
+    - name: Delete deploy tag
+      if: github.ref == 'refs/tags/deploy-server'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -d deploy-server
+        git push --delete origin deploy-server
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Cleanup
+    - name: Cleanup credentials
+      if: always()
+      run: |
+        rm -f ~/.npmrc
+        gcloud auth revoke --all || true
