@@ -46,6 +46,17 @@ jobs:
       id-token: write
 
     steps:
+    # Delete the deploy tag if it was used to trigger this workflow
+    - name: Delete deploy tag
+      if: github.ref == 'refs/tags/deploy-server'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -d deploy-server
+        git push --delete origin deploy-server
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -88,17 +99,6 @@ jobs:
       run: |
         cd packages/server
         npm run build:image
-
-    # Delete the deploy tag if it was used to trigger this workflow
-    - name: Delete deploy tag
-      if: github.ref == 'refs/tags/deploy-server'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git tag -d deploy-server
-        git push --delete origin deploy-server
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Cleanup
     - name: Cleanup credentials
