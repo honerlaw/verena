@@ -38,12 +38,15 @@ describe("Encryption Service", () => {
       },
     } as unknown as Context;
 
-    const mocked = mock.fn(getConfig, mock.fn(async (key: string) => {
-      if (key === "KEY_ENCRYPTION_KEY") {
-        return "test";
-      }
-      throw new Error(`Unexpected config key: ${key}`);
-    }));
+    const mocked = mock.fn(
+      getConfig,
+      mock.fn(async (key: string) => {
+        if (key === "KEY_ENCRYPTION_KEY") {
+          return "test";
+        }
+        throw new Error(`Unexpected config key: ${key}`);
+      }),
+    );
 
     return {
       ctx,

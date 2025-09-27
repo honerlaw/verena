@@ -1,3 +1,4 @@
+import { logger } from "@onerlaw/framework/backend/logger";
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -52,14 +53,18 @@ export async function getConfig<Key extends keyof Config>(
     if (typeof defaultValue !== "undefined") {
       return defaultValue;
     }
-    if (error instanceof z.ZodError) {
-      const formattedErrors =
-        error.issues
-          ?.map((err) => `${err.path.join(".")}: ${err.message}`)
-          .join("\n") || "Unknown validation error";
-
-      throw new Error(`Invalid environment configuration:\n${formattedErrors}`);
-    }
-    throw error;
+    logger.error(
+      {
+        error,
+        attributes: {
+          key,
+          expectedValue: envSchema.shape[key],
+          value: process.env[key],
+          defaultValue,
+        },
+      },
+      "Error getting config",
+    );
+    throw new Error("Failed to get config.");
   }
 }
