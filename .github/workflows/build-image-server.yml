@@ -10,9 +10,9 @@
 # Note: PROJECT_ID is automatically extracted from packages/server/onerlaw.config.json
 #
 # Usage:
-# To trigger a build and deployment, create and push the 'deploy-server' tag:
-#   git tag deploy-server
-#   git push origin deploy-server
+# To trigger a build and deployment, create and push the 'build-image' tag:
+#   git tag build-image
+#   git push origin build-image
 # The tag will be automatically deleted after the workflow completes.
 #
 # Required Repository Setup:
@@ -28,14 +28,14 @@
 # 4. Create an infrastructure/ directory in your repo root with Terraform files (optional)
 #
 # Triggers:
-# - Push of 'deploy-server' tag (tag will be automatically deleted after build)
+# - Push of 'build-image' tag (tag will be automatically deleted after build)
 #
 name: Build and Publish to GCR
 
 on:
   push:
     tags:
-      - 'deploy-server'
+      - 'build-image'
 
 jobs:
   build-and-publish:
@@ -51,12 +51,12 @@ jobs:
 
     # Delete the deploy tag if it was used to trigger this workflow
     - name: Delete deploy tag
-      if: github.ref == 'refs/tags/deploy-server'
+      if: github.ref == 'refs/tags/build-image'
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git tag -d deploy-server
-        git push --delete origin deploy-server
+        git tag -d build-image
+        git push --delete origin build-image
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
