@@ -19,9 +19,6 @@ const envSchema = z.object({
   // Encryption
   KEY_ENCRYPTION_KEY: z.string().min(1, "KEY_ENCRYPTION_KEY is required"),
 
-  // App-specific configuration
-  APP_MUX_ENV_KEY: z.string().min(1, "APP_MUX_ENV_KEY is required"),
-
   // Database (assuming DATABASE_URL is used by Prisma, even if not directly referenced)
   DATABASE_URL: z.string().url().optional(),
 
