@@ -4,7 +4,7 @@ import type { Context } from "../../context.mjs";
 import { getConfig } from "../../util/config.mjs";
 
 async function getBasePath(ctx: Context) {
-  const NODE_ENV = await getConfig("NODE_ENV");
+  const NODE_ENV = await getConfig("NODE_ENV", "production");
   // if we are not in production, use the sandbox environment
   if (NODE_ENV !== "production") {
     return PlaidEnvironments.sandbox!;
