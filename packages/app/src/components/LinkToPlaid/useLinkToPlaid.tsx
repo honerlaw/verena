@@ -18,12 +18,18 @@ export function useLinkToPlaid(itemId?: string) {
     useMutation(trpc.link.exchange.mutationOptions());
 
   useEffect(() => {
-    createLinkToken({
-      itemId,
-    });
+    (async () => {
+      try {
+        await createLinkToken({
+          itemId,
+        });
+      } catch (error) {
+        report(error, "Failed to create link token.");
+      }
+    })();
   }, [itemId, createLinkToken]);
 
-  useEffect(() => {
+  useMemo(() => {
     if (!data?.token) {
       return;
     }
@@ -31,7 +37,7 @@ export function useLinkToPlaid(itemId?: string) {
       token: data.token.link_token,
       noLoadingState: true,
     });
-  }, [itemId, data?.token]);
+  }, [data?.token]);
 
   const token = data?.token?.link_token || null;
 

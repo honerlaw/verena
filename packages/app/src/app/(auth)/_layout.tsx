@@ -81,9 +81,8 @@ export default function AuthLayout() {
               name="profile"
               options={{
                 headerTitle: "Profile",
-                headerTransparent: false,
-                presentation: "modal",
-                animationTypeForReplace: "push",
+                headerBackButtonDisplayMode: "minimal",
+                headerShadowVisible: false,
               }}
             />
           </Stack>

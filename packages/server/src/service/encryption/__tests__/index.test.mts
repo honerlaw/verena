@@ -1,5 +1,18 @@
 import { afterEach, describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
+
+// Mock the config module before importing other modules
+mock.module("../../../util/config.mjs", {
+  namedExports: {
+    getConfig: mock.fn(async (key: string) => {
+      if (key === "KEY_ENCRYPTION_KEY") {
+        return "test";
+      }
+      throw new Error(`Unexpected config key: ${key}`);
+    }),
+  },
+});
+
 import { encrypt } from "../encrypt.mjs";
 import { decrypt } from "../decrypt.mjs";
 import { type Context } from "../../../context.mjs";
@@ -7,11 +20,10 @@ import { DEKIdentifier, getDEK } from "../getDEK.mjs";
 
 describe("Encryption Service", () => {
   afterEach(() => {
-    delete process.env.KEY_ENCRYPTION_KEY;
+    mock.restoreAll();
   });
 
   function harness() {
-    process.env.KEY_ENCRYPTION_KEY = "test";
     // store the key in memory to mimic the database
     let storedKey: string | null = null;
     const ctx = {

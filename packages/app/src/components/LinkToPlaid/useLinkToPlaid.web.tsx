@@ -25,7 +25,11 @@ export function useLinkToPlaid(itemId?: string) {
   const token = data?.token?.link_token || null;
 
   // this is also web only, so we shouldn't call it unless we are on the web platform
-  const { open, ready, error: plaidError } = usePlaidLink({
+  const {
+    open,
+    ready,
+    error: plaidError,
+  } = usePlaidLink({
     token,
     // @todo the second argument is a metadata object so we could
     // display data right away technically

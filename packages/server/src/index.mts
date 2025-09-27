@@ -6,9 +6,10 @@ import { logger, register } from "@onerlaw/framework/backend/logger";
 import { expressTRPCMiddleware } from "./network/rpc/index.mjs";
 import { config } from "./network/http/index.mjs";
 import { plaidWebhook } from "./network/http/webhook/plaid/webhook.mjs";
+import { getConfig } from "./util/config.mjs";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = await getConfig("PORT", 3000);
 
 app.use(
   clerkMiddleware({

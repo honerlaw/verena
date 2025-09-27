@@ -11,6 +11,7 @@
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "ios:prod": "NODE_ENV=production npm run ios",
     "web": "expo start --web",
     "web:export": "npm run clean:cache && expo export --clear -p web",
     "lint": "expo lint",

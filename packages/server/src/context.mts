@@ -1,5 +1,6 @@
 import { type Logger, logger } from "@onerlaw/framework/backend/logger";
 import { wrap } from "@onerlaw/framework/backend/utils";
+import { getConfig } from "./util/config.mjs";
 
 import * as userDB from "./database/user/index.mjs";
 import * as userKeyDB from "./database/user/key/index.mjs";
@@ -119,7 +120,7 @@ export const createContext = async (
   if (typeof req === "string") {
     try {
       const results = await verifyToken(req, {
-        jwtKey: process.env.CLERK_JWSK!,
+        jwtKey: await getConfig("CLERK_JWSK"),
       });
       const userId = results.sub;
       const foundUser = await options.upsert(userId);

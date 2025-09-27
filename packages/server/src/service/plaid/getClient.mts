@@ -1,10 +1,12 @@
 import { PlaidApi, Configuration, PlaidEnvironments } from "plaid";
 import { UserType } from "../../generated/prisma/index.js";
 import type { Context } from "../../context.mjs";
+import { getConfig } from "../../util/config.mjs";
 
 async function getBasePath(ctx: Context) {
+  const NODE_ENV = await getConfig("NODE_ENV");
   // if we are not in production, use the sandbox environment
-  if (process.env.NODE_ENV !== "production") {
+  if (NODE_ENV !== "production") {
     return PlaidEnvironments.sandbox!;
   }
 
@@ -54,8 +56,8 @@ export async function getClient(ctx: Context) {
     basePath: basePath,
     baseOptions: {
       headers: {
-        "PLAID-CLIENT-ID": process.env.PLAID_CLIENT_ID!,
-        "PLAID-SECRET": process.env.PLAID_SECRET!,
+        "PLAID-CLIENT-ID": await getConfig("PLAID_CLIENT_ID"),
+        "PLAID-SECRET": await getConfig("PLAID_SECRET"),
       },
     },
   });

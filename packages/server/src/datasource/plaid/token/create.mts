@@ -1,5 +1,6 @@
 import { CountryCode, type PlaidApi, Products } from "plaid";
 import { type Logger } from "@onerlaw/framework/backend/logger";
+import { getConfig } from "../../../util/config.mjs";
 
 export type LinkTokenResponse = {
   link_token: string;
@@ -25,7 +26,7 @@ export async function create(
       products: [Products.Transactions],
       country_codes: [CountryCode.Us],
       language: "en",
-      webhook: `${process.env.WEBHOOK_BASE_URL}/api/webhook/plaid`,
+      webhook: `${await getConfig("WEBHOOK_BASE_URL")}/api/webhook/plaid`,
       transactions: {
         days_requested: 730, // 2 years, max data retention
       },

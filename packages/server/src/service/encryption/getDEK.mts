@@ -1,6 +1,7 @@
 import type { Context } from "../../context.mjs";
 import crypto from "crypto";
 import Cryptr from "cryptr";
+import { getConfig } from "../../util/config.mjs";
 
 export enum DEKIdentifier {
   TRANSACTIONS = "transactions",
@@ -23,7 +24,7 @@ export async function getDEK(
     throw new Error("User not found");
   }
 
-  const kek = new Cryptr(process.env.KEY_ENCRYPTION_KEY!);
+  const kek = new Cryptr(await getConfig("KEY_ENCRYPTION_KEY"));
 
   // generate a tmp DEK to upsert if one does not already exist
   const tmpDek = crypto.randomBytes(32).toString("hex");

@@ -1,5 +1,8 @@
 import { createClerkClient } from "@clerk/express";
+import { getConfig } from "../../util/config.mjs";
+
+const SECRET_KEY = await getConfig("CLERK_SECRET_KEY");
 
 export const clerkClient = createClerkClient({
-  secretKey: process.env.CLERK_SECRET_KEY!,
+  secretKey: SECRET_KEY,
 });
