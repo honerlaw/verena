@@ -1,0 +1,111 @@
+# Deploy Server Application
+#
+# This workflow runs the deploy script for the server application using terraform.
+# It sets up Google Cloud SDK and Terraform, then executes the deployment process.
+#
+# Required Secrets:
+# - GCP_SA_KEY: Service Account Key JSON (base64 encoded or raw JSON)
+# - NPM_ACCESS_TOKEN: NPM token for accessing private packages
+#
+# Note: PROJECT_ID is automatically extracted from packages/server/onerlaw.config.json
+#
+# Usage:
+# To trigger a deployment, create and push a 'deploy' tag:
+#   git tag deploy
+#   git push origin deploy
+# The tag will be automatically deleted after the workflow completes.
+#
+# Required Repository Setup:
+# 1. Create a Google Cloud service account with the following roles:
+#    - Storage Admin (for GCR access)
+#    - Cloud Run Admin (if deploying to Cloud Run)
+#    - Service Account User
+#    - Compute Admin (for terraform resources)
+#    - IAM Service Account Admin (for terraform)
+# 2. Download the service account key JSON and add it as GCP_SA_KEY secret
+# 3. Enable the following APIs in your GCP project:
+#    - Container Registry API
+#    - Cloud Build API
+#    - Cloud Run API
+#    - Compute Engine API
+#    - IAM API
+#
+# Triggers:
+# - Push of 'deploy' tag (tag will be automatically deleted after deployment)
+#
+name: Deploy Server
+
+on:
+  push:
+    tags:
+      - 'deploy'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Delete the deploy tag if it was used to trigger this workflow
+    - name: Delete deploy tag
+      if: github.ref == 'refs/tags/deploy'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -d deploy
+        git push --delete origin deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22.x'
+        cache: 'npm'
+
+    # Google Cloud Setup
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v3
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    # Terraform Setup
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.5.7
+        terraform_wrapper: false
+
+    # Build Dependencies
+    - name: Authenticate with private NPM package
+      run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_ACCESS_TOKEN }}" > ~/.npmrc
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Apply patches
+      run: npm run postinstall
+
+    # Deploy Application
+    - name: Change to server directory and deploy
+      run: |
+        cd packages/server
+        npm run deploy
+
+    # Cleanup
+    - name: Cleanup credentials
+      if: always()
+      run: |
+        rm -f ~/.npmrc
+        gcloud auth revoke --all || true
