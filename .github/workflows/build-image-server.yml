@@ -61,6 +61,17 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+        # Delete the deploy tag if it was used to trigger this workflow
+    - name: Delete deploy tag
+      if: github.ref == 'refs/tags/build-deploy'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git tag -d build-deploy
+        git push --delete origin build-deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:

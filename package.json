@@ -10,9 +10,9 @@
     "build": "nx run-many -t build",
     "lint:format": "nx run-many -t lint:format",
     "snyk": "snyk test --all-projects",
-    "build:image": "git tag build-image -f && git push origin build-image",
-    "build:deploy": "git tag build-deploy -f && git push origin build-deploy",
-    "deploy": "git tag deploy -f && git push origin deploy",
+    "build:image": "git tag build-image -f && git push origin build-image --force",
+    "build:deploy": "git tag build-deploy -f && git push origin build-deploy --force",
+    "deploy": "git tag deploy -f && git push origin deploy --force",
     "submit:ios": "npm run submit:ios --workspace=packages/app",
     "submit:android": "npm run submit:android --workspace=packages/app"
   },
