@@ -1,18 +1,23 @@
-import { afterEach, describe, it, mock } from "node:test";
+import { afterEach, describe, it, mock, type TestContext } from "node:test";
 import assert from "node:assert/strict";
-import { getConfig } from "../../../util/config.mjs";
-
-import { encrypt } from "../encrypt.mjs";
-import { decrypt } from "../decrypt.mjs";
-import { type Context } from "../../../context.mjs";
-import { DEKIdentifier, getDEK } from "../getDEK.mjs";
 
 describe("Encryption Service", () => {
   afterEach(() => {
     mock.restoreAll();
   });
 
-  function harness() {
+  async function harness(context: TestContext) {
+    context.mock.module("../../../util/config.mjs", {
+      namedExports: {
+        getConfig: mock.fn(async () => {
+          return "test";
+        }),
+      },
+    });
+    const { encrypt } = await import("../encrypt.mjs");
+    const { decrypt } = await import("../decrypt.mjs");
+    const { DEKIdentifier, getDEK } = await import("../getDEK.mjs");
+
     // store the key in memory to mimic the database
     let storedKey: string | null = null;
     const ctx = {
@@ -36,26 +41,19 @@ describe("Encryption Service", () => {
           },
         },
       },
-    } as unknown as Context;
-
-    const mocked = mock.fn(
-      getConfig,
-      mock.fn(async (key: string) => {
-        if (key === "KEY_ENCRYPTION_KEY") {
-          return "test";
-        }
-        throw new Error(`Unexpected config key: ${key}`);
-      }),
-    );
+    } as unknown as Parameters<typeof encrypt>[0];
 
     return {
       ctx,
-      mocked,
+      encrypt,
+      decrypt,
+      DEKIdentifier,
+      getDEK,
     };
   }
 
-  it("should encrypt and decrypt data", async () => {
-    const { ctx } = harness();
+  it("should encrypt and decrypt data", async (context) => {
+    const { ctx, encrypt, decrypt, DEKIdentifier } = await harness(context);
 
     const data = JSON.stringify({
       name: "John Doe",
@@ -69,8 +67,8 @@ describe("Encryption Service", () => {
     assert.strictEqual(decrypted, data);
   });
 
-  it("should bulk encrypt using the getDEK function", async () => {
-    const { ctx } = harness();
+  it("should bulk encrypt using the getDEK function", async (context) => {
+    const { ctx, getDEK, DEKIdentifier } = await harness(context);
 
     const data = JSON.stringify({
       name: "John Doe",
