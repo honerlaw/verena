@@ -61,6 +61,7 @@ export async function getConfig<Key extends keyof Config>(
           expectedValue: envSchema.shape[key],
           value: process.env[key],
           defaultValue,
+          env: process.env
         },
       },
       "Error getting config",
