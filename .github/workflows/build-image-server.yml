@@ -36,6 +36,7 @@ on:
   push:
     tags:
       - 'build-image'
+      - 'build-deploy'
 
 jobs:
   build-and-publish:
@@ -99,6 +100,13 @@ jobs:
       run: |
         cd packages/server
         npm run build:image
+
+    # Deploy Application
+    - name: Change to server directory and deploy
+      if: github.ref == 'refs/tags/build-deploy'
+      run: |
+        cd packages/server
+        npm run deploy
 
     # Cleanup
     - name: Cleanup credentials
