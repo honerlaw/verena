@@ -9,7 +9,10 @@
     "start": "nx run-many -t start",
     "build": "nx run-many -t build",
     "lint:format": "nx run-many -t lint:format",
-    "snyk": "snyk test --all-projects"
+    "snyk": "snyk test --all-projects",
+    "build:image": "git tag build-image -f && git push origin build-image",
+    "build:deploy": "git tag build-deploy -f && git push origin build-deploy",
+    "deploy": "git tag deploy -f && git push origin deploy"
   },
   "author": "",
   "license": "ISC",
