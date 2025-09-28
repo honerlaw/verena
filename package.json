@@ -12,7 +12,9 @@
     "snyk": "snyk test --all-projects",
     "build:image": "git tag build-image -f && git push origin build-image",
     "build:deploy": "git tag build-deploy -f && git push origin build-deploy",
-    "deploy": "git tag deploy -f && git push origin deploy"
+    "deploy": "git tag deploy -f && git push origin deploy",
+    "submit:ios": "npm run submit:ios --workspace=packages/app",
+    "submit:android": "npm run submit:android --workspace=packages/app"
   },
   "author": "",
   "license": "ISC",

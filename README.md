@@ -4,31 +4,45 @@ Verena is your trusted and personalized AI Financial Assistant.
 
 ## Deployment
 
-### Server Deployment
+### App Deployment
 
-To deploy the server application, create and push a `deploy` tag:
+App deployments are done through EAS and split between android and iOS. To deploy the web app, you need to deploy the server.
+
+#### iOS Deployment
+
+Run the following in the root
 
 ```bash
-git tag deploy
-git push origin deploy
+npm run submit:ios
 ```
 
-This will trigger the GitHub Actions workflow that:
-1. Sets up Google Cloud SDK and Terraform
-2. Installs dependencies 
-3. Runs the deployment script in `packages/server`
-4. Automatically deletes the deploy tag after completion
+#### Android Development
 
-**Required Secrets:**
-- `GCP_SA_KEY`: Google Cloud Service Account key (JSON)
-- `NPM_ACCESS_TOKEN`: NPM token for accessing private packages
+Run the following in the root
 
-**Required GCP Permissions:**
-- Storage Admin (for GCR access)
-- Cloud Run Admin
-- Service Account User  
-- Compute Admin (for terraform resources)
-- IAM Service Account Admin (for terraform)
+```bash
+npm run submit:android
+```
+
+### Server Deployment
+
+You can create a new image and deploy the image using the following script from the root
+
+```bash
+$ npm run build:deploy
+```
+
+You can trigger only a deployment using the following
+
+```bash
+$ npm run deploy
+```
+
+You can trigger just an image build using the following
+
+```bash
+$ npm run build:image
+```
 
 ## TODO
 - Verify Android app works
