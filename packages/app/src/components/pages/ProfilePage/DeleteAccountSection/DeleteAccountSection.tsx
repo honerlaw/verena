@@ -72,7 +72,9 @@ export const DeleteAccountSection: React.FC = () => {
           }}
           marginTop="$2"
         >
-          {isPending ? "Deleting..." : "Delete account & data"}
+          <Text color="white">
+            {isPending ? "Deleting..." : "Delete account & data"}
+          </Text>
         </Button>
       </AlertModal>
     </YStack>

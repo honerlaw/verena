@@ -36,6 +36,16 @@ export const ChatBar: React.FC = () => {
           <GlassView style={{ borderRadius: 100 }}>
             <Button
               backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
+              hoverStyle={
+                isLiquidGlassEnabled
+                  ? { backgroundColor: "transparent", borderWidth: 0 }
+                  : undefined
+              }
+              pressStyle={
+                isLiquidGlassEnabled
+                  ? { backgroundColor: "transparent", borderWidth: 0 }
+                  : undefined
+              }
               size="$4"
               circular
               icon={MoreVertical}

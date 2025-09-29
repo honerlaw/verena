@@ -25,6 +25,16 @@ const HeaderRight: React.FC = () => {
       circular
       icon={Plus}
       backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
+      hoverStyle={
+        isLiquidGlassEnabled
+          ? { backgroundColor: "transparent", borderWidth: 0 }
+          : undefined
+      }
+      pressStyle={
+        isLiquidGlassEnabled
+          ? { backgroundColor: "transparent", borderWidth: 0 }
+          : undefined
+      }
       onPress={async () => {
         message.clearMessages();
         setCurrentConversationId(null);
@@ -69,6 +79,16 @@ export default function AuthLayout() {
                     icon={User}
                     backgroundColor={
                       isLiquidGlassEnabled ? "transparent" : undefined
+                    }
+                    hoverStyle={
+                      isLiquidGlassEnabled
+                        ? { backgroundColor: "transparent", borderWidth: 0 }
+                        : undefined
+                    }
+                    pressStyle={
+                      isLiquidGlassEnabled
+                        ? { backgroundColor: "transparent", borderWidth: 0 }
+                        : undefined
                     }
                     scaleIcon={1.5}
                     onPress={() => router.push("/profile")}
