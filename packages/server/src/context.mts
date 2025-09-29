@@ -53,6 +53,7 @@ const options = {
     // create a temporary context for the plaid service
     // as we need to the client to build the actual context
     const plaidClient = await plaidService.getClient({
+      logger: childLogger,
       auth: {
         user,
       },

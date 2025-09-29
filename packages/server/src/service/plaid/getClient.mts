@@ -5,8 +5,7 @@ import { getConfig } from "../../util/config.mjs";
 
 async function getBasePath(ctx: Context) {
   const NODE_ENV = await getConfig("NODE_ENV", "production");
-  // if we are not in production, use the sandbox environment
-  if (NODE_ENV !== "production") {
+  if (NODE_ENV === "development" || NODE_ENV === "test") {
     return PlaidEnvironments.sandbox!;
   }
 
@@ -17,6 +16,11 @@ async function getBasePath(ctx: Context) {
 
   // if they have a user type defined use that
   if (ctx.auth.user.userType !== null) {
+    ctx.logger.info(
+      { attributes: { userType: ctx.auth.user.userType } },
+      "Getting Plaid client for specific user",
+    );
+
     switch (ctx.auth.user.userType) {
       case UserType.SANDBOX:
         return PlaidEnvironments.sandbox!;
@@ -39,8 +43,10 @@ async function getBasePath(ctx: Context) {
   return PlaidEnvironments.production!;
 }
 
-export async function getClient(ctx: Context) {
+export async function getClient(ctx: Context): Promise<PlaidApi> {
   const basePath = await getBasePath(ctx);
+
+  ctx.logger.info({ attributes: { basePath } }, "Getting Plaid client");
 
   // if the user is not null and the user type is not set yet, update the user in prisma
   if (ctx.auth.user !== null && ctx.auth.user.userType === null) {
