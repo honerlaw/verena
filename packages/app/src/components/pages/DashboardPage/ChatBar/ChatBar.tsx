@@ -1,14 +1,29 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Input, XStack, YStack } from "tamagui";
 import { ArrowUp, MoreVertical } from "@tamagui/lucide-icons";
 import { useConversation } from "../../../../providers/ConversationProvider";
 import { useActionSheet } from "@/src/components/ActionSheet";
+import { GlassView } from "expo-glass-effect";
+import { useLiquidGlass } from "@/src/hooks/useLiquidGlass";
+
+const STYLES = StyleSheet.create({
+  inputContainer: {
+    flex: 1,
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: 46,
+    flexDirection: "row",
+    paddingVertical: 8,
+  },
+});
 
 export const ChatBar: React.FC = () => {
   const insets = useSafeAreaInsets();
   const { message } = useConversation();
   const { setOpen } = useActionSheet();
+  const { isLiquidGlassEnabled } = useLiquidGlass();
 
   return (
     <XStack
@@ -18,18 +33,16 @@ export const ChatBar: React.FC = () => {
     >
       <YStack flex={1}>
         <XStack gap="$2" alignItems="center">
-          <Button
-            size="$3"
-            circular
-            icon={MoreVertical}
-            onPress={() => setOpen(true)}
-          />
-          <XStack
-            backgroundColor="$gray4"
-            flex={1}
-            borderRadius={"$8"}
-            alignItems="center"
-          >
+          <GlassView style={{ borderRadius: 100 }}>
+            <Button
+              backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
+              size="$4"
+              circular
+              icon={MoreVertical}
+              onPress={() => setOpen(true)}
+            />
+          </GlassView>
+          <GlassView style={STYLES.inputContainer}>
             <Input
               multiline
               flex={1}
@@ -56,7 +69,7 @@ export const ChatBar: React.FC = () => {
               onPress={message.handleSend}
               marginRight={"$2"}
             />
-          </XStack>
+          </GlassView>
         </XStack>
       </YStack>
     </XStack>
