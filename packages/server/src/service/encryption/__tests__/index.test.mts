@@ -1,5 +1,6 @@
 import { afterEach, describe, it, mock, type TestContext } from "node:test";
 import assert from "node:assert/strict";
+import { mockConfig } from "../../../util/__mocks__/config.mjs";
 
 describe("Encryption Service", () => {
   afterEach(() => {
@@ -7,13 +8,7 @@ describe("Encryption Service", () => {
   });
 
   async function harness(context: TestContext) {
-    context.mock.module("../../../util/config.mjs", {
-      namedExports: {
-        getConfig: mock.fn(async () => {
-          return "test";
-        }),
-      },
-    });
+    mockConfig(context, async () => "test");
     const { encrypt } = await import("../encrypt.mjs");
     const { decrypt } = await import("../decrypt.mjs");
     const { DEKIdentifier, getDEK } = await import("../getDEK.mjs");

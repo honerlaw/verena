@@ -1,7 +1,7 @@
 import { afterEach, describe, it, mock } from "node:test";
 import assert from "node:assert/strict";
-import type { Logger } from "@onerlaw/framework/backend/logger";
-import type { DBClient } from "../../../util/database.mjs";
+import { mockLogger } from "../../../util/__mocks__/logger.mjs";
+import { mockDatabase } from "../../../util/__mocks__/database.mjs";
 
 describe("Database Conversation Create", () => {
   afterEach(() => {
@@ -21,49 +21,38 @@ describe("Database Conversation Create", () => {
       title: null,
     };
 
-    const errorMockFn = mock.fn();
-    const createMockFn = mock.fn(({ data }) => {
-      return Promise.resolve({
-        ...mockConversation,
-        ...data,
-      });
-    });
-
-    const mockLogger = {
-      error: errorMockFn,
-      info: mock.fn(),
-      warn: mock.fn(),
-      debug: mock.fn(),
-      trace: mock.fn(),
-      child: mock.fn(() => mockLogger),
-    } as unknown as Logger;
-
-    const mockClient = {
-      conversation: {
-        create: createMockFn,
-      },
-    } as unknown as DBClient;
+    const logger = mockLogger();
 
     return {
       create,
-      mockLogger,
-      mockClient,
-      mockConversation,
-      createMockFn,
-      errorMockFn,
+      logger,
+      mocks: {
+        mockConversation,
+      },
     };
   }
 
   it("should successfully create a conversation", async () => {
-    const { create, mockLogger, mockClient, createMockFn, errorMockFn } =
-      await harness();
+    const {
+      create,
+      logger,
+      mocks: { mockConversation },
+    } = await harness();
 
     const userId = "user-123";
     const openaiConversationId = "openai-456";
 
+    const database = mockDatabase({
+      conversation: {
+        create: mock.fn(() => {
+          return Promise.resolve(mockConversation);
+        }),
+      },
+    });
+
     const result = await create(
-      mockLogger,
-      mockClient,
+      logger.logger,
+      database.client,
       userId,
       openaiConversationId,
     );
@@ -74,34 +63,42 @@ describe("Database Conversation Create", () => {
     assert.strictEqual(result.openaiConversationId, openaiConversationId);
 
     // Verify database client was called with correct parameters
-    assert.strictEqual(createMockFn.mock.calls.length, 1);
-    assert.deepStrictEqual(createMockFn.mock.calls[0]?.arguments[0], {
-      data: {
-        userId,
-        openaiConversationId,
+    assert.strictEqual(
+      database.mock.conversation?.create?.mock.calls.length,
+      1,
+    );
+    assert.deepStrictEqual(
+      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      {
+        data: {
+          userId,
+          openaiConversationId,
+        },
       },
-    });
+    );
 
     // Verify logger was not called (no errors)
-    assert.strictEqual(errorMockFn.mock.calls.length, 0);
+    assert.strictEqual(logger.mock.error.mock.calls.length, 0);
   });
 
   it("should handle database errors and return null", async () => {
-    const { create, mockLogger, mockClient, createMockFn, errorMockFn } =
-      await harness();
+    const { create, logger } = await harness();
 
     const userId = "user-123";
     const openaiConversationId = "openai-456";
     const testError = new Error("Database connection failed");
 
-    // Mock the create method to throw an error
-    createMockFn.mock.mockImplementation(() => {
-      throw testError;
+    const database = mockDatabase({
+      conversation: {
+        create: mock.fn(() => {
+          throw testError;
+        }),
+      },
     });
 
     const result = await create(
-      mockLogger,
-      mockClient,
+      logger.logger,
+      database.client,
       userId,
       openaiConversationId,
     );
@@ -110,35 +107,42 @@ describe("Database Conversation Create", () => {
     assert.strictEqual(result, null);
 
     // Verify database client was called
-    assert.strictEqual(createMockFn.mock.calls.length, 1);
+    assert.strictEqual(
+      database.mock.conversation?.create?.mock.calls.length,
+      1,
+    );
 
     // Verify logger was called with correct error information
-    assert.strictEqual(errorMockFn.mock.calls.length, 1);
-    const errorCall = errorMockFn.mock.calls[0];
-    assert.ok(errorCall);
-    assert.deepStrictEqual(errorCall.arguments[0], {
+    assert.strictEqual(logger.mock.error.mock.calls.length, 1);
+    assert.deepStrictEqual(logger.mock.error.mock.calls[0]?.arguments[0], {
       error: testError,
       tags: ["database", "conversation", "create"],
     });
-    assert.strictEqual(errorCall.arguments[1], "Error creating conversation");
+    assert.strictEqual(
+      logger.mock.error.mock.calls[0]?.arguments[1],
+      "Error creating conversation",
+    );
   });
 
   it("should handle async database errors and return null", async () => {
-    const { create, mockLogger, mockClient, createMockFn, errorMockFn } =
-      await harness();
+    const { create, logger } = await harness();
 
     const userId = "user-456";
     const openaiConversationId = "openai-789";
     const testError = new Error("Async database error");
 
     // Mock the create method to reject with an error
-    createMockFn.mock.mockImplementation(() => {
-      return Promise.reject(testError);
+    const database = mockDatabase({
+      conversation: {
+        create: mock.fn(() => {
+          return Promise.reject(testError);
+        }),
+      },
     });
 
     const result = await create(
-      mockLogger,
-      mockClient,
+      logger.logger,
+      database.client,
       userId,
       openaiConversationId,
     );
@@ -147,44 +151,65 @@ describe("Database Conversation Create", () => {
     assert.strictEqual(result, null);
 
     // Verify database client was called with correct parameters
-    assert.strictEqual(createMockFn.mock.calls.length, 1);
-    const createCall = createMockFn.mock.calls[0];
-    assert.ok(createCall);
-    assert.deepStrictEqual(createCall.arguments[0], {
-      data: {
-        userId,
-        openaiConversationId,
+    assert.strictEqual(
+      database.mock.conversation?.create?.mock.calls.length,
+      1,
+    );
+    assert.deepStrictEqual(
+      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      {
+        data: {
+          userId,
+          openaiConversationId,
+        },
       },
-    });
+    );
 
     // Verify logger was called with correct error information
-    assert.strictEqual(errorMockFn.mock.calls.length, 1);
-    const errorCall = errorMockFn.mock.calls[0];
-    assert.ok(errorCall);
-    assert.deepStrictEqual(errorCall.arguments[0], {
+    assert.strictEqual(logger.mock.error.mock.calls.length, 1);
+    assert.deepStrictEqual(logger.mock.error.mock.calls[0]?.arguments[0], {
       error: testError,
       tags: ["database", "conversation", "create"],
     });
-    assert.strictEqual(errorCall.arguments[1], "Error creating conversation");
+    assert.strictEqual(
+      logger.mock.error.mock.calls[0]?.arguments[1],
+      "Error creating conversation",
+    );
   });
 
   it("should pass through all parameters correctly", async () => {
-    const { create, mockLogger, mockClient, createMockFn } = await harness();
+    const {
+      create,
+      logger,
+      mocks: { mockConversation },
+    } = await harness();
 
     const userId = "different-user-789";
     const openaiConversationId = "different-openai-abc";
 
-    await create(mockLogger, mockClient, userId, openaiConversationId);
-
-    // Verify all parameters were passed correctly
-    assert.strictEqual(createMockFn.mock.calls.length, 1);
-    const createCall = createMockFn.mock.calls[0];
-    assert.ok(createCall);
-    assert.deepStrictEqual(createCall.arguments[0], {
-      data: {
-        userId,
-        openaiConversationId,
+    const database = mockDatabase({
+      conversation: {
+        create: mock.fn(() => {
+          return Promise.resolve(mockConversation);
+        }),
       },
     });
+
+    await create(logger.logger, database.client, userId, openaiConversationId);
+
+    // Verify all parameters were passed correctly
+    assert.strictEqual(
+      database.mock.conversation?.create?.mock.calls.length,
+      1,
+    );
+    assert.deepStrictEqual(
+      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      {
+        data: {
+          userId,
+          openaiConversationId,
+        },
+      },
+    );
   });
 });
