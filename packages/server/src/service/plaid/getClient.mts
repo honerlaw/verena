@@ -15,7 +15,7 @@ async function getBasePath(ctx: Context) {
   }
 
   // if they have a user type defined use that
-  if (ctx.auth.user.userType !== null) {
+  /*if (ctx.auth.user.userType !== null) {
     ctx.logger.info(
       { attributes: { userType: ctx.auth.user.userType } },
       "Getting Plaid client for specific user",
@@ -27,7 +27,7 @@ async function getBasePath(ctx: Context) {
       case UserType.PRODUCTION:
         return PlaidEnvironments.production!;
     }
-  }
+  }*/
 
   // check if they user's email ends with +dev@onerlaw.com
   const clerkUser = await ctx.datasource.clerk.getUserById(
@@ -49,7 +49,7 @@ export async function getClient(ctx: Context): Promise<PlaidApi> {
   ctx.logger.info({ attributes: { basePath } }, "Getting Plaid client");
 
   // if the user is not null and the user type is not set yet, update the user in prisma
-  if (ctx.auth.user !== null && ctx.auth.user.userType === null) {
+  if (ctx.auth.user !== null) {
     await ctx.database.user.setUserType(
       ctx.auth.user.id,
       basePath === PlaidEnvironments.sandbox!
