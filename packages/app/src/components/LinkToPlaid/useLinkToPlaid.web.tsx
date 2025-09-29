@@ -45,7 +45,7 @@ export function useLinkToPlaid(itemId?: string) {
           type: account.type,
         })),
       });
-      
+
       toast.show("Successfully linked accounts.", {
         type: "success",
       });
