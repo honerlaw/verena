@@ -79,7 +79,7 @@ export function useLinkToPlaid(itemId?: string) {
       },
       onExit: async ({ error }) => {
         if (error) {
-          return report(error, "Failed to link accounts.");
+          return report(error, error.displayMessage);
         }
 
         // create a new token for the next time

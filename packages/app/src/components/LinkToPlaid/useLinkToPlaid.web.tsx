@@ -47,6 +47,11 @@ export function useLinkToPlaid(itemId?: string) {
       // trigger everything to refetch
       client.invalidateQueries();
     },
+    onExit: async (error) => {
+      if (error) {
+        return report(error, error.display_message);
+      }
+    },
   });
 
   useMemo(() => {
