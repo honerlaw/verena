@@ -3,11 +3,13 @@ import { create, open } from "react-native-plaid-link-sdk";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useReportError } from "@/src/hooks/useReportError";
+import { useToastController } from "@tamagui/toast";
 
 export function useLinkToPlaid(itemId?: string) {
   const trpc = useTRPC();
   const { report } = useReportError();
   const client = useQueryClient();
+  const toast = useToastController();
 
   const {
     data,
@@ -67,6 +69,10 @@ export function useLinkToPlaid(itemId?: string) {
             mask: account.mask,
             type: account.type,
           })),
+        });
+
+        toast.show("Successfully linked accounts.", {
+          type: "success",
         });
 
         // create a new token for the next time
