@@ -13,7 +13,7 @@
           {
             "name": "server",
             "port": 3000,
-            "prebuild": "npm run build:web",
+            "prebuild": "npm run build:pre",
             "dns": {
               "domainName": "verena.app",
               "subdomainNames": ["www"]

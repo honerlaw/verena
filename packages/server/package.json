@@ -7,6 +7,7 @@
     "start:local": "tsx --watch --no-cache --env-file=.env src/index.mts",
     "ngrok": "ngrok http --url=intimate-certainly-opossum.ngrok-free.app 3000",
     "build": "rm -rf dist && npm run codegen && tsc && cp -r ./src/generated ./dist/generated",
+    "build:pre": "npm run build:web && cp -r ../../patches ./patches",
     "build:web": "rm -rf static && cd ../app && NODE_ENV=production npm run web:export && cd ../server && mv ../app/dist static",
     "build:image": "npx -y @onerlaw/cli@latest build",
     "deploy": "npx -y @onerlaw/cli@latest deploy",
@@ -14,7 +15,7 @@
     "format": "prettier --write \"src/**/*.{js,ts,mjs,mts}\"",
     "lint": "eslint \"src/**/*.{js,ts,mjs,mts}\" --fix",
     "lint:format": "npm run lint && npm run format",
-    "clean": "rm -rf dist node_modules tsconfig.tsbuildinfo package-lock.json src/generated",
+    "clean": "rm -rf dist node_modules tsconfig.tsbuildinfo package-lock.json src/generated patches",
     "generate:prisma": "npx prisma generate",
     "codegen": "npm run generate:prisma"
   },

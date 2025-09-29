@@ -9,6 +9,7 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json ./
+COPY patches ./patches
 
 # Configure npm for private packages
 # These build args should be passed during build time
@@ -22,6 +23,7 @@ RUN --mount=type=secret,id=NPM_TOKEN,env=NPM_TOKEN \
     fi
 
 RUN npm i
+RUN npx -y patch-package
 
 # Clean up npmrc to avoid exposing token in final image
 RUN rm -f .npmrc
