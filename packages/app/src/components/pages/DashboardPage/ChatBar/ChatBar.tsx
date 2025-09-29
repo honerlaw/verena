@@ -60,7 +60,7 @@ export const ChatBar: React.FC = () => {
               value={message.inputText}
               onChangeText={message.setInputText}
               onSubmitEditing={message.handleSend}
-              placeholder="Ask about my finances..."
+              placeholder="Ask about your finances..."
               disabled={message.isSending}
               borderWidth={0}
               backgroundColor="transparent"
