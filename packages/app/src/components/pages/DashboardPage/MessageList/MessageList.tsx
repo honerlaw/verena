@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { ScrollView } from "react-native";
 import { YStack } from "tamagui";
 import { MessageBubble } from "./MessageBubble";
+import { ThinkingMessage } from "./ThinkingMessage";
 import { useConversation } from "../../../../providers/ConversationProvider";
 import { LoadingView } from "@/src/components/LoadingView";
 import { PromptButtonList } from "@/src/components/ActionSheet/PromptButtonList";
@@ -46,16 +47,7 @@ export const MessageList: React.FC = () => {
         {messages.map((m) => (
           <MessageBubble key={m.id} message={m} />
         ))}
-        {isSending && (
-          <MessageBubble
-            message={{
-              id: "thinking",
-              role: "assistant",
-              content: "Thinking…",
-            }}
-            isLoading
-          />
-        )}
+        {isSending && <ThinkingMessage />}
       </YStack>
     </ScrollView>
   );
