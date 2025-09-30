@@ -33,7 +33,7 @@ export const ConnectionList: React.FC = () => {
   };
 
   const connectionCount = data?.items?.length || 0;
-  const hasConnections = false; // connectionCount > 0;
+  const hasConnections = connectionCount > 0;
 
   return (
     <YStack gap="$4">
