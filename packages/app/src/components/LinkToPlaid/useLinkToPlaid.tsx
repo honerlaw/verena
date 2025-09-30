@@ -1,87 +1,66 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { create, open } from "react-native-plaid-link-sdk";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useReportError } from "@/src/hooks/useReportError";
 import { useToastController } from "@tamagui/toast";
 
+// @todo refactor this so that the create is called on button click
 export function useLinkToPlaid(itemId?: string) {
   const trpc = useTRPC();
   const { report } = useReportError();
   const client = useQueryClient();
   const toast = useToastController();
 
-  const {
-    data,
-    error,
-    mutateAsync: createLinkToken,
-  } = useMutation(trpc.link.create.mutationOptions());
-  const { mutateAsync: exchangePublicToken, error: exchangeError } =
-    useMutation(trpc.link.exchange.mutationOptions());
+  const { mutateAsync: createLinkToken } = useMutation(
+    trpc.link.create.mutationOptions(),
+  );
+  const { mutateAsync: exchangePublicToken } = useMutation(
+    trpc.link.exchange.mutationOptions(),
+  );
 
-  useEffect(() => {
-    (async () => {
-      try {
-        await createLinkToken({
-          itemId,
-        });
-      } catch (error) {
-        report(error, "Failed to create link token.");
-      }
-    })();
-  }, [itemId, createLinkToken]);
+  const createToken = useCallback(async () => {
+    try {
+      return await createLinkToken({
+        itemId,
+      });
+    } catch (error) {
+      report(error, "Failed to create link token.");
+    }
+    return null;
+  }, [createLinkToken, itemId, report]);
 
-  useMemo(() => {
-    if (!data?.token) {
+  const openLink = async () => {
+    const token = await createToken();
+    if (!token || !token.token) {
       return;
     }
+
     create({
-      token: data.token.link_token,
-      noLoadingState: true,
+      token: token.token.link_token,
     });
-  }, [data?.token]);
 
-  const token = data?.token?.link_token || null;
-
-  // notify sentry of the error since we want to render nothing if it fails
-  useMemo(() => {
-    if (!error) {
-      return;
-    }
-    report(error, "Failed to start linking process.");
-  }, [error, report]);
-
-  useMemo(() => {
-    if (!exchangeError) {
-      return;
-    }
-    report(exchangeError, "Failed to connect accounts.");
-  }, [exchangeError, report]);
-
-  const openLink = () => {
     open({
       onSuccess: async (success) => {
-        await exchangePublicToken({
-          publicToken: success.publicToken,
-          accounts: success.metadata.accounts.map((account) => ({
-            id: account.id,
-            name: account.name,
-            mask: account.mask,
-            type: account.type,
-          })),
-        });
+        try {
+          await exchangePublicToken({
+            publicToken: success.publicToken,
+            accounts: success.metadata.accounts.map((account) => ({
+              id: account.id,
+              name: account.name,
+              mask: account.mask,
+              type: account.type,
+            })),
+          });
+          toast.show("Successfully linked accounts.", {
+            type: "success",
+          });
 
-        toast.show("Successfully linked accounts.", {
-          type: "success",
-        });
-
-        // create a new token for the next time
-        await createLinkToken({
-          itemId,
-        });
-
-        // trigger everything to refetch
-        client.invalidateQueries();
+          // trigger everything to refetch
+          client.invalidateQueries();
+        } catch (error) {
+          report(error, "Failed to connect accounts.");
+        }
       },
       onExit: async ({ error }) => {
         if (error) {
@@ -97,10 +76,6 @@ export function useLinkToPlaid(itemId?: string) {
   };
 
   return {
-    // this is to match the contract with web
-    ready: true,
-    error,
-    token,
     openLink,
   };
 }

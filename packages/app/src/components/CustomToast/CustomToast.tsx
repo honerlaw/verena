@@ -57,6 +57,13 @@ export const CustomToast = () => {
         borderRadius="$4"
         alignItems="center"
         gap="$3"
+        borderWidth={1}
+        borderColor={"$gray6"}
+        shadowColor={"$gray4"}
+        shadowOffset={{ width: 0, height: 2 }}
+        shadowOpacity={0.25}
+        shadowRadius={3.84}
+        elevation={5}
       >
         <ToastIcon type={type} />
         <Toast.Title fontWeight={"600"}>{toast.title}</Toast.Title>

@@ -4,16 +4,7 @@ import { useLinkToPlaid } from "./useLinkToPlaid";
 export const LinkToPlaid: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const { error, token, openLink } = useLinkToPlaid();
-
-  if (error) {
-    return null;
-  }
-
-  if (!token) {
-    // @todo maybe an actual loading indiciator?
-    return children;
-  }
+  const { openLink } = useLinkToPlaid();
 
   return React.Children.map(children, (child) => {
     if (!React.isValidElement(child)) {

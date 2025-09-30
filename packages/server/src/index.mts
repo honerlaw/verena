@@ -7,6 +7,7 @@ import { expressTRPCMiddleware } from "./network/rpc/index.mjs";
 import { config } from "./network/http/index.mjs";
 import { plaidWebhook } from "./network/http/webhook/plaid/webhook.mjs";
 import { getConfig } from "./util/config.mjs";
+import cors from "cors";
 
 const app = express();
 const PORT = await getConfig("PORT", 3000);
@@ -17,6 +18,8 @@ app.use(
     enableHandshake: true,
   }),
 );
+
+app.use(cors());
 
 app.use(contextMiddleware());
 
