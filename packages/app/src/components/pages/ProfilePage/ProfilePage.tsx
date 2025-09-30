@@ -3,7 +3,6 @@ import { ScrollView } from "react-native";
 import { YStack } from "tamagui";
 import { UserInfo } from "@/src/components/pages/ProfilePage/UserInfo";
 import { ConnectionList } from "@/src/components/pages/ProfilePage/ConnectionList";
-import { DeleteAccountSection } from "@/src/components/pages/ProfilePage/DeleteAccountSection";
 import { SignOutSection } from "@/src/components/pages/ProfilePage/SignOutSection";
 
 export const ProfilePage: React.FC = () => {
@@ -16,7 +15,6 @@ export const ProfilePage: React.FC = () => {
       >
         <UserInfo />
         <ConnectionList />
-        <DeleteAccountSection />
       </ScrollView>
       <SignOutSection />
     </YStack>

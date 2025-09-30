@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useReportError } from "@/src/hooks/useReportError";
-import { Plaid, usePlaidLink } from "react-plaid-link";
+import { usePlaidLink } from "react-plaid-link";
 import { useToastController } from "@tamagui/toast";
 
 export function useLinkToPlaid(itemId?: string) {

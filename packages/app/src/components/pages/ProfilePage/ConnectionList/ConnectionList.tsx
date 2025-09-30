@@ -7,6 +7,7 @@ import { useTRPC } from "@/src/providers/TRPCProvider";
 import { LoadingView } from "@/src/components/LoadingView";
 import { ErrorView } from "@/src/components/ErrorView";
 import { ConnectionCard } from "./ConnectionCard";
+import { ConnectAccountCTA } from "./ConnectAccountCTA";
 
 export const ConnectionList: React.FC = () => {
   const { openLink } = useLinkToPlaid();
@@ -32,7 +33,7 @@ export const ConnectionList: React.FC = () => {
   };
 
   const connectionCount = data?.items?.length || 0;
-  const hasConnections = connectionCount > 0;
+  const hasConnections = false; // connectionCount > 0;
 
   return (
     <YStack gap="$4">
@@ -54,6 +55,8 @@ export const ConnectionList: React.FC = () => {
           circular
         />
       </XStack>
+
+      {!hasConnections && <ConnectAccountCTA />}
 
       {hasConnections && data?.items && (
         <YStack gap="$3">

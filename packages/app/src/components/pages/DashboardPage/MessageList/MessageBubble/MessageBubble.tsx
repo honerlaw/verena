@@ -133,6 +133,14 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
       bullet_list: {
         marginVertical: 8,
       },
+      bullet_list_icon: {
+        color: theme.color?.val || "#000",
+        fontSize: 48,
+        lineHeight: 24,
+        paddingTop: 14,
+        textAlign: "center",
+        textAlignVertical: "center",
+      },
       ordered_list: {
         marginVertical: 8,
       },
@@ -153,7 +161,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   return (
     <XStack justifyContent={isUser ? "flex-end" : "flex-start"}>
       <YStack
-        maxWidth="85%"
+        maxWidth="90%"
         paddingHorizontal="$3"
         borderRadius="$6"
         backgroundColor={isUser ? "$gray4" : "transparent"}

@@ -1,5 +1,5 @@
 import React from "react";
-import { YStack, XStack, Text, Separator } from "tamagui";
+import { YStack, XStack, Text } from "tamagui";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Avatar } from "./Avatar";
 import { LoadingView } from "../../../LoadingView";
@@ -41,20 +41,14 @@ export const UserInfo: React.FC = () => {
       <XStack alignItems="center" gap="$4">
         <Avatar name={displayName} />
         <YStack gap="$2" flex={1}>
-          <Text fontSize="$4" fontWeight="600" color="$color">
+          <Text fontSize="$6" fontWeight="600" color="$color">
             {displayName}
           </Text>
-          <Text fontSize="$3" color="$gray11" fontWeight={"600"}>
+          <Text fontSize="$3" color="$gray10">
             {email}
           </Text>
         </YStack>
       </XStack>
-      <Separator width={"100%"} />
-      {email && (
-        <Text fontSize="$3" color="$gray10" textAlign="center">
-          Signed in as {email}
-        </Text>
-      )}
     </YStack>
   );
 };
