@@ -16,6 +16,7 @@ const envSchema = z.object({
   // Plaid integration
   PLAID_CLIENT_ID: z.string().min(1, "PLAID_CLIENT_ID is required"),
   PLAID_SECRET: z.string().min(1, "PLAID_SECRET is required"),
+  PLAID_SECRET_SANDBOX: z.string().min(1, "PLAID_SECRET_SANDBOX is required"),
 
   // Encryption
   KEY_ENCRYPTION_KEY: z.string().min(1, "KEY_ENCRYPTION_KEY is required"),

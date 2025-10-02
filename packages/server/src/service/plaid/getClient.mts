@@ -51,12 +51,16 @@ export async function getClient(ctx: Context): Promise<PlaidApi> {
     );
   }
 
+  const isProduction = basePath === PlaidEnvironments.production!;
+
   const configuration = new Configuration({
     basePath: basePath,
     baseOptions: {
       headers: {
         "PLAID-CLIENT-ID": await getConfig("PLAID_CLIENT_ID"),
-        "PLAID-SECRET": await getConfig("PLAID_SECRET"),
+        "PLAID-SECRET": isProduction
+          ? await getConfig("PLAID_SECRET")
+          : await getConfig("PLAID_SECRET_SANDBOX"),
       },
     },
   });
