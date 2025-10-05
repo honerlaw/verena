@@ -7,11 +7,11 @@ export function useReportError(error?: unknown) {
 
   const report = useCallback(
     (error: unknown, displayMessage?: string) => {
+      Sentry.captureException(error);
+      
       if (process.env.NODE_ENV !== "production") {
         console.error(error, displayMessage);
       }
-
-      Sentry.captureException(error);
 
       if (displayMessage) {
         toast.show(displayMessage, {

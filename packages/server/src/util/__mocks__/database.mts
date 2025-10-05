@@ -26,6 +26,6 @@ type MockedDBClient = {
 export function mockDatabase(mocked: MockedDBClient = {}) {
   return {
     client: mocked as unknown as DBClient,
-    mock: mocked,
+    mocked,
   };
 }

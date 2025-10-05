@@ -15,6 +15,6 @@ export function mockLogger() {
 
   return {
     logger: mockLogger as unknown as Logger,
-    mock: mockLogger,
+    mocked: mockLogger,
   };
 }

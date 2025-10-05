@@ -64,11 +64,11 @@ describe("Database Conversation Create", () => {
 
     // Verify database client was called with correct parameters
     assert.strictEqual(
-      database.mock.conversation?.create?.mock.calls.length,
+      database.mocked.conversation?.create?.mock.calls.length,
       1,
     );
     assert.deepStrictEqual(
-      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      database.mocked.conversation?.create?.mock.calls[0]?.arguments[0],
       {
         data: {
           userId,
@@ -78,7 +78,7 @@ describe("Database Conversation Create", () => {
     );
 
     // Verify logger was not called (no errors)
-    assert.strictEqual(logger.mock.error.mock.calls.length, 0);
+    assert.strictEqual(logger.mocked.error.mock.calls.length, 0);
   });
 
   it("should handle database errors and return null", async () => {
@@ -108,18 +108,18 @@ describe("Database Conversation Create", () => {
 
     // Verify database client was called
     assert.strictEqual(
-      database.mock.conversation?.create?.mock.calls.length,
+      database.mocked.conversation?.create?.mock.calls.length,
       1,
     );
 
     // Verify logger was called with correct error information
-    assert.strictEqual(logger.mock.error.mock.calls.length, 1);
-    assert.deepStrictEqual(logger.mock.error.mock.calls[0]?.arguments[0], {
+    assert.strictEqual(logger.mocked.error.mock.calls.length, 1);
+    assert.deepStrictEqual(logger.mocked.error.mock.calls[0]?.arguments[0], {
       error: testError,
       tags: ["database", "conversation", "create"],
     });
     assert.strictEqual(
-      logger.mock.error.mock.calls[0]?.arguments[1],
+      logger.mocked.error.mock.calls[0]?.arguments[1],
       "Error creating conversation",
     );
   });
@@ -152,11 +152,11 @@ describe("Database Conversation Create", () => {
 
     // Verify database client was called with correct parameters
     assert.strictEqual(
-      database.mock.conversation?.create?.mock.calls.length,
+      database.mocked.conversation?.create?.mock.calls.length,
       1,
     );
     assert.deepStrictEqual(
-      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      database.mocked.conversation?.create?.mock.calls[0]?.arguments[0],
       {
         data: {
           userId,
@@ -166,13 +166,13 @@ describe("Database Conversation Create", () => {
     );
 
     // Verify logger was called with correct error information
-    assert.strictEqual(logger.mock.error.mock.calls.length, 1);
-    assert.deepStrictEqual(logger.mock.error.mock.calls[0]?.arguments[0], {
+    assert.strictEqual(logger.mocked.error.mock.calls.length, 1);
+    assert.deepStrictEqual(logger.mocked.error.mock.calls[0]?.arguments[0], {
       error: testError,
       tags: ["database", "conversation", "create"],
     });
     assert.strictEqual(
-      logger.mock.error.mock.calls[0]?.arguments[1],
+      logger.mocked.error.mock.calls[0]?.arguments[1],
       "Error creating conversation",
     );
   });
@@ -199,11 +199,11 @@ describe("Database Conversation Create", () => {
 
     // Verify all parameters were passed correctly
     assert.strictEqual(
-      database.mock.conversation?.create?.mock.calls.length,
+      database.mocked.conversation?.create?.mock.calls.length,
       1,
     );
     assert.deepStrictEqual(
-      database.mock.conversation?.create?.mock.calls[0]?.arguments[0],
+      database.mocked.conversation?.create?.mock.calls[0]?.arguments[0],
       {
         data: {
           userId,
