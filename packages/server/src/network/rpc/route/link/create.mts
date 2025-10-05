@@ -1,5 +1,6 @@
 import {
   BadRequestError,
+  InternalServerError,
   UnauthorizedError,
 } from "@onerlaw/framework/backend/rpc";
 import { procedure } from "../../router.mjs";
@@ -37,6 +38,10 @@ export const create = procedure
       email,
       item?.token ?? null,
     );
+
+    if (!result) {
+      throw new InternalServerError("Failed to link accounts.");
+    }
 
     return {
       token: result,

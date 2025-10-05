@@ -1,6 +1,7 @@
 import { CountryCode, type PlaidApi, Products } from "plaid";
 import { type Logger } from "@onerlaw/framework/backend/logger";
 import { getConfig } from "../../../util/config.mjs";
+import axios from "axios";
 
 export type LinkTokenResponse = {
   link_token: string;
@@ -38,6 +39,23 @@ export async function create(
       request_id: response.data.request_id,
     };
   } catch (error) {
+    if (axios.isAxiosError(error)) {
+      logger.error(
+        {
+          error: {
+            ...error.toJSON(),
+            response: {
+              data: error.response?.data,
+              headers: { ...error.response?.headers },
+            },
+          },
+          tags: ["datasource", "plaid", "createLinkToken"],
+        },
+        "Error creating link token",
+      );
+      return null;
+    }
+
     logger.error(
       {
         error,
