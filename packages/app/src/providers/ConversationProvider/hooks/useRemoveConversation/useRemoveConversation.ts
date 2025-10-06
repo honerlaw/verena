@@ -36,7 +36,7 @@ export const useRemoveConversation = (
 
         return true;
       } catch (err) {
-        report(err, "Failed to remove conversation");
+        report(err, "Failed to delete conversation.");
         return false;
       }
     },

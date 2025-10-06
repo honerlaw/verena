@@ -25,7 +25,7 @@ export function useLinkToPlaid(itemId?: string) {
         itemId,
       });
     } catch (error) {
-      report(error, "Failed to create link token.");
+      report(error, "Failed to connect accounts.");
     }
     return null;
   }, [createLinkToken, itemId, report]);
@@ -52,7 +52,7 @@ export function useLinkToPlaid(itemId?: string) {
               type: account.type,
             })),
           });
-          toast.show("Successfully linked accounts.", {
+          toast.show("Successfully connected accounts.", {
             type: "success",
           });
 

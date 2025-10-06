@@ -61,7 +61,7 @@ export function useLinkToPlaid(itemId?: string) {
     if (!plaidError) {
       return;
     }
-    report(plaidError, "Failed to start linking process.");
+    report(plaidError, "Failed to account connection process.");
   }, [plaidError, report]);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ export function useLinkToPlaid(itemId?: string) {
           itemId,
         });
       } catch (error) {
-        report(error, "Failed to create link token.");
+        report(error, "Failed to connect accounts.");
       }
     },
   };
