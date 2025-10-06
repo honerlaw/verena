@@ -1,5 +1,5 @@
 import type { ItemRemoveResponse, PlaidApi } from "plaid";
-import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { Logger } from "../../../util/logger/index.mjs";
 
 export const remove = async function (
   logger: Logger,

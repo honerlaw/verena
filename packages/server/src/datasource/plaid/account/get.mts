@@ -1,5 +1,5 @@
 import type { AccountBase, PlaidApi } from "plaid";
-import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { Logger } from "../../../util/logger/index.mjs";
 
 export const get = async function (
   logger: Logger,

@@ -1,4 +1,4 @@
-import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { Logger } from "../../../util/logger/index.mjs";
 import type { PlaidApi } from "plaid";
 import jsonwebtoken, { type JwtPayload } from "jsonwebtoken/index.js";
 const { decode, verify } = jsonwebtoken;
@@ -52,6 +52,7 @@ export const validate = async function (
     logger.error(
       {
         error: err,
+        tags: ["datasource", "plaid", "webhook", "validate"],
       },
       "Failed to validate webhook verification token",
     );

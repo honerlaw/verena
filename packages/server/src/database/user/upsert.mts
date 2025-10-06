@@ -1,5 +1,5 @@
 import { type DBClient, type User } from "../../util/database.mjs";
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../util/logger/index.mjs";
 
 export async function upsert(
   logger: Logger,
@@ -20,6 +20,7 @@ export async function upsert(
     logger.error(
       {
         error: err,
+        tags: ["database", "user", "upsert"],
       },
       "Failed to upsert user",
     );

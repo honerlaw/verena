@@ -2,12 +2,12 @@ import { clerkMiddleware } from "@clerk/express";
 import express from "express";
 import path from "path";
 import { contextMiddleware } from "./context.mjs";
-import { logger, register } from "@onerlaw/framework/backend/logger";
 import { expressTRPCMiddleware } from "./network/rpc/index.mjs";
 import { config } from "./network/http/index.mjs";
 import { plaidWebhook } from "./network/http/webhook/plaid/webhook.mjs";
 import { getConfig } from "./util/config.mjs";
 import cors from "cors";
+import { register, logger } from "./util/logger/index.mjs";
 
 const app = express();
 const PORT = await getConfig("PORT", 3000);

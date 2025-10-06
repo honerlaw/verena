@@ -1,4 +1,4 @@
-import { type Logger, logger } from "@onerlaw/framework/backend/logger";
+import { type Logger, logger } from "./util/logger/index.mjs";
 import { wrap } from "@onerlaw/framework/backend/utils";
 import { getConfig } from "./util/config.mjs";
 
@@ -136,6 +136,7 @@ export const createContext = async (
       logger.error(
         {
           error: err,
+          tags: ["context", "createContext"],
         },
         "Failed to verify token to create context.",
       );

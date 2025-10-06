@@ -33,6 +33,7 @@ export const getAccountBalancesTool = tool({
       context?.context.logger.error(
         {
           error,
+          tags: ["service", "openai", "tools", "getAccountBalances"],
           attributes: {
             params,
           },

@@ -58,6 +58,7 @@ export async function respond(
     context.logger.error(
       {
         error,
+        tags: ["service", "openai", "respond"],
       },
       "Error responding to message",
     );

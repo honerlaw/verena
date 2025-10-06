@@ -9,6 +9,15 @@ export const syncUpdatesAvailableHandler: WebhookHandler<
   if (!user) {
     ctx.logger.warn(
       {
+        tags: [
+          "network",
+          "http",
+          "webhook",
+          "plaid",
+          "handler",
+          "transaction",
+          "syncUpdatesAvailable",
+        ],
         attributes: {
           item_id: hook.item_id,
         },
@@ -31,6 +40,15 @@ export const syncUpdatesAvailableHandler: WebhookHandler<
     .catch((error) => {
       ctx.logger.error(
         {
+          tags: [
+            "network",
+            "http",
+            "webhook",
+            "plaid",
+            "handler",
+            "transaction",
+            "syncUpdatesAvailable",
+          ],
           attributes: {
             error,
           },

@@ -1,5 +1,5 @@
 import { mock } from "node:test";
-import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { Logger } from "../logger/index.mjs";
 
 export function mockLogger() {
   const errorMockFn = mock.fn();

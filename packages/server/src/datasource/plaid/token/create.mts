@@ -1,5 +1,5 @@
 import { CountryCode, type PlaidApi, Products } from "plaid";
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../../util/logger/index.mjs";
 import { getConfig } from "../../../util/config.mjs";
 import axios from "axios";
 
@@ -42,14 +42,8 @@ export async function create(
     if (axios.isAxiosError(error)) {
       logger.error(
         {
-          error: {
-            ...error.toJSON(),
-            response: {
-              data: error.response?.data,
-              headers: { ...error.response?.headers },
-            },
-          },
-          tags: ["datasource", "plaid", "createLinkToken"],
+          error,
+          tags: ["datasource", "plaid", "token", "create"],
         },
         "Error creating link token",
       );
@@ -59,7 +53,7 @@ export async function create(
     logger.error(
       {
         error,
-        tags: ["datasource", "plaid", "createLinkToken"],
+        tags: ["datasource", "plaid", "token", "create"],
       },
       "Error creating link token",
     );

@@ -67,6 +67,7 @@ export async function plaidWebhook(
 
       req.serverContext.logger.warn(
         {
+          tags: ["network", "http", "webhook", "plaid", "webhook"],
           attributes: {
             webhook: webhook,
           },
@@ -84,6 +85,7 @@ export async function plaidWebhook(
     }
     req.serverContext.logger.error(
       {
+        tags: ["network", "http", "webhook", "plaid", "webhook"],
         attributes: {
           webhook: webhook,
         },
@@ -94,6 +96,7 @@ export async function plaidWebhook(
   } catch (err) {
     req.serverContext.logger.error(
       {
+        tags: ["network", "http", "webhook", "plaid", "webhook"],
         error: err,
       },
       `Hard failure when handling webhook`,

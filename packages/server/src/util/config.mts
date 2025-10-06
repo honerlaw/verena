@@ -1,4 +1,4 @@
-import { logger } from "@onerlaw/framework/backend/logger";
+import { logger } from "./logger/index.mjs";
 import { z } from "zod";
 
 const envSchema = z.object({
@@ -57,6 +57,7 @@ export async function getConfig<Key extends keyof Config>(
     logger.error(
       {
         error,
+        tags: ["util", "config"],
         attributes: {
           key,
           expectedValue: envSchema.shape[key],

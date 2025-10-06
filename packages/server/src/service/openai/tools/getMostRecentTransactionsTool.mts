@@ -25,6 +25,7 @@ export const getMostRecentTransactionsTool = tool({
       context?.context.logger.error(
         {
           error,
+          tags: ["service", "openai", "tools", "getMostRecentTransactions"],
           attributes: {
             params,
           },

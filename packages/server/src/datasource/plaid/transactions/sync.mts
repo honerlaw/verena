@@ -5,7 +5,7 @@ import type {
   TransactionsSyncRequest,
   TransactionsSyncResponse,
 } from "plaid";
-import type { Logger } from "@onerlaw/framework/backend/logger";
+import type { Logger } from "../../../util/logger/index.mjs";
 
 type RecursiveSyncOptions = {
   cursor?: string | undefined;
@@ -80,6 +80,7 @@ export const sync = async function (
     if (responses.length === 0) {
       logger.warn(
         {
+          tags: ["datasource", "plaid", "transactions", "sync"],
           attributes: {
             initialCursor,
           },
@@ -111,6 +112,7 @@ export const sync = async function (
     logger.error(
       {
         error,
+        tags: ["datasource", "plaid", "transactions", "sync"],
         attributes: {
           initialCursor,
         },

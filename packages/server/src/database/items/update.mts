@@ -1,4 +1,4 @@
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../util/logger/index.mjs";
 import { type DBClient, type Item, ItemStatus } from "../../util/database.mjs";
 
 export const update = async function (

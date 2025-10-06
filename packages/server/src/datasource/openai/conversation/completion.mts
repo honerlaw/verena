@@ -1,4 +1,4 @@
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../../util/logger/index.mjs";
 import { type OpenAI } from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 

@@ -1,5 +1,5 @@
 import { type ClerkClient } from "@clerk/express";
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../util/logger/index.mjs";
 
 export async function getUserById(
   logger: Logger,
@@ -12,6 +12,7 @@ export async function getUserById(
     logger.error(
       {
         error,
+        tags: ["datasource", "clerk", "getUserById"],
       },
       "Error getting user by id",
     );

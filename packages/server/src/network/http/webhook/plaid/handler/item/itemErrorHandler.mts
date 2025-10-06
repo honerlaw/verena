@@ -8,6 +8,15 @@ export const itemErrorHandler: WebhookHandler<ItemErrorWebhook> = async (
   if (hook.error?.error_code !== "ITEM_LOGIN_REQUIRED") {
     ctx.logger.warn(
       {
+        tags: [
+          "network",
+          "http",
+          "webhook",
+          "plaid",
+          "handler",
+          "item",
+          "itemErrorHandler",
+        ],
         attributes: {
           webhook: hook,
         },

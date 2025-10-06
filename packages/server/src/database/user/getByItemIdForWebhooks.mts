@@ -1,4 +1,4 @@
-import { type Logger } from "@onerlaw/framework/backend/logger";
+import { type Logger } from "../../util/logger/index.mjs";
 import { type DBClient } from "../../util/database.mjs";
 
 export async function getByItemIdForWebhooks(
