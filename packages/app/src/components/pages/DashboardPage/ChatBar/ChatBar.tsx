@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Button, Input, XStack, YStack } from "tamagui";
+import { Button, Input, useTheme, XStack, YStack } from "tamagui";
 import { ArrowUp, MoreVertical } from "@tamagui/lucide-icons";
 import { useConversation } from "../../../../providers/ConversationProvider";
 import { useActionSheet } from "@/src/components/ActionSheet";
@@ -12,7 +12,6 @@ const STYLES = StyleSheet.create({
   inputContainer: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderRadius: 46,
     flexDirection: "row",
     paddingVertical: 8,
@@ -24,6 +23,7 @@ export const ChatBar: React.FC = () => {
   const { message } = useConversation();
   const { setOpen } = useActionSheet();
   const { isLiquidGlassEnabled } = useLiquidGlass();
+  const theme = useTheme();
 
   return (
     <XStack
@@ -32,7 +32,11 @@ export const ChatBar: React.FC = () => {
       marginBottom={insets.bottom * 1.3}
     >
       <YStack flex={1}>
-        <XStack gap="$2" alignItems="center">
+        <XStack
+          gap="$2"
+          alignItems="center"
+          marginBottom={Platform.OS === "web" ? "$3" : undefined}
+        >
           <GlassView style={{ borderRadius: 100 }}>
             <Button
               backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
@@ -52,22 +56,35 @@ export const ChatBar: React.FC = () => {
               onPress={() => setOpen(true)}
             />
           </GlassView>
-          <GlassView style={STYLES.inputContainer}>
+          <GlassView
+            style={[
+              STYLES.inputContainer,
+              !isLiquidGlassEnabled &&
+                Platform.OS === "web" && {
+                  backgroundColor: theme.gray4?.val,
+                  borderRadius: 24,
+                },
+            ]}
+          >
             <Input
               multiline
               flex={1}
+              height={Platform.OS === "web" ? 46 : undefined}
               maxHeight={140}
+              flexGrow={1}
               value={message.inputText}
               onChangeText={message.setInputText}
               onSubmitEditing={message.handleSend}
               placeholder="Ask about your finances..."
               disabled={message.isSending}
               borderWidth={0}
+              focusStyle={{ outline: "none" }}
               backgroundColor="transparent"
               fontWeight={400}
               style={{ fontSize: 15, lineHeight: 20 }}
               verticalAlign={"center"}
               returnKeyType="send"
+              underlineColorAndroid="transparent"
             />
             <Button
               size="$3"

@@ -11,6 +11,7 @@ import {
 } from "@/src/providers/ConversationProvider";
 import React from "react";
 import { useLiquidGlass } from "@/src/hooks/useLiquidGlass";
+import { Platform } from "react-native";
 
 export const unstable_settings = {
   initialRouteName: "dashboard",
@@ -24,6 +25,7 @@ const HeaderRight: React.FC = () => {
       size="$3"
       circular
       icon={Plus}
+      marginHorizontal={Platform.OS === "web" ? "$4" : undefined}
       backgroundColor={isLiquidGlassEnabled ? "transparent" : undefined}
       hoverStyle={
         isLiquidGlassEnabled
@@ -77,6 +79,7 @@ export default function AuthLayout() {
                     size="$3"
                     circular
                     icon={User}
+                    marginHorizontal={Platform.OS === "web" ? "$4" : undefined}
                     backgroundColor={
                       isLiquidGlassEnabled ? "transparent" : undefined
                     }
