@@ -30,6 +30,15 @@ function RootLayout() {
             headerShadowVisible: false,
           }}
         />
+        <Stack.Screen name="sso-callback" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="+not-found"
+          options={{
+            headerTitle: "",
+            headerBackButtonDisplayMode: "minimal",
+            headerShadowVisible: false,
+          }}
+        />
       </Stack>
     </AppLayout>
   );
