@@ -27,52 +27,57 @@ type StrictLogger = {
   child: (options?: object) => StrictLogger;
 };
 
-const gcpConfig = createGcpLoggingPinoConfig(
-  {
-    serviceContext: {
-      service: "@onerlaw/verena-server",
+const loggerConfig = {
+  enabled: process.env.LOG_SILENT !== "true",
+  level: "trace", // @todo control by env variable
+  serializers: {
+    error: std.wrapErrorSerializer((error) => {
+      if (error.name === "AxiosError") {
+        const toJSON = error.toJSON.bind(error);
+        error.toJSON = () => ({
+          ...toJSON(),
+          response: {
+            data: error.response?.data,
+            headers: { ...error.response?.headers },
+          },
+        });
+      }
+      return error;
+    }),
+  },
+  redact: {
+    paths: [
+      "req.headers",
+      "req.query",
+      "req.params",
+      "req.remoteAddress",
+      "req.remotePort",
+      "res.headers",
+
+      // don't leak data from errors
+      'error.config.headers["PLAID-CLIENT-ID"]',
+      'error.config.headers["PLAID-SECRET"]',
+      "error.config.data",
+    ],
+    censor: () => {
+      return undefined;
     },
   },
-  {
-    enabled: process.env.LOG_SILENT !== "true",
-    level: "trace", // @todo control by env variable
-    serializers: {
-      error: std.wrapErrorSerializer((error) => {
-        if (error.name === "AxiosError") {
-          const toJSON = error.toJSON.bind(error);
-          error.toJSON = () => ({
-            ...toJSON(),
-            response: {
-              data: error.response?.data,
-              headers: { ...error.response?.headers },
-            },
-          });
-        }
-        return error;
-      }),
-    },
-    redact: {
-      paths: [
-        "req.headers",
-        "req.query",
-        "req.params",
-        "req.remoteAddress",
-        "req.remotePort",
-        "res.headers",
+};
 
-        // don't leak data from errors
-        'error.config.headers["PLAID-CLIENT-ID"]',
-        'error.config.headers["PLAID-SECRET"]',
-        "error.config.data",
-      ],
-      censor: () => {
-        return undefined;
-      },
-    },
-  },
-);
+const config =
+  process.env.NODE_ENV === "production"
+    ? createGcpLoggingPinoConfig(
+        {
+          serviceContext: {
+            service: "@onerlaw/verena-server",
+          },
+        },
+        loggerConfig,
+      )
+    : loggerConfig;
 
-const pinoLogger = pino<never, boolean>(gcpConfig);
+const pinoLogger = pino<never, boolean>(config);
 
 // force a simpler API
 export const logger = pinoLogger as unknown as StrictLogger;

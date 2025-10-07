@@ -4,12 +4,14 @@ import { useTRPC } from "@/src/providers/TRPCProvider";
 import { useReportError } from "@/src/hooks/useReportError";
 import { usePlaidLink } from "react-plaid-link";
 import { useToastController } from "@tamagui/toast";
+import { useLoading } from "@/src/providers/LoadingProvider";
 
 export function useLinkToPlaid(itemId?: string) {
   const trpc = useTRPC();
   const client = useQueryClient();
   const { report } = useReportError();
   const toast = useToastController();
+  const { showLoading, hideLoading } = useLoading();
   const { data, mutateAsync: createLinkToken } = useMutation(
     trpc.link.create.mutationOptions(),
   );
@@ -72,12 +74,15 @@ export function useLinkToPlaid(itemId?: string) {
 
   return {
     openLink: async () => {
+      showLoading();
       try {
         await createLinkToken({
           itemId,
         });
       } catch (error) {
         report(error, "Failed to connect accounts.");
+      } finally {
+        hideLoading();
       }
     },
   };

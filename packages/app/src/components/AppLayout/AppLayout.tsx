@@ -12,6 +12,7 @@ import { isRunningInExpoGo } from "expo";
 import { Platform } from "react-native";
 import Head from "expo-router/head";
 import { CustomToast } from "../CustomToast";
+import { LoadingProvider } from "@/src/providers/LoadingProvider";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -58,10 +59,12 @@ export const AppLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
           <AuthProvider>
             <TRPCProvider>
               <ToastProvider>
-                {children}
-                <StatusBar style="auto" />
-                <ToastViewport />
-                <CustomToast />
+                <LoadingProvider>
+                  {children}
+                  <StatusBar style="auto" />
+                  <ToastViewport />
+                  <CustomToast />
+                </LoadingProvider>
               </ToastProvider>
             </TRPCProvider>
           </AuthProvider>
