@@ -51,11 +51,11 @@ export function useLinkToPlaid(itemId?: string) {
       } catch (error) {
         report(error, "Failed to connect accounts.");
       } finally {
-        hideLoading()
+        hideLoading();
       }
     },
     onExit: async (error) => {
-      hideLoading()
+      hideLoading();
       if (error) {
         return report(error, error.display_message);
       }
@@ -83,7 +83,7 @@ export function useLinkToPlaid(itemId?: string) {
           itemId,
         });
       } catch (error) {
-        hideLoading()
+        hideLoading();
         report(error, "Failed to connect accounts.");
       }
     },

@@ -39,6 +39,14 @@ function RootLayout() {
             headerShadowVisible: false,
           }}
         />
+        <Stack.Screen
+          name="support"
+          options={{
+            headerTitle: "",
+            headerBackButtonDisplayMode: "minimal",
+            headerShadowVisible: false,
+          }}
+        />
       </Stack>
     </AppLayout>
   );
