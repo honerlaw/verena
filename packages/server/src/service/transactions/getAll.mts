@@ -1,7 +1,14 @@
 import type { Transaction } from "plaid";
 import type { Context } from "../../context.mjs";
+import { type ItemTransaction } from "../../util/database.mjs";
 
-export async function getAll(ctx: Context) {
+type TransactionWithDecryptedPayload = Omit<ItemTransaction, "transaction"> & {
+  transaction: Transaction;
+};
+
+export async function getAll(
+  ctx: Context,
+): Promise<TransactionWithDecryptedPayload[] | null> {
   if (!ctx.auth.user) {
     ctx.logger.error(
       {
@@ -21,12 +28,16 @@ export async function getAll(ctx: Context) {
     ctx.auth.user.id,
   );
 
-  return transactions?.map((transaction) => {
-    return {
-      ...transaction,
-      transaction: JSON.parse(
-        dek.decrypt(transaction.transaction),
-      ) as Transaction,
-    };
-  });
+  return (
+    transactions?.map(
+      (transaction: ItemTransaction): TransactionWithDecryptedPayload => {
+        return {
+          ...transaction,
+          transaction: JSON.parse(
+            dek.decrypt(transaction.transaction),
+          ) as Transaction,
+        };
+      },
+    ) || null
+  );
 }
