@@ -50,9 +50,12 @@ export function useLinkToPlaid(itemId?: string) {
         client.invalidateQueries();
       } catch (error) {
         report(error, "Failed to connect accounts.");
+      } finally {
+        hideLoading()
       }
     },
     onExit: async (error) => {
+      hideLoading()
       if (error) {
         return report(error, error.display_message);
       }
@@ -80,9 +83,8 @@ export function useLinkToPlaid(itemId?: string) {
           itemId,
         });
       } catch (error) {
+        hideLoading()
         report(error, "Failed to connect accounts.");
-      } finally {
-        hideLoading();
       }
     },
   };
