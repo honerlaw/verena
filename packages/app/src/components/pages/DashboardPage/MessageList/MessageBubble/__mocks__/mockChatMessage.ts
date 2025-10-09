@@ -1,4 +1,4 @@
-import { ChatMessage } from "@/src/providers/ConversationProvider/hooks/useMessage";
+import { ChatMessage } from "@/src/providers/ConversationProvider/hooks/useStreamMessage";
 
 export const mockChatMessage: ChatMessage = {
   id: "mock-comprehensive-markdown-message",

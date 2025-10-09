@@ -1,18 +1,27 @@
 import { run } from "@openai/agents";
 import type { Context } from "../../context.mjs";
 
+type StreamChunk = {
+  type: "COMPLETE"
+} | {
+  type: "ERROR"
+} | {
+  type: "CHUNK",
+  data: string,
+}
+
 /**
  * So a few things, we should not use the conversation API at all basically
  * we should instead leverage the response API.
  */
-export async function respond(
+export async function* stream(
   context: Context,
   userId: string,
   conversationId: string,
   message: string,
-): Promise<string | null> {
+): AsyncGenerator<StreamChunk, void, unknown> {
   try {
-    // must have a conversation to respond to
+    // must have a conversation to stream to
     const conversation =
       await context.database.conversation.getByConversationIdForUser(
         conversationId,
@@ -43,27 +52,46 @@ export async function respond(
       );
     }
 
-    // respond to the message
+    // respond to the message with streaming
     const result = await run(
       context.service.agent.agents.VerenaAgent,
       message,
       {
         conversationId: conversation.openaiConversationId,
         context,
+        stream: true
       },
     );
 
-    result.lastResponseId
+    // Convert the streaming result to a text stream and yield chunks
+    const textStream = result.toTextStream({ compatibleWithNodeStreams: true });
+    
+    // Read from the stream and yield string chunks
+    for await (const chunk of textStream) {
+      if (chunk instanceof Buffer) {
+        yield {
+          type: "CHUNK",
+          data: chunk.toString(),
+        };
+      }
+    }
+    
+    // Wait for the stream to complete
+    await result.completed;
 
-    return result.finalOutput ?? null;
+    yield {
+      type: "COMPLETE"
+    }
   } catch (error) {
     context.logger.error(
       {
         error,
-        tags: ["service", "openai", "respond"],
+        tags: ["service", "openai", "stream"],
       },
-      "Error responding to message",
+      "Error streaming message response",
     );
+    yield {
+      type: "ERROR"
+    };
   }
-  return null;
 }

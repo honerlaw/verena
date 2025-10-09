@@ -150,6 +150,10 @@ export const createContext = async (
     return options.create(null, logger, additional);
   }
 
+  if (req.url.indexOf("stream") !== -1) {
+    console.log("req", req.url, req.headers.authorization, req.headers.cookie)
+  }
+
   // its the request itself
   const { userId } = getAuth(req);
   const childLogger = userId

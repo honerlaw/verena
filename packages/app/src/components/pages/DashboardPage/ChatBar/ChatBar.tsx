@@ -91,6 +91,7 @@ export const ChatBar: React.FC = () => {
               circular
               disabled={message.isSendDisabled}
               backgroundColor={"$primary"}
+              disabledStyle={{ backgroundColor: "$gray8" }}
               color="white"
               icon={ArrowUp}
               onPress={message.handleSend}

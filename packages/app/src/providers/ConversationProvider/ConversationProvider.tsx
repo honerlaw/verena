@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useCreateConversation } from "./hooks/useCreateConversation";
 import { useListConversation } from "./hooks/useListConversation";
 import { useListConversationItems } from "./hooks/useListConversationItems";
-import { useMessage } from "./hooks/useMessage";
+import { useStreamMessage } from "./hooks/useStreamMessage";
 import { useRemoveConversation } from "./hooks/useRemoveConversation";
 
 interface ConversationContextType {
@@ -10,7 +10,7 @@ interface ConversationContextType {
   create: ReturnType<typeof useCreateConversation>;
   remove: ReturnType<typeof useRemoveConversation>;
   items: ReturnType<typeof useListConversationItems>;
-  message: ReturnType<typeof useMessage>;
+  message: ReturnType<typeof useStreamMessage>;
   currentConversationId: string | null;
   setCurrentConversationId: (conversationId: string | null) => void;
 }
@@ -55,7 +55,7 @@ export const ConversationProvider: React.FC<React.PropsWithChildren> = ({
   const items = useListConversationItems(currentConversationId);
 
   // Use the message hook
-  const message = useMessage(create.create);
+  const message = useStreamMessage(create.create);
 
   // Refetch items whenever currentConversationId changes
   const refetch = items.refetch;

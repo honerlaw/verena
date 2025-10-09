@@ -3,11 +3,28 @@ import React, { useCallback, useMemo, useState } from "react";
 
 import { useAuth } from "@clerk/clerk-expo";
 import superjson from "superjson";
-import { createTRPCClient, httpBatchLink, loggerLink } from "@trpc/client";
+import {
+  createTRPCClient,
+  httpBatchLink,
+  httpSubscriptionLink,
+  loggerLink,
+  splitLink,
+} from "@trpc/client";
 import { createTRPCContext } from "@trpc/tanstack-react-query";
 import type { AppRouter } from "@onerlaw/verena-server/dist/network/rpc/index.mjs";
 import { useConfig } from "@/src/providers/ConfigProvider";
 import { useReportError } from "@/src/hooks/useReportError";
+
+// Polyfills for React Native SSE support
+import "@azure/core-asynciterator-polyfill";
+import { ReadableStream, TransformStream } from "web-streams-polyfill";
+import { CustomEventSource } from "@/src/utils/CustomEventSource";
+
+// Ensure global objects are available for React Native
+if (typeof globalThis !== "undefined") {
+  globalThis.ReadableStream = globalThis.ReadableStream || ReadableStream;
+  globalThis.TransformStream = globalThis.TransformStream || TransformStream;
+}
 
 const context = createTRPCContext<AppRouter>();
 
@@ -42,14 +59,31 @@ export const TRPCProvider: React.FC<React.PropsWithChildren> = ({
     () => ({
       links: [
         loggerLink(),
-        httpBatchLink({
-          transformer: superjson,
-          // this needs to be in a string template otherwise metro will compile it with \"
-          // wrapped around it, causing it to fail
-          url: `${config.baseUrl}${config.trpcRelativeUrl}`,
-          async headers() {
-            return await getHeaders();
+        splitLink({
+          condition: (op) => {
+            return op.type === "subscription";
           },
+          true: httpSubscriptionLink({
+            transformer: superjson,
+            url: `${config.baseUrl}${config.trpcRelativeUrl}`,
+            EventSource: CustomEventSource,
+            eventSourceOptions: async () => {
+              const headers = await getHeaders();
+              if (!headers.Authorization) {
+                return {} as any;
+              }
+              return {
+                headers,
+              } as any;
+            },
+          }),
+          false: httpBatchLink({
+            transformer: superjson,
+            url: `${config.baseUrl}${config.trpcRelativeUrl}`,
+            async headers() {
+              return await getHeaders();
+            },
+          }),
         }),
       ],
     }),

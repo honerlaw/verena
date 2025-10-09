@@ -50,7 +50,7 @@ export const CustomToast = () => {
       viewportName={toast.viewportName}
     >
       <XStack
-        display="inline"
+        display="flex"
         backgroundColor={"$gray4"}
         paddingVertical="$3"
         paddingHorizontal="$4"
@@ -64,6 +64,7 @@ export const CustomToast = () => {
         shadowOpacity={0.25}
         shadowRadius={3.84}
         elevation={5}
+        justifyContent="center"
       >
         <ToastIcon type={type} />
         <Toast.Title fontWeight={"600"}>{toast.title}</Toast.Title>

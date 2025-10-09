@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Text, XStack, YStack, useTheme } from "tamagui";
 import Markdown from "react-native-markdown-display";
-import { ChatMessage } from "../../../../../providers/ConversationProvider/hooks/useMessage";
+import { ChatMessage } from "../../../../../providers/ConversationProvider/hooks/useStreamMessage";
 
 export type MessageBubbleProps = {
   message: ChatMessage;
