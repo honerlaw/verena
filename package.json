@@ -2,13 +2,13 @@
   "name": "@onerlaw/verena",
   "version": "1.0.0",
   "scripts": {
-    "clean": "nx run-many -t clean && rm -rf node_modules package-lock.json",
+    "clean": "nx run-many -t clean && rm -rf node_modules package-lock.json .nx",
     "clean:install": "npm run clean && npm install",
     "test": "nx run-many -t test",
     "start": "nx run-many -t start",
     "build": "nx run-many -t build",
     "lint:format": "nx run-many -t lint:format",
-    "snyk": "snyk test --all-projects",
+    "snyk": "npx -y snyk test --all-projects",
     "build:image": "git tag build-image -f && git push origin build-image --force",
     "build:deploy": "git tag build-deploy -f && git push origin build-deploy --force",
     "deploy": "git tag deploy -f && git push origin deploy --force",
@@ -24,8 +24,7 @@
     "packages/app"
   ],
   "devDependencies": {
-    "nx": "21.5.2",
-    "snyk": "^1.1299.0"
+    "nx": "21.6.4"
   },
   "overrides": {
     "react-native": "0.81.4",
