@@ -6,5 +6,4 @@ dist
 .env.*
 src/generated/
 static/
-patches/
 lcov.info
