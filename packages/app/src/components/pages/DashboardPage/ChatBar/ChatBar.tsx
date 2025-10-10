@@ -78,7 +78,7 @@ export const ChatBar: React.FC = () => {
               placeholder="Ask about your finances..."
               disabled={message.isSending}
               borderWidth={0}
-              focusStyle={{ outline: "none" }}
+              focusStyle={{ outlineWidth: 0 }}
               backgroundColor="transparent"
               fontWeight={400}
               style={{ fontSize: 15, lineHeight: 20 }}
