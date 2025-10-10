@@ -53,8 +53,6 @@ export async function respond(
       },
     );
 
-    result.lastResponseId
-
     return result.finalOutput ?? null;
   } catch (error) {
     context.logger.error(

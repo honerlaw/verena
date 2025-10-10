@@ -1,5 +1,5 @@
 import {
-    BadRequestError,
+  BadRequestError,
   UnauthorizedError,
 } from "@onerlaw/framework/backend/rpc";
 import { z } from "zod";
@@ -28,7 +28,7 @@ export const stream = procedure
       ctx,
       ctx.auth.user.id,
       conversationId,
-      message
+      message,
     )) {
       switch (chunk.type) {
         case "CHUNK":

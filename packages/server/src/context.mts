@@ -151,7 +151,7 @@ export const createContext = async (
   }
 
   if (req.url.indexOf("stream") !== -1) {
-    console.log("req", req.url, req.headers.authorization, req.headers.cookie)
+    console.log("req", req.url, req.headers.authorization, req.headers.cookie);
   }
 
   // its the request itself

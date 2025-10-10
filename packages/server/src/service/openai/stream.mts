@@ -1,14 +1,17 @@
 import { run } from "@openai/agents";
 import type { Context } from "../../context.mjs";
 
-type StreamChunk = {
-  type: "COMPLETE"
-} | {
-  type: "ERROR"
-} | {
-  type: "CHUNK",
-  data: string,
-}
+type StreamChunk =
+  | {
+      type: "COMPLETE";
+    }
+  | {
+      type: "ERROR";
+    }
+  | {
+      type: "CHUNK";
+      data: string;
+    };
 
 /**
  * So a few things, we should not use the conversation API at all basically
@@ -59,13 +62,13 @@ export async function* stream(
       {
         conversationId: conversation.openaiConversationId,
         context,
-        stream: true
+        stream: true,
       },
     );
 
     // Convert the streaming result to a text stream and yield chunks
     const textStream = result.toTextStream({ compatibleWithNodeStreams: true });
-    
+
     // Read from the stream and yield string chunks
     for await (const chunk of textStream) {
       if (chunk instanceof Buffer) {
@@ -75,13 +78,13 @@ export async function* stream(
         };
       }
     }
-    
+
     // Wait for the stream to complete
     await result.completed;
 
     yield {
-      type: "COMPLETE"
-    }
+      type: "COMPLETE",
+    };
   } catch (error) {
     context.logger.error(
       {
@@ -91,7 +94,7 @@ export async function* stream(
       "Error streaming message response",
     );
     yield {
-      type: "ERROR"
+      type: "ERROR",
     };
   }
 }
