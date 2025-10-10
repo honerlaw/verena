@@ -2,9 +2,9 @@ import React from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Stack } from "tamagui";
 
-export interface KeyboardAvoidingProps {
+export type KeyboardAvoidingProps = {
   children: React.ReactNode;
-}
+};
 
 export const KeyboardAvoiding = React.forwardRef<
   ScrollView,

@@ -1,10 +1,10 @@
 import React from "react";
 import { YStack, XStack, Text } from "tamagui";
 
-interface FeatureItemProps {
+type FeatureItemProps = {
   icon: React.ReactNode;
   title: string;
-}
+};
 
 export const FeatureItem: React.FC<FeatureItemProps> = ({ icon, title }) => {
   return (

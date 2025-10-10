@@ -1,7 +1,7 @@
 import { RunContext, tool } from "@openai/agents";
 import type { Context } from "../../../context.mjs";
 
-export interface AccountBalance {
+export type AccountBalance = {
   id: string;
   name: string;
   available: number | null;

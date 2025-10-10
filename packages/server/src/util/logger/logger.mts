@@ -12,7 +12,7 @@ type LogObject = {
   };
 };
 
-export interface LogFn {
+export type LogFn = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (obj: LogObject, msg?: string, ...args: any[]): void;
   (msg: string): void;

@@ -7,9 +7,9 @@ export type Item = Awaited<
   ReturnType<AppRouter["item"]["getAll"]>
 >["items"][number];
 
-export interface ConnectionCardProps {
+export type ConnectionCardProps = {
   item: Item;
-}
+};
 
 export const ConnectionCard: React.FC<ConnectionCardProps> = ({ item }) => {
   const [isAccountsExpanded, setIsAccountsExpanded] = useState(false);

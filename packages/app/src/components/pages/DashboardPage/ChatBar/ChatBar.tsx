@@ -3,10 +3,10 @@ import { Platform, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Button, Input, useTheme, XStack, YStack } from "tamagui";
 import { ArrowUp, MoreVertical } from "@tamagui/lucide-icons";
-import { useConversation } from "../../../../providers/ConversationProvider";
 import { useActionSheet } from "@/src/components/ActionSheet";
 import { GlassView } from "expo-glass-effect";
 import { useLiquidGlass } from "@/src/hooks/useLiquidGlass";
+import { useConversationStreamMessage } from "@/src/providers/ConversationProvider";
 
 const STYLES = StyleSheet.create({
   inputContainer: {
@@ -20,7 +20,8 @@ const STYLES = StyleSheet.create({
 
 export const ChatBar: React.FC = () => {
   const insets = useSafeAreaInsets();
-  const { message } = useConversation();
+  const { isSending, inputText, setInputText, handleSend, isSendDisabled } =
+    useConversationStreamMessage();
   const { setOpen } = useActionSheet();
   const { isLiquidGlassEnabled } = useLiquidGlass();
   const theme = useTheme();
@@ -72,11 +73,11 @@ export const ChatBar: React.FC = () => {
               height={Platform.OS === "web" ? 46 : undefined}
               maxHeight={140}
               flexGrow={1}
-              value={message.inputText}
-              onChangeText={message.setInputText}
-              onSubmitEditing={message.handleSend}
+              value={inputText}
+              onChangeText={setInputText}
+              onSubmitEditing={handleSend}
               placeholder="Ask about your finances..."
-              disabled={message.isSending}
+              disabled={isSending}
               borderWidth={0}
               focusStyle={{ outlineWidth: 0 }}
               backgroundColor="transparent"
@@ -89,12 +90,12 @@ export const ChatBar: React.FC = () => {
             <Button
               size="$3"
               circular
-              disabled={message.isSendDisabled}
+              disabled={isSendDisabled}
               backgroundColor={"$primary"}
               disabledStyle={{ backgroundColor: "$gray8" }}
               color="white"
               icon={ArrowUp}
-              onPress={message.handleSend}
+              onPress={handleSend}
               marginRight={"$2"}
             />
           </GlassView>

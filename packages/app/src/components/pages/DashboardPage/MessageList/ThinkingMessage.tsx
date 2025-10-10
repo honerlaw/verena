@@ -1,5 +1,5 @@
 import React from "react";
-import { XStack, YStack, Text } from "tamagui";
+import { XStack, YStack } from "tamagui";
 import LottieView from "lottie-react-native";
 
 export const ThinkingMessage: React.FC = () => {

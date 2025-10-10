@@ -2,10 +2,10 @@ import React from "react";
 import { Stack, Text } from "tamagui";
 import { COLOR_PRIMARY } from "@/src/constant";
 
-interface AvatarProps {
+type AvatarProps = {
   name: string;
   size?: number;
-}
+};
 
 export const Avatar: React.FC<AvatarProps> = ({ name, size = 60 }) => {
   const getInitials = (fullName: string): string => {

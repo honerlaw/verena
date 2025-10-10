@@ -3,16 +3,17 @@ import { ScrollView } from "react-native";
 import { YStack } from "tamagui";
 import { MessageBubble } from "./MessageBubble";
 import { ThinkingMessage } from "./ThinkingMessage";
-import { useConversation } from "../../../../providers/ConversationProvider";
 import { LoadingView } from "@/src/components/LoadingView";
 import { PromptButtonList } from "@/src/components/ActionSheet/PromptButtonList";
 import Icon from "@/assets/icon.svg";
+import {
+  useConversationStreamMessage,
+  useConversationListItems,
+} from "@/src/providers/ConversationProvider";
 
 export const MessageList: React.FC = () => {
-  const {
-    message: { messages, isSending },
-    items,
-  } = useConversation();
+  const { messages, isSending } = useConversationStreamMessage();
+  const { isLoading: isLoadingItems } = useConversationListItems();
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -21,7 +22,7 @@ export const MessageList: React.FC = () => {
   }, [messages]);
 
   // loading a conversation, but have no messages yet
-  if (items.isLoading && messages.length === 0) {
+  if (isLoadingItems && messages.length === 0) {
     return <LoadingView />;
   }
 

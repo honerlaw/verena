@@ -3,11 +3,11 @@ import { Modal, Pressable, View, useWindowDimensions } from "react-native";
 import { YStack, Button } from "tamagui";
 import { MoreVertical } from "@tamagui/lucide-icons";
 
-export interface ContextMenuProps {
+export type ContextMenuProps = {
   children: React.ReactNode;
   triggerComponent?: React.ReactNode;
   buttonSize?: "$2" | "$3" | "$4" | "$5";
-}
+};
 
 type MenuPosition = {
   top: number;

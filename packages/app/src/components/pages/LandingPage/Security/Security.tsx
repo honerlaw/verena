@@ -3,10 +3,10 @@ import { YStack, XStack, Text, Card } from "tamagui";
 import { Eye, Settings, Shield } from "@tamagui/lucide-icons";
 import { useScreenSize } from "@/src/hooks/useScreenSize";
 
-interface SecurityFeatureProps {
+type SecurityFeatureProps = {
   icon: React.ReactNode;
   title: string;
-}
+};
 
 const SecurityFeature: React.FC<SecurityFeatureProps> = ({ icon, title }) => {
   return (
@@ -38,9 +38,9 @@ const SecurityFeature: React.FC<SecurityFeatureProps> = ({ icon, title }) => {
   );
 };
 
-interface SecurityBadgeProps {
+type SecurityBadgeProps = {
   label: string;
-}
+};
 
 const SecurityBadge: React.FC<SecurityBadgeProps> = ({ label }) => {
   return (

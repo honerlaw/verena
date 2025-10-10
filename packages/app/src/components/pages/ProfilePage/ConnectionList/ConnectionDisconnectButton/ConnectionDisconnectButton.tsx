@@ -11,9 +11,9 @@ export type Item = Awaited<
   ReturnType<AppRouter["item"]["getAll"]>
 >["items"][number];
 
-export interface ConnectionDisconnectButtonProps {
+export type ConnectionDisconnectButtonProps = {
   item: Item;
-}
+};
 
 export const ConnectionDisconnectButton: React.FC<
   ConnectionDisconnectButtonProps

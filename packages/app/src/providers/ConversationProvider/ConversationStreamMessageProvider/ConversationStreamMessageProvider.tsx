@@ -1,27 +1,63 @@
-import { useCallback, useMemo, useState } from "react";
+import React, {
+  useMemo,
+  useState,
+  useCallback,
+  useContext,
+  createContext,
+  useEffect,
+} from "react";
 import { useTRPC } from "@/src/providers/TRPCProvider";
+import { ChatMessage } from "./types";
 import { useReportError } from "@/src/hooks/useReportError";
 import { useSubscription } from "@trpc/tanstack-react-query";
-import { ChatMessage, UseMessageReturn } from "./types";
+import { useConversationCreate } from "../ConversationCreateProvider";
+import { useConversationCurrent } from "../ConversationCurrentProvider";
+import { useConversationListItems } from "../ConversationListItemsProvider";
 
-/**
- * Good news we are streaming back messages as we receive them!
- *
- * However, we need to make sure we concatenate everything into one message, not add a bunch of messages
- * @returns
- */
-export const useStreamMessage = (
-  create: (force?: boolean) => Promise<string | null>,
-): UseMessageReturn => {
+type ConversationStreamMessageContextType = {
+  messages: ChatMessage[];
+  isSending: boolean;
+  sendMessage: (message: string) => Promise<void>;
+  addMessage: (message: ChatMessage) => void;
+  clearMessages: () => void;
+  inputText: string;
+  setInputText: (text: string) => void;
+  handleSend: () => Promise<void>;
+  isSendDisabled: boolean;
+};
+
+export const ConversationStreamMessageContext =
+  createContext<ConversationStreamMessageContextType | null>(null);
+
+export const useConversationStreamMessage = () => {
+  const context = useContext(ConversationStreamMessageContext);
+
+  if (context === null) {
+    throw new Error(
+      "useConversationStreamMessage must be used within a ConversationStreamMessageProvider",
+    );
+  }
+
+  return context;
+};
+
+export const ConversationStreamMessageProvider: React.FC<
+  React.PropsWithChildren
+> = ({ children }) => {
+  const { create } = useConversationCreate();
+  const { currentConversationId, setCurrentConversationId } =
+    useConversationCurrent();
+  const {
+    items,
+    conversationId: conversationIdFromItems,
+    isLoading: isLoadingItems,
+  } = useConversationListItems();
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState<unknown | null>(null);
   const [inputText, setInputText] = useState("");
   const [currentMessage, setCurrentMessage] = useState<string | null>(null);
   const [currentMessageContent, setCurrentMessageContent] = useState<
-    string | null
-  >(null);
-  const [currentConversationId, setCurrentConversationId] = useState<
     string | null
   >(null);
 
@@ -75,11 +111,13 @@ export const useStreamMessage = (
             setIsSending(false);
             setCurrentMessage(null);
             setCurrentMessageContent(null);
-            setError(new Error("Failed to send message."));
+            report(
+              new Error("Failed to send message."),
+              "Failed to send message.",
+            );
           }
         },
         onError: (error) => {
-          setError(error);
           setIsSending(false);
           setCurrentMessage(null);
           setCurrentMessageContent(null);
@@ -114,7 +152,6 @@ export const useStreamMessage = (
         return;
       }
 
-      setError(null);
       setIsSending(true);
       setCurrentMessage(trimmed);
 
@@ -135,7 +172,7 @@ export const useStreamMessage = (
       }
       setCurrentConversationId(conversationId);
     },
-    [isSending, addMessage],
+    [isSending, addMessage, create, setCurrentConversationId],
   );
 
   const handleSend = useCallback(async () => {
@@ -145,7 +182,43 @@ export const useStreamMessage = (
 
   const isSendDisabled = isSending || inputText.trim().length === 0;
 
-  return {
+  // items changed, and we have no messages, so add the previous historical messages
+  useEffect(() => {
+    if (isLoadingItems) {
+      return;
+    }
+
+    if (messages.length !== 0) {
+      return;
+    }
+    // the history is from a different conversation, so we don't need to add it
+    if (conversationIdFromItems !== currentConversationId) {
+      return;
+    }
+    for (const item of items) {
+      for (const content of item.content) {
+        // we don't handle other message types yet
+        if (content.type !== "input_text" && content.type !== "output_text") {
+          continue;
+        }
+
+        addMessage({
+          id: item.id,
+          role: item.role,
+          content: content.text,
+        });
+      }
+    }
+  }, [
+    items,
+    addMessage,
+    currentConversationId,
+    conversationIdFromItems,
+    isLoadingItems,
+    messages,
+  ]);
+
+  const value: ConversationStreamMessageContextType = {
     messages: currentMessageContent
       ? [
           ...messages,
@@ -160,10 +233,15 @@ export const useStreamMessage = (
     sendMessage,
     addMessage,
     clearMessages,
-    error,
     inputText,
     setInputText,
     handleSend,
     isSendDisabled,
   };
+
+  return (
+    <ConversationStreamMessageContext.Provider value={value}>
+      {children}
+    </ConversationStreamMessageContext.Provider>
+  );
 };

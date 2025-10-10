@@ -7,18 +7,21 @@ import { EmptyView } from "@/src/components/EmptyView";
 import { AlertModal } from "@/src/components/AlertModal/AlertModal";
 import { Trash2, Plus } from "@tamagui/lucide-icons";
 import { useActionSheet } from "../providers/ActionSheetProvider";
-import { useConversation } from "@/src/providers/ConversationProvider";
+import {
+  useConversationList,
+  useConversationStreamMessage,
+  useConversationCurrent,
+  useConversationCreate,
+  useConversationRemove,
+} from "@/src/providers/ConversationProvider";
 
 export const ConversationHistory: React.FC = () => {
   const { setOpen } = useActionSheet();
-
-  const {
-    list: { conversations, isLoading, error },
-    create,
-    remove,
-    setCurrentConversationId,
-    message,
-  } = useConversation();
+  const { clearMessages } = useConversationStreamMessage();
+  const { setCurrentConversationId } = useConversationCurrent();
+  const { create } = useConversationCreate();
+  const { remove } = useConversationRemove();
+  const { conversations, isLoading, error } = useConversationList();
 
   if (isLoading) {
     return <LoadingView />;
@@ -59,9 +62,9 @@ export const ConversationHistory: React.FC = () => {
               icon={<Plus size={14} color="$color" />}
               onPress={async () => {
                 setOpen(false);
-                message.clearMessages();
+                clearMessages();
                 setCurrentConversationId(null);
-                await create.create(true);
+                await create(true);
               }}
             />
           </XStack>
@@ -77,7 +80,7 @@ export const ConversationHistory: React.FC = () => {
               padding="$2"
               flex={1}
               onPress={() => {
-                message.clearMessages();
+                clearMessages();
                 setCurrentConversationId(conversation.conversationId);
                 setOpen(false);
               }}
@@ -112,7 +115,7 @@ export const ConversationHistory: React.FC = () => {
                   text: "Delete",
                   style: "destructive",
                   onPress: async () => {
-                    await remove.remove(conversation.conversationId);
+                    await remove(conversation.conversationId);
                   },
                 },
               ]}

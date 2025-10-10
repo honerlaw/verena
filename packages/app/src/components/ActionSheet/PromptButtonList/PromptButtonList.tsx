@@ -5,9 +5,9 @@ import { useListPrompts } from "./hooks/useListPrompts";
 import { ErrorView } from "../../ErrorView";
 import { LoadingView } from "../../LoadingView";
 
-export interface PromptButtonListProps {
+export type PromptButtonListProps = {
   title?: string | null;
-}
+};
 
 export const PromptButtonList: React.FC<PromptButtonListProps> = ({
   title = "Prompts Ideas",

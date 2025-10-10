@@ -2,17 +2,17 @@ import React from "react";
 import { Modal } from "react-native";
 import { Button, Text, XStack, YStack, View } from "tamagui";
 
-export interface AlertButton {
+export type AlertButton = {
   text: string;
   style?: "default" | "cancel" | "destructive";
   onPress?: () => void;
-}
+};
 
 // AlertModal ref interface
-export interface AlertModalRef {
+export type AlertModalRef = {
   show: () => void;
   hide: () => void;
-}
+};
 
 type AlertModalProps = React.PropsWithChildren<{
   title: string;

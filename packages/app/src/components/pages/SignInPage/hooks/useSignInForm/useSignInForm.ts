@@ -2,7 +2,7 @@ import { useSignIn } from "@clerk/clerk-expo";
 import React from "react";
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
-interface UseSignInFormReturn {
+type UseSignInFormReturn = {
   emailAddress: string;
   setEmailAddress: (value: string) => void;
   password: string;
@@ -10,7 +10,7 @@ interface UseSignInFormReturn {
   errors: string[] | null;
   onSignInPress: () => Promise<void>;
   isSigningIn: boolean;
-}
+};
 
 export function useSignInForm(): UseSignInFormReturn {
   const { signIn, setActive, isLoaded } = useSignIn();

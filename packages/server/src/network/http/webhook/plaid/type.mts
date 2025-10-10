@@ -1,6 +1,6 @@
 import { type Context } from "../../../../context.mjs";
 
-export interface BasePlaidWebHook {
+export type BasePlaidWebHook = {
   webhook_type: string;
   webhook_code: string;
 }

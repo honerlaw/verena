@@ -3,12 +3,12 @@ import { useColorScheme } from "react-native";
 
 export type ThemeMode = "light" | "dark" | "auto";
 
-interface ThemeContextValue {
+type ThemeContextValue = {
   themeMode: ThemeMode;
   currentTheme: "light" | "dark";
   setThemeMode: (mode: ThemeMode) => void;
   toggleTheme: () => void;
-}
+};
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 

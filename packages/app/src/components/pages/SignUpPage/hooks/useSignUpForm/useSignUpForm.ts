@@ -2,7 +2,7 @@ import { isClerkAPIResponseError, useSignUp } from "@clerk/clerk-expo";
 import React from "react";
 import { useReportError } from "../../../../../hooks/useReportError/useReportError";
 
-interface UseSignUpFormReturn {
+type UseSignUpFormReturn = {
   emailAddress: string;
   setEmailAddress: (value: string) => void;
   password: string;
@@ -15,7 +15,7 @@ interface UseSignUpFormReturn {
   onVerifyPress: () => Promise<void>;
   isSigningUp: boolean;
   isVerifying: boolean;
-}
+};
 
 export function useSignUpForm(): UseSignUpFormReturn {
   const { signUp, setActive, isLoaded } = useSignUp();

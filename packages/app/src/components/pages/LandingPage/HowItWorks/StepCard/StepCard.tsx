@@ -1,12 +1,12 @@
 import React from "react";
 import { YStack, Text, Circle } from "tamagui";
 
-interface StepCardProps {
+type StepCardProps = {
   stepNumber: number;
   icon: React.ReactNode;
   title: string;
   description: string;
-}
+};
 
 export const StepCard: React.FC<StepCardProps> = ({
   stepNumber,

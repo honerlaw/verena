@@ -1,11 +1,11 @@
 import React from "react";
 import { YStack, Text, Card } from "tamagui";
 
-export interface FeatureCardProps {
+export type FeatureCardProps = {
   icon: React.ReactNode;
   title: string;
   description: string;
-}
+};
 
 export const FeatureCard: React.FC<FeatureCardProps> = ({
   icon,

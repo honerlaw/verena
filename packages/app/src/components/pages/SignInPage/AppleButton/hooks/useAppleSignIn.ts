@@ -2,10 +2,10 @@ import { useSignIn, useSSO } from "@clerk/clerk-expo";
 import React from "react";
 import { useReportError } from "@/src/hooks/useReportError/useReportError";
 
-interface UseAppleSignInReturn {
+type UseAppleSignInReturn = {
   isSigningIn: boolean;
   onAppleSignInPress: () => Promise<void>;
-}
+};
 
 export function useAppleSignIn(): UseAppleSignInReturn {
   const { setActive, isLoaded } = useSignIn();

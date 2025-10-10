@@ -1,25 +1,25 @@
-import { useConversation } from "@/src/providers/ConversationProvider";
+import { useConversationStreamMessage } from "@/src/providers/ConversationProvider";
 import React from "react";
 import { Button, Text, YStack } from "tamagui";
 import { useActionSheet } from "../../providers/ActionSheetProvider";
 
-export interface PromptButtonProps {
+export type PromptButtonProps = {
   title: string;
   prompt: string;
-}
+};
 
 export const PromptButton: React.FC<PromptButtonProps> = ({
   title,
   prompt,
 }) => {
   const { setOpen } = useActionSheet();
-  const { message } = useConversation();
+  const { sendMessage } = useConversationStreamMessage();
 
   return (
     <Button
       onPress={async () => {
         setOpen(false);
-        await message.sendMessage(prompt);
+        await sendMessage(prompt);
       }}
       borderWidth={1}
       borderRadius="$3"

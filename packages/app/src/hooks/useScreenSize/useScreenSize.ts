@@ -1,8 +1,8 @@
 import { useWindowDimensions } from "react-native";
 
-interface UseScreenSizeReturn {
+type UseScreenSizeReturn = {
   isDesktop: boolean;
-}
+};
 
 const DESKTOP_BREAKPOINT = 768;
 

@@ -1,4 +1,4 @@
-import { ChatMessage } from "@/src/providers/ConversationProvider/hooks/useStreamMessage";
+import { ChatMessage } from "@/src/providers/ConversationProvider";
 
 export const mockChatMessage: ChatMessage = {
   id: "mock-comprehensive-markdown-message",
@@ -46,7 +46,7 @@ function calculateTotal(items) {
 Here's a TypeScript example:
 
 \`\`\`typescript
-interface User {
+type User = {
   id: string;
   name: string;
   email: string;

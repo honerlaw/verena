@@ -7,7 +7,9 @@ import { WebLayout } from "@/src/components/WebLayout";
 import { ActionSheetProvider, ActionSheet } from "@/src/components/ActionSheet";
 import {
   ConversationProvider,
-  useConversation,
+  useConversationCreate,
+  useConversationStreamMessage,
+  useConversationCurrent,
 } from "@/src/providers/ConversationProvider";
 import React from "react";
 import { useLiquidGlass } from "@/src/hooks/useLiquidGlass";
@@ -19,7 +21,9 @@ export const unstable_settings = {
 
 const HeaderRight: React.FC = () => {
   const { isLiquidGlassEnabled } = useLiquidGlass();
-  const { create, message, setCurrentConversationId } = useConversation();
+  const { create } = useConversationCreate();
+  const { clearMessages } = useConversationStreamMessage();
+  const { setCurrentConversationId } = useConversationCurrent();
   return (
     <Button
       size="$3"
@@ -38,9 +42,9 @@ const HeaderRight: React.FC = () => {
           : undefined
       }
       onPress={async () => {
-        message.clearMessages();
+        clearMessages();
         setCurrentConversationId(null);
-        await create.create(true);
+        await create(true);
       }}
     />
   );

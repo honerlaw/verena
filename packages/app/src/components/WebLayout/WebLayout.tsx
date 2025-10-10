@@ -2,9 +2,9 @@ import React from "react";
 import { Platform } from "react-native";
 import { View, YStack } from "tamagui";
 
-interface WebLayoutProps {
+type WebLayoutProps = {
   children: React.ReactNode;
-}
+};
 
 export const WebLayout: React.FC<WebLayoutProps> = ({ children }) => {
   // On web, constrain to mobile dimensions and center
