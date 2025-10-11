@@ -8,7 +8,7 @@ export type AccountBalance = {
   current: number | null;
   limit: number | null;
   balanceAt: string;
-}
+};
 
 const AccountBalanceDataParams = {
   type: "object" as const,

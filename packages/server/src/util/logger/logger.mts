@@ -16,7 +16,7 @@ export type LogFn = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (obj: LogObject, msg?: string, ...args: any[]): void;
   (msg: string): void;
-}
+};
 
 /**
  * Create a stricter log function type to better enforce the shape of the log object

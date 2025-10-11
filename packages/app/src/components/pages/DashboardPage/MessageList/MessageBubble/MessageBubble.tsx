@@ -1,11 +1,47 @@
 import React, { useMemo } from "react";
 import { Text, XStack, YStack, useTheme } from "tamagui";
-import Markdown from "react-native-markdown-display";
+import Markdown, { ASTNode, RenderRules } from "react-native-markdown-display";
+import MarkdownIt from "markdown-it";
 import { ChatMessage } from "@/src/providers/ConversationProvider";
+import { Graph } from "../Graph";
+import { GraphSpec } from "@onerlaw/verena-server/dist/service/openai/tools/buildGraphMarkdownFence/schema.mjs";
+import * as Sentry from "@sentry/react-native";
 
 export type MessageBubbleProps = {
   message: ChatMessage;
   isLoading?: boolean;
+};
+
+const md = new MarkdownIt({ breaks: true });
+
+type FenceNode = ASTNode & {
+  sourceInfo?: string;
+};
+
+const rules: RenderRules = {
+  fence: (node, _children, _parent, _styles) => {
+    const fenceNode = node as FenceNode;
+    if (
+      node.markup === "```" &&
+      fenceNode.sourceInfo?.trim().toLowerCase() === "graph"
+    ) {
+      try {
+        const spec = GraphSpec.safeParse(JSON.parse(node.content));
+        if (spec.success && spec.data) {
+          return <Graph key={node.key} spec={spec.data} />;
+        } else {
+          Sentry.captureException(spec.error);
+          return (
+            <Text key={node.key}>Sorry, I could not render the graph.</Text>
+          );
+        }
+      } catch (e) {
+        Sentry.captureException(e);
+        return <Text key={node.key}>Sorry, I could not render the graph.</Text>;
+      }
+    }
+    return null;
+  },
 };
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
@@ -168,7 +204,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
       >
         <YStack>
           <Text opacity={isLoading ? 0.7 : 1}>
-            <Markdown style={markdownStyles}>{message.content}</Markdown>
+            <Markdown rules={rules} markdownit={md} style={markdownStyles}>
+              {message.content}
+            </Markdown>
           </Text>
         </YStack>
       </YStack>
