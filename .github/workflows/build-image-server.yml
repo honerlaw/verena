@@ -103,6 +103,9 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Run build
+      run: npm run build
+
     # Build and Publish
     - name: Change to server directory and build image
       run: |
