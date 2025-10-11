@@ -30,7 +30,7 @@ export const ChatBar: React.FC = () => {
     <XStack
       margin="$3"
       alignItems="flex-end"
-      marginBottom={insets.bottom * 1.3}
+      marginBottom={insets.bottom * 1.2}
     >
       <YStack flex={1}>
         <XStack
@@ -61,7 +61,7 @@ export const ChatBar: React.FC = () => {
             style={[
               STYLES.inputContainer,
               !isLiquidGlassEnabled &&
-                Platform.OS === "web" && {
+                (Platform.OS === "web" || Platform.OS === "android") && {
                   backgroundColor: theme.gray4?.val,
                   borderRadius: 24,
                 },
@@ -70,7 +70,11 @@ export const ChatBar: React.FC = () => {
             <Input
               multiline
               flex={1}
-              height={Platform.OS === "web" ? 46 : undefined}
+              height={
+                Platform.OS === "web" || Platform.OS === "android"
+                  ? 46
+                  : undefined
+              }
               maxHeight={140}
               flexGrow={1}
               value={inputText}

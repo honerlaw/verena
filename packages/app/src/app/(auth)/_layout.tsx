@@ -84,6 +84,7 @@ export default function AuthLayout() {
                     circular
                     icon={User}
                     marginHorizontal={Platform.OS === "web" ? "$4" : undefined}
+                    marginRight={Platform.OS === "android" ? "$4" : undefined}
                     backgroundColor={
                       isLiquidGlassEnabled ? "transparent" : undefined
                     }

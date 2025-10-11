@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "postinstall": "cd ../.. && npm run build",
     "build": "tsc --noEmit",
     "clean": "rm -rf node_modules .vscode package-lock.json ios android .expo-env.d.ts .tamagui .expo dist expo-env.d.ts tamagui-web.css",
     "clean:dist": "rm -rf .expo .tamagui ios android .expo-env.d.ts dist $TMPDIR/react-*",
@@ -11,6 +12,7 @@
     "start:clear": "expo start --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
+    "android:localhost": "adb reverse tcp:3000 tcp:3000",
     "ios": "expo run:ios",
     "ios:prod": "NODE_ENV=production npm run ios",
     "web": "expo start --web --clear",

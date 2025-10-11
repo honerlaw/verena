@@ -41,7 +41,7 @@ export const MessageList: React.FC = () => {
     <ScrollView
       ref={scrollViewRef}
       style={{ flex: 1 }}
-      contentContainerStyle={{ padding: 16 }}
+      contentContainerStyle={{ padding: 16, paddingBottom: 150 }}
       showsVerticalScrollIndicator={false}
     >
       <YStack gap="$3">

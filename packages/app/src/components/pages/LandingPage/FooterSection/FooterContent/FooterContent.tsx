@@ -69,7 +69,7 @@ export const FooterContent: React.FC = () => {
           <Text
             fontSize="$3"
             color="$color10"
-            onPress={() => Linking.openURL("mailto:support@jurnara.com")}
+            onPress={() => Linking.openURL("mailto:support@onerlaw.com")}
             pressStyle={{ color: "$color12" }}
             cursor="pointer"
           >
