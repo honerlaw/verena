@@ -31,7 +31,7 @@
       },
       "android": {
         "releaseStatus": "draft",
-        "track": "production"
+        "track": "internal"
       }
     }
   }
