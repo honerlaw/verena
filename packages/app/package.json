@@ -27,7 +27,7 @@
     "@clerk/clerk-expo": "^2.14.30",
     "@clerk/clerk-react": "^5.46.2",
     "@expo/vector-icons": "^15.0.2",
-    "@lottiefiles/dotlottie-react": "^0.13.5",
+    "@lottiefiles/dotlottie-react": "^0.17.1",
     "@onerlaw/verena-server": "*",
     "@radix-ui/react-dialog": "^1.1.15",
     "@react-native-async-storage/async-storage": "2.2.0",
